@@ -20,9 +20,12 @@ export async function POST(
         });
 
         var token = response.data['access_token'];
-        var session = response.headers['set-cookie']?.find((row) => row.startsWith("session="))?.split("=")[1].split("; ")[0];
 
-        return NextResponse.json({ token: `${token}`, session: `${session}` }, { status: 200 })
+        var session = response.headers['set-cookie']?.find((row) => row.startsWith("session="))?.split("=")[1].split("; ")[0] + ";";
+        var time = response.headers['set-cookie']?.at(1)?.split("; ")[2];
+
+        console.log(time);
+        return NextResponse.json({ token: `${token}`, session: `${session} ${time}` }, { status: 200 })
 
     } catch (error) {
         return NextResponse.json({ msg: 'Server Error' }, { status: 401 })

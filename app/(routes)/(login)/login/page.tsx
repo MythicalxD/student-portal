@@ -15,7 +15,7 @@ export default function AuthenticationPage() {
   const router = useRouter();
 
   useEffect(() => {
-    const token = Cookies.get("token");
+    const token = Cookies.get("session");
 
     if (token) {
       router.replace("/"); // If token is found, redirect to Home page

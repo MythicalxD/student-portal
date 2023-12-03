@@ -18,7 +18,15 @@ export const columns: ColumnDef<Industry>[] = [
     accessorKey: "logo",
     header: () => <div className="">Logo</div>,
     cell: ({ row }) => {
-      return <div className=" bg-black rounded-full w-[30px] h-[30px]"></div>;
+      return (
+        <img
+          className=" bg-black rounded-full w-[30px] h-[30px] object-cover"
+          src={row.original.logo.replace(
+            "https://s3.amazonaws.com/sambucketcoduty/",
+            "https://sambucketcoduty.s3.ap-south-1.amazonaws.com/"
+          )}
+        />
+      );
     },
   },
   {

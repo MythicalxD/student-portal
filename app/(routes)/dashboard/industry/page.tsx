@@ -1,11 +1,9 @@
 "use client";
 import { useState, useEffect } from "react";
-import Link from "next/link";
 import { Industry, columns } from "./components/columns";
 import { DataTable } from "./components/data-table";
-import { buttonVariants } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
 import axios from "axios";
+import { useRouter } from "next/navigation";
 
 async function getData(token: string, session: string): Promise<Industry[]> {
   const dataToSend = {
@@ -14,11 +12,23 @@ async function getData(token: string, session: string): Promise<Industry[]> {
   };
 
   const apiUrl = "/api/industry";
-  const response = await axios.post(apiUrl, dataToSend);
 
-  console.log(response.data);
-
-  return response.data;
+  try {
+    const response = await axios.post(apiUrl, dataToSend);
+    console.log(response);
+    return response.data;
+  } catch (error: any) {
+    if (error.response.status === 401) {
+      // delete cookies
+      document.cookie = `session=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+      document.cookie = `token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+      window.location.href = "/login";
+      return error;
+    } else {
+      console.error("Error:", error);
+      return error;
+    }
+  }
 }
 
 export default function DemoPage() {
