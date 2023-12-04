@@ -13,6 +13,17 @@ export type Industry = {
   updated_at: string;
 };
 
+export type IndustryFull = {
+  id: string;
+  name: string;
+  description: string;
+  logo: string;
+  updated_at: string;
+  created_at: string;
+  created_by: string;
+  updated_by: string;
+};
+
 export const columns: ColumnDef<Industry>[] = [
   {
     accessorKey: "logo",

@@ -20,11 +20,10 @@ export async function POST(
 
     try {
 
-        const { name, desc, file, session, token } = body;
+        const { name, desc, id, session, token } = body;
 
         let headersList = {
             "Accept": "*/*",
-            "User-Agent": "Thunder Client (https://www.thunderclient.com)",
             "Authorization": `Bearer ${token}`,
             "Cookie": `session=${session}`
         }
@@ -32,18 +31,16 @@ export async function POST(
         const formdata = new FormData();
         formdata.append("name", name);
         formdata.append("description", desc);
-        formdata.append("file", file);
 
         let reqOptions = {
-            url: "https://seal-app-krop4.ondigitalocean.app/api/v1/companyIndustry/register",
-            method: "POST",
+            url: `${process.env.BASEURL}/api/v1/companyIndustry/industry/${id}`,
+            method: "PUT",
             headers: headersList,
             data: formdata,
         }
 
         let response = await axios.request(reqOptions);
         console.log(response.data);
-
 
         return NextResponse.json({ token: `done` }, { status: 200 })
     } catch (error) {
