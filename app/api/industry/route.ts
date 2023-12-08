@@ -14,7 +14,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
 
 
         let reqOptions = {
-            url: "https://seal-app-krop4.ondigitalocean.app/api/v1/companyIndustry/industries",
+            url: `${process.env.BASEURL}/api/v1/companyIndustry/industries`,
             method: "GET",
             headers: headersList,
         }

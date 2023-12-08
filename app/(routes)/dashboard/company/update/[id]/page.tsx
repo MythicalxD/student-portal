@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, ChangeEvent, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
@@ -15,6 +15,14 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+
 import { Input } from "@/components/ui/input";
 
 import axios from "axios";
@@ -23,40 +31,43 @@ import FormData from "form-data";
 import * as z from "zod";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
-import { Factory, Image } from "lucide-react";
+import { Factory } from "lucide-react";
 import { Icons } from "@/components/icons";
-import { Textarea } from "@/components/ui/textarea";
 import toast from "react-hot-toast";
-import { IndustryFull } from "../../components/columns";
+import { CompanyFull } from "../../components/columns";
 import Link from "next/link";
 
-interface IndustryProps {
+interface CompanyProps {
   params: {
     id: string;
   };
 }
 
 const formSchema = z.object({
-  name: z.string().min(2).max(50),
-  description: z.string().min(2).max(5000),
+  name: z.string().min(2),
+  email: z.string().email(),
+  contact: z.string().min(2),
+  address: z.string().min(2),
+  status: z.string({
+    required_error: "Please select an Status.",
+  }),
 });
 
 async function getData(
   token: string,
   session: string,
   id: string
-): Promise<IndustryFull> {
+): Promise<CompanyFull> {
   const dataToSend = {
     token: token,
     session: session,
     id: id,
   };
 
-  const apiUrl = "/api/industry/get";
+  const apiUrl = "/api/company/get";
 
   try {
     const response = await axios.post(apiUrl, dataToSend);
-    console.log(response);
     return response.data;
   } catch (error: any) {
     if (error.response.status === 401) {
@@ -68,9 +79,9 @@ async function getData(
   }
 }
 
-const UpdateIndustry: React.FC<IndustryProps> = ({ params }) => {
+const UpdateCompany: React.FC<CompanyProps> = ({ params }) => {
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
-  const [data, setData] = useState<IndustryFull>();
+  const [data, setData] = useState<CompanyFull>();
 
   const router = useRouter();
 
@@ -91,7 +102,10 @@ const UpdateIndustry: React.FC<IndustryProps> = ({ params }) => {
 
       // Populate the form fields with the fetched data
       form.setValue("name", fetchedData.name);
-      form.setValue("description", fetchedData.description);
+      form.setValue("status", fetchedData.status);
+      form.setValue("email", fetchedData.company_email);
+      form.setValue("contact", fetchedData.company_contact);
+      form.setValue("address", fetchedData.company_address);
     };
 
     fetchData(); // Call the fetchData function when the component mounts
@@ -104,13 +118,19 @@ const UpdateIndustry: React.FC<IndustryProps> = ({ params }) => {
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
-      description: "",
+      email: "",
+      contact: "",
+      address: "",
+      status: "Active",
     },
   });
 
   const handleUpload = async (
     name: string,
-    description: string,
+    email: string,
+    contact: string,
+    address: string,
+    status: string,
     id: string
   ) => {
     try {
@@ -126,24 +146,26 @@ const UpdateIndustry: React.FC<IndustryProps> = ({ params }) => {
 
       const formData = new FormData();
       formData.append("name", name);
-      formData.append("desc", description);
+      formData.append("email", email);
+      formData.append("address", address);
+      formData.append("contact", contact);
+      formData.append("status", status);
       formData.append("id", id);
       formData.append("session", session);
       formData.append("token", authToken);
 
-      const apiUrl = "/api/industry/update";
+      const apiUrl = "/api/company/update";
       const response = await axios.post(apiUrl, formData);
 
-      console.log(response.data);
       const { token } = response.data;
       if (token === "done") {
-        toast.success("Industry Updated");
-        router.push("/dashboard/industry");
+        toast.success("Company Updated");
+        router.push("/dashboard/company");
       }
       setIsLoading(false);
     } catch (error) {
       setIsLoading(false);
-      toast.error("Error Updating Industry");
+      toast.error("Error Updating Company");
       console.error("Error uploading file:", error);
       // Handle the error
     }
@@ -152,8 +174,14 @@ const UpdateIndustry: React.FC<IndustryProps> = ({ params }) => {
   // 2. Define a submit handler.
   function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
-    handleUpload(values.name, values.description, params.id);
-    console.log(values);
+    handleUpload(
+      values.name,
+      values.email,
+      values.contact,
+      values.address,
+      values.status,
+      params.id
+    );
   }
 
   return (
@@ -161,7 +189,7 @@ const UpdateIndustry: React.FC<IndustryProps> = ({ params }) => {
       <div className="flex flex-col w-[80vw]">
         <div className="flex">
           <img
-            src={data?.logo.replace(
+            src={data?.company_logo.replace(
               "https://s3.amazonaws.com/sambucketcoduty/",
               "https://sambucketcoduty.s3.ap-south-1.amazonaws.com/"
             )}
@@ -169,9 +197,9 @@ const UpdateIndustry: React.FC<IndustryProps> = ({ params }) => {
             className="w-[55px] h-[55px] rounded-md object-cover mr-4"
           />
           <div className="flex flex-col">
-            <p className="text-3xl text-black font-bold">Update Industry</p>
+            <p className="text-3xl text-black font-bold">Update Company</p>
             <p className="text-sm text-gray-600 mb-2">
-              Please provide updated information for industry profile.
+              Please provide updated information for company profile.
             </p>
           </div>
         </div>
@@ -182,7 +210,7 @@ const UpdateIndustry: React.FC<IndustryProps> = ({ params }) => {
         href="../"
         className={cn(
           buttonVariants({ variant: "outline" }),
-          "absolute right-[2rem] top-[5rem]"
+          "absolute right-[2rem] top-[6rem]"
         )}
       >
         Go Back
@@ -199,7 +227,7 @@ const UpdateIndustry: React.FC<IndustryProps> = ({ params }) => {
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Industry Name</FormLabel>
+                  <FormLabel>Company Name</FormLabel>
                   <FormControl>
                     <Input placeholder="Minimum 2 characters" {...field} />
                   </FormControl>
@@ -212,23 +240,71 @@ const UpdateIndustry: React.FC<IndustryProps> = ({ params }) => {
             />
             <FormField
               control={form.control}
-              name="description"
+              name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Industry Description</FormLabel>
+                  <FormLabel>Company Email Address</FormLabel>
                   <FormControl>
-                    <Textarea
-                      placeholder="Enter industry description in detail."
-                      {...field}
-                    />
+                    <Input placeholder="company@example.com" {...field} />
                   </FormControl>
-                  <FormDescription>
-                    You can <span>@mention</span> other users and industries.
-                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
             />
+
+            <FormField
+              control={form.control}
+              name="contact"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Company Contact</FormLabel>
+                  <FormControl>
+                    <Input placeholder="+91(0000-000000)" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="address"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Company Address</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Enter Address" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="status"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Status</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select a Company Status" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value={"Active"}>Active</SelectItem>
+                      <SelectItem value={"Inactive"}>InActive</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
             <div className="flex flex-col space-y-4">
               <Button type="submit" disabled={isLoading}>
                 {isLoading && (
@@ -239,10 +315,11 @@ const UpdateIndustry: React.FC<IndustryProps> = ({ params }) => {
             </div>
           </form>
         </Form>
+
         <Separator orientation="vertical" className="h-auto mx-8" />
 
         <div className="flex flex-col">
-          <p className="text-xl font-bold">Industry Details</p>
+          <p className="text-xl font-bold">Company Details</p>
           <div className="grid grid-cols-2 gap-4">
             <div className="flex items-center space-x-4 rounded-md min-h-[70px] bg-gray-100 p-2 px-4 mt-2">
               <Factory className="mt-px h-5 w-5" />
@@ -258,7 +335,7 @@ const UpdateIndustry: React.FC<IndustryProps> = ({ params }) => {
               <div className="space-y-1">
                 <p className="text-sm font-medium leading-none">Created By</p>
                 <p className="text-sm text-muted-foreground">
-                  {data?.created_by}
+                  {data?.createdby}
                 </p>
               </div>
             </div>
@@ -278,7 +355,7 @@ const UpdateIndustry: React.FC<IndustryProps> = ({ params }) => {
               <div className="space-y-1">
                 <p className="text-sm font-medium leading-none">Updated By</p>
                 <p className="text-sm text-muted-foreground">
-                  {data?.updated_by}
+                  {data?.updatedby}
                 </p>
               </div>
             </div>
@@ -289,4 +366,4 @@ const UpdateIndustry: React.FC<IndustryProps> = ({ params }) => {
   );
 };
 
-export default UpdateIndustry;
+export default UpdateCompany;

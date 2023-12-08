@@ -3,7 +3,6 @@ import { useState, useEffect } from "react";
 import { Industry, columns } from "./components/columns";
 import { DataTable } from "./components/data-table";
 import axios from "axios";
-import { useRouter } from "next/navigation";
 
 async function getData(token: string, session: string): Promise<Industry[]> {
   const dataToSend = {

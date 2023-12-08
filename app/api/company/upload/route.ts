@@ -20,7 +20,7 @@ export async function POST(
 
     try {
 
-        const { name, desc, file, session, token } = body;
+        const { name, file, website, email, contact, address, linkedIn, industry, session, token } = body;
 
         let headersList = {
             "Accept": "*/*",
@@ -30,11 +30,16 @@ export async function POST(
 
         const formdata = new FormData();
         formdata.append("name", name);
-        formdata.append("description", desc);
         formdata.append("file", file);
+        formdata.append("company_website", website);
+        formdata.append("company_email", email);
+        formdata.append("company_contact", contact);
+        formdata.append("company_address", address);
+        formdata.append("company_linkedin", linkedIn);
+        formdata.append("company_industry", industry);
 
         let reqOptions = {
-            url: `${process.env.BASEURL}/api/v1/companyIndustry/register`,
+            url: `${process.env.BASEURL}/api/v1/company/companies`,
             method: "POST",
             headers: headersList,
             data: formdata,

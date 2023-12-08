@@ -11,9 +11,9 @@ export default function RootLayout({
   return (
     <div className="flex flex-col">
       <Navbar />
-      <div className="flex">
+      <div className="flex mt-[60px]">
         <Sidebar />
-        {children}
+        <main className="flex-1 p-4 ml-64">{children}</main>
       </div>
     </div>
   );

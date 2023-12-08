@@ -26,7 +26,7 @@ const Sidebar: React.FC = () => {
   return (
     <div className="flex">
       <div
-        className={`bg-gray-100 md:w-[250px] w-[90vw] h-screen text-white p-4 ${
+        className={`fixed bg-gray-100 md:w-[250px] w-[90vw] h-screen text-white p-4 z-10 ${
           sidebarOpen ? "block" : "hidden"
         } md:block`}
       >

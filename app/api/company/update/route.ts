@@ -20,7 +20,7 @@ export async function POST(
 
     try {
 
-        const { name, desc, file, session, token } = body;
+        const { name, email, address, contact, status, id, session, token } = body;
 
         let headersList = {
             "Accept": "*/*",
@@ -30,19 +30,21 @@ export async function POST(
 
         const formdata = new FormData();
         formdata.append("name", name);
-        formdata.append("description", desc);
-        formdata.append("file", file);
+        formdata.append("email", email);
+        formdata.append("address", address);
+        formdata.append("contact", contact);
+        formdata.append("status", status);
+
 
         let reqOptions = {
-            url: `${process.env.BASEURL}/api/v1/companyIndustry/register`,
-            method: "POST",
+            url: `${process.env.BASEURL}/api/v1/company/companies/${id}`,
+            method: "PUT",
             headers: headersList,
             data: formdata,
         }
 
         let response = await axios.request(reqOptions);
         console.log(response.data);
-
 
         return NextResponse.json({ token: `done` }, { status: 200 })
     } catch (error) {

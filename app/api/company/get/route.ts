@@ -14,7 +14,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
 
 
         let reqOptions = {
-            url: `${process.env.BASEURL}/api/v1/companyIndustry/industry/${id}`,
+            url: `${process.env.BASEURL}/api/v1/company/companies/${id}`,
             method: "GET",
             headers: headersList,
         }
