@@ -1,9 +1,59 @@
-export default function Dashboard() {
+"use client";
+import { useState, useEffect } from "react";
+import { Skill, columns } from "./components/columns";
+import { DataTable } from "./components/data-table";
+import axios from "axios";
+
+async function getData(token: string, session: string): Promise<Skill[]> {
+  const dataToSend = {
+    id: token,
+    session: session,
+  };
+
+  const apiUrl = "/api/skill";
+
+  try {
+    const response = await axios.post(apiUrl, dataToSend);
+    console.log(response);
+    return response.data;
+  } catch (error: any) {
+    window.location.href = "/login";
+    console.error();
+    return error;
+  }
+}
+
+export default function DemoPage() {
+  const [data, setData] = useState<Skill[]>([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const authToken = document.cookie
+        .split("; ")
+        .find((row) => row.startsWith("token="))
+        ?.split("=")[1];
+
+      const session = document.cookie
+        .split("; ")
+        .find((row) => row.startsWith("session="))
+        ?.split("=")[1];
+
+      const fetchedData = await getData(authToken!, session!);
+      setData(fetchedData);
+    };
+
+    fetchData(); // Call the fetchData function when the component mounts
+
+    // Optionally, you can include a cleanup function here if needed
+  }, []); // The empty dependency array ensures that the effect runs only once
+
   return (
-    <main className="flex min-h-screen flex-col p-4">
-      <div>
-        <p className="text-xl text-blue-500">This is Skills Page</p>
+    <div className="container mx-auto py-4">
+      <div className="flex justify-between items-center">
+        <p className="text-2xl font-extrabold">ALL SKILLS</p>
       </div>
-    </main>
+
+      <DataTable columns={columns} data={data} />
+    </div>
   );
 }

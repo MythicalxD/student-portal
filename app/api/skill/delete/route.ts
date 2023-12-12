@@ -12,16 +12,13 @@ export async function POST(req: NextRequest, res: NextResponse) {
             "Cookie": `session=${session}`
         }
 
-
         let reqOptions = {
-            url: `${process.env.BASEURL}/api/v1/companyIndustry/industry/${id}`,
+            url: `${process.env.BASEURL}/api/v1/skill/${id}`,
             method: "DELETE",
-            headers: headersList,   
+            headers: headersList,
         }
 
         let response = await axios.request(reqOptions);
-
-
         return NextResponse.json(response.data, { status: 200 })
         // Handle success as needed
     } catch (error) {

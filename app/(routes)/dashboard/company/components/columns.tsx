@@ -86,7 +86,15 @@ export const columns: ColumnDef<Company>[] = [
       return <div className="text-start ml-2">Status</div>;
     },
     cell: ({ row }) => {
-      return <Badge variant="secondary">{row.original.status}</Badge>;
+      return (
+        <Badge
+          variant={`${
+            row.original.status == "Inactive" ? "destructive" : "secondary"
+          }`}
+        >
+          {row.original.status}
+        </Badge>
+      );
     },
   },
   {

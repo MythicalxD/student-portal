@@ -12,15 +12,14 @@ import {
 
 import { useRouter } from "next/navigation";
 import { Edit, Eye, MoreHorizontal, Trash } from "lucide-react";
-import { Job } from "./columns";
+import { Skill } from "./columns";
 import { AlertModal } from "@/components/modals/alert-modal";
 import { useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
-import { NewModal } from "@/components/modals/new-modal";
 
 interface CellActionProps {
-  data: Job;
+  data: Skill;
 }
 
 export const CellAction: React.FC<CellActionProps> = ({ data }) => {
@@ -46,12 +45,12 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
       id: id,
     };
 
-    const apiUrl = "/api/job/delete";
+    const apiUrl = "/api/skill/delete";
     const response = await axios.post(apiUrl, dataToSend);
 
     if (response.status === 200) {
-      toast.success("Job Deleted");
-      window.location.href = "/dashboard/jobs";
+      toast.success("Skill Deleted");
+      window.location.href = "/dashboard/skills";
     }
 
     console.log(response.data);
@@ -81,16 +80,16 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
         <DropdownMenuContent align="end">
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
           <DropdownMenuItem
-            onClick={() => router.push(`/dashboard/job/${data.id}`)}
+            onClick={() => router.push(`/dashboard/skill/${data.id}`)}
           >
             <Eye className="w-[15px] h-[15px] mr-2" />
             View
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem
-            onClick={() => router.push(`/dashboard/jobs/update/${data.id}`)}
+            onClick={() => router.push(`/dashboard/skills/update/${data.id}`)}
           >
-            <Edit className="w-[15px] h-[15px] mr-2" /> Update Job
+            <Edit className="w-[15px] h-[15px] mr-2" /> Update Skill
           </DropdownMenuItem>
           <DropdownMenuItem
             className=" text-red-700"
@@ -99,7 +98,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
               setOpen(true);
             }}
           >
-            <Trash className="w-[15px] h-[15px] mr-2" /> Delete Job
+            <Trash className="w-[15px] h-[15px] mr-2" /> Delete Skill
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
