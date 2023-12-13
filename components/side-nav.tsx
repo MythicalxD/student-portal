@@ -100,7 +100,7 @@ const Sidebar: React.FC = () => {
             </li>
           </Link>
 
-          <Link href={"/dashboard/category"}>
+          <Link href={"/dashboard/course"}>
             <li
               className={`px-2 py-2 rounded-md text-black text-sm flex items-center mb-2 ${
                 pathname == "/dashboard/category"
@@ -109,7 +109,7 @@ const Sidebar: React.FC = () => {
               }`}
             >
               <SlidersHorizontal className="w-[15px] h-[15px] mr-2" />
-              Manage Category
+              Manage Courses
             </li>
           </Link>
 

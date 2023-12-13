@@ -52,6 +52,11 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
 
         document.cookie = `session=${data.session}; path=/`;
         document.cookie = `token=${data.token}; path=/`;
+
+        // add email and account type
+        localStorage.setItem('email', sanitizedEmail);
+        localStorage.setItem('accountType', data.accountType);
+
         router.push("/");
 
         setIsError(false);
