@@ -2,15 +2,19 @@
 import Image from "next/image";
 import Logo from "@/public/logo.png";
 import { UserNav } from "./user-nav";
+import { useEffect, useState } from "react";
 
 const Navbar = () => {
-  let accountType: string | null = null;
-  let userEmail: string | null = null;
+  const [accountType, setAccountType] = useState<string | null>("");
+  const [userEmail, setUserEmail] = useState<string | null>("");
 
-  if (typeof window !== "undefined") {
-    accountType = localStorage.getItem("accountType");
-    userEmail = localStorage.getItem("email");
-  }
+  useEffect(() => {
+    // This block will only run on the client side
+    if (typeof window !== "undefined") {
+      setAccountType(localStorage.getItem("accountType"));
+      setUserEmail(localStorage.getItem("email"));
+    }
+  }, []); // Empty dependency array ensures the effect runs once after mount
 
   return (
     <div className="fixed flex items-center justify-between bg-white dark:bg-gray-900 h-[60px] w-screen md:px-4 px-2 z-10">

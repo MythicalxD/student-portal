@@ -33,7 +33,7 @@ import FormData from "form-data";
 import * as z from "zod";
 import toast from "react-hot-toast";
 import Link from "next/link";
-import { Industry } from "../../industry/components/columns";
+import Industry from "../../../(super-admin)/industry/[id]/page";
 
 const formSchema = z.object({
   name: z.string().min(2).max(50),

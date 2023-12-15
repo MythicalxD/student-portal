@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import SuperAdmin from "./sideNav/super-admin";
 import Teacher from "./sideNav/teacher";
 import Student from "./sideNav/student";
@@ -11,12 +11,16 @@ const Sidebar: React.FC = () => {
     setSidebarOpen(!sidebarOpen);
   };
 
-  let accountType: string | null = null;
+  const [accountType, setAccountType] = useState<string | null>("");
+  const [userEmail, setUserEmail] = useState<string | null>("");
 
-  // Check if window is defined to ensure we're on the client side
-  if (typeof window !== "undefined") {
-    accountType = localStorage.getItem("accountType");
-  }
+  useEffect(() => {
+    // This block will only run on the client side
+    if (typeof window !== "undefined") {
+      setAccountType(localStorage.getItem("accountType"));
+      setUserEmail(localStorage.getItem("email"));
+    }
+  }, []); // Empty dependency array ensures the effect runs once after mount
 
   return (
     <div className="flex">

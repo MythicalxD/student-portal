@@ -1,12 +1,6 @@
 import { NextResponse, NextRequest } from 'next/server';
 import axios from 'axios';
 
-export const config = {
-    api: {
-        bodyParser: false,
-    },
-};
-
 export async function POST(
     req: NextRequest,
     res: NextResponse
