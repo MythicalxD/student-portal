@@ -49,19 +49,6 @@ export default function Teacher() {
               Manage Jobs
             </li>
           </Link>
-
-          <Link href={"/dashboard/analytics"}>
-            <li
-              className={`px-2 py-2 rounded-md text-black text-sm flex items-center mb-2 ${
-                pathname == "/dashboard/analytics"
-                  ? " bg-[#73a9ff] transition-all duration-300"
-                  : "bg-gray-100 transition-all duration-300 hover:bg-gray-300"
-              }`}
-            >
-              <AreaChart className="w-[15px] h-[15px] mr-2" />
-              Analytics
-            </li>
-          </Link>
         </ul>
       </div>
     </div>
