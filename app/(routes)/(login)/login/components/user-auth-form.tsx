@@ -54,10 +54,10 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
         document.cookie = `token=${data.token}; path=/`;
 
         // add email and account type
-        localStorage.setItem('email', sanitizedEmail);
-        localStorage.setItem('accountType', data.accountType);
+        localStorage.setItem("email", sanitizedEmail);
+        localStorage.setItem("accountType", data.type);
 
-        router.push("/");
+        router.push("/dashboard");
 
         setIsError(false);
       } else {
