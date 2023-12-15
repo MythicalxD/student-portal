@@ -7,17 +7,12 @@ import { CellAction } from "./cell-actions";
 import { Badge } from "@/components/ui/badge";
 
 export type Job = {
-  id: string;
-  name: string;
-};
-
-export type JobFull = {
-  created_at: string;
-  created_by: string;
-  id: string;
-  name: string;
-  updated_at: string;
-  updated_by: string;
+  company: string;
+  id: number;
+  job_category: string;
+  job_description: string;
+  status: string;
+  title: string;
 };
 
 export const columns: ColumnDef<Job>[] = [
@@ -45,21 +40,36 @@ export const columns: ColumnDef<Job>[] = [
     },
     cell: ({ row }) => {
       return (
-        <div className="text-start font-medium ml-4">{row.original.name}</div>
+        <div className="text-start font-medium ml-4">{row.original.title}</div>
       );
     },
   },
   {
-    accessorKey: "updated_at",
+    accessorKey: "job_description",
+    header: "Description",
+  },
+  {
+    accessorKey: "job_category",
+    header: "Category",
+  },
+  {
+    accessorKey: "company",
+    header: "Company",
+  },
+  {
+    accessorKey: "status",
     header: ({ column }) => {
+      return <div className="text-start ml-2">Status</div>;
+    },
+    cell: ({ row }) => {
       return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        <Badge
+          variant={`${
+            row.original.status == "Inactive" ? "destructive" : "secondary"
+          }`}
         >
-          Updated At
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
+          {row.original.status}
+        </Badge>
       );
     },
   },

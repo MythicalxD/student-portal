@@ -1,30 +1,34 @@
 "use client";
 import { useState, useEffect } from "react";
-import { Job, columns } from "./components/columns";
+import { JobView, columns } from "./components/columns";
 import { DataTable } from "./components/data-table";
 import axios from "axios";
 
-async function getData(token: string, session: string): Promise<Job[]> {
+async function getData(token: string, session: string): Promise<string[]> {
   const dataToSend = {
     id: token,
     session: session,
   };
 
-  const apiUrl = "/api/manage-jobs/job";
+  const apiUrl = "/api/job";
 
   try {
     const response = await axios.post(apiUrl, dataToSend);
-    console.log(response);
+    console.log(response.data);
     return response.data;
   } catch (error: any) {
-    window.location.href = "/login";
     console.error();
     return error;
   }
 }
 
 export default function DemoPage() {
-  const [data, setData] = useState<Job[]>([]);
+  const [data, setData] = useState<string[]>([]);
+
+  const jsonData: JobView[] = data.map((item, index) => ({
+  id: index + 1,
+  name: item,
+}));
 
   useEffect(() => {
     const fetchData = async () => {
@@ -50,10 +54,9 @@ export default function DemoPage() {
   return (
     <div className="container mx-auto py-4">
       <div className="flex justify-between items-center">
-        <p className="text-2xl font-extrabold">ALL JOBS</p>
+        <p className="text-2xl font-extrabold">ALL SKILLS</p>
       </div>
-
-      <DataTable columns={columns} data={data} />
+      <DataTable columns={columns} data={jsonData} />
     </div>
   );
 }

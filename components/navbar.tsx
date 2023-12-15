@@ -1,16 +1,16 @@
 "use client";
 import Image from "next/image";
 import Logo from "@/public/logo.png";
-import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
-import { useEffect } from "react";
 import { UserNav } from "./user-nav";
 
 const Navbar = () => {
   let accountType: string | null = null;
   let userEmail: string | null = null;
 
-  accountType = localStorage.getItem("accountType");
-  userEmail = localStorage.getItem("email");
+  if (typeof window !== "undefined") {
+    accountType = localStorage.getItem("accountType");
+    userEmail = localStorage.getItem("email");
+  }
 
   return (
     <div className="fixed flex items-center justify-between bg-white dark:bg-gray-900 h-[60px] w-screen md:px-4 px-2 z-10">

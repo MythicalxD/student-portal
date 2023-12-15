@@ -29,6 +29,7 @@ import { Plus } from "lucide-react";
 import { NewModal } from "@/components/modals/new-modal";
 import axios from "axios";
 import toast from "react-hot-toast";
+import Link from "next/link";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -118,10 +119,8 @@ export function DataTable<TData, TValue>({
               className="max-w-sm"
             />
           </div>
-          <div
-            onClick={() => {
-              setOpen(true);
-            }}
+          <Link
+            href={`/dashboard/manage-jobs/new`}
             className={cn(
               buttonVariants({ variant: "default" }),
               "md:right-8 md:top-8"
@@ -129,7 +128,7 @@ export function DataTable<TData, TValue>({
           >
             <Plus className="w-[17px] h-[17px] mr-2" />
             CREATE NEW
-          </div>
+          </Link>
         </div>
 
         <div className="rounded-md border">

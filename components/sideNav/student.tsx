@@ -40,10 +40,10 @@ export default function Student() {
             </li>
           </Link>
 
-          <Link href={"/dashboard/jobs"}>
+          <Link href={"/dashboard/student-job"}>
             <li
               className={`px-2 py-2 rounded-md text-black text-sm flex items-center mb-2 ${
-                pathname == "/dashboard/jobs"
+                pathname == "/dashboard/student-job"
                   ? " bg-[#73a9ff] transition-all duration-300"
                   : "bg-gray-100 transition-all duration-300 hover:bg-gray-300"
               }`}
@@ -53,10 +53,10 @@ export default function Student() {
             </li>
           </Link>
 
-          <Link href={"/dashboard/course"}>
+          <Link href={"/dashboard/student-application"}>
             <li
               className={`px-2 py-2 rounded-md text-black text-sm flex items-center mb-2 ${
-                pathname == "/dashboard/category"
+                pathname == "/dashboard/student-application"
                   ? " bg-[#73a9ff] transition-all duration-300"
                   : "bg-gray-100 transition-all duration-300 hover:bg-gray-300"
               }`}
