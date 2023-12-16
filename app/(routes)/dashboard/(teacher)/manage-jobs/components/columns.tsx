@@ -15,6 +15,21 @@ export type Job = {
   title: string;
 };
 
+export type JobFull = {
+  applications: string[]; // Assuming application IDs or references are strings
+  company_name: string;
+  courses: string[];
+  detailed_description: string; // Corrected the typo in property name
+  experience: number;
+  job_category_name: string;
+  location: string;
+  salary: string;
+  skills: string[];
+  status: string;
+  title: string;
+  web_url: string;
+};
+
 export const columns: ColumnDef<Job>[] = [
   {
     accessorKey: "id",

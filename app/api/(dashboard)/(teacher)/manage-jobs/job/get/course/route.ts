@@ -4,17 +4,17 @@ import { NextRequest, NextResponse } from 'next/server';
 export async function POST(req: NextRequest, res: NextResponse) {
     try {
 
-        const { token, session, id } = await req.json();
+        const { id, session } = await req.json();
 
         let headersList = {
             "Accept": "*/*",
-            "Authorization": `Bearer ${token}`,
+            "Authorization": `Bearer ${id}`,
             "Cookie": `session=${session}`
         }
 
 
         let reqOptions = {
-            url: `${process.env.BASEURL}/api/v1/job/job/${id}`,
+            url: `${process.env.BASEURL}/api/v1/courses`,
             method: "GET",
             headers: headersList,
         }

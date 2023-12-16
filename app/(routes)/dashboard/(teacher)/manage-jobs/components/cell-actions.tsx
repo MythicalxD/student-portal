@@ -17,7 +17,6 @@ import { AlertModal } from "@/components/modals/alert-modal";
 import { useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
-import { NewModal } from "@/components/modals/new-modal";
 
 interface CellActionProps {
   data: Job;
@@ -27,7 +26,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [loading] = useState(false);
-  const [id, setId] = useState("");
+  const [id, setId] = useState(0);
 
   const handleUpload = async (name: string) => {
     const authToken = document.cookie
@@ -60,7 +59,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
   return (
     <>
       <AlertModal
-        title={data.name}
+        title={data.title}
         isOpen={open}
         onClose={() => {
           setOpen(false);
@@ -80,26 +79,19 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
+          <DropdownMenuSeparator />
           <DropdownMenuItem
-            onClick={() => router.push(`/dashboard/job/${data.id}`)}
+            onClick={() => router.push(`/dashboard/manage-jobs/${data.id}`)}
           >
             <Eye className="w-[15px] h-[15px] mr-2" />
             View
           </DropdownMenuItem>
-          <DropdownMenuSeparator />
           <DropdownMenuItem
-            onClick={() => router.push(`/dashboard/jobs/update/${data.id}`)}
+            onClick={() =>
+              router.push(`/dashboard/manage-jobs/update/${data.id}`)
+            }
           >
             <Edit className="w-[15px] h-[15px] mr-2" /> Update Job
-          </DropdownMenuItem>
-          <DropdownMenuItem
-            className=" text-red-700"
-            onClick={() => {
-              setId(data.id);
-              setOpen(true);
-            }}
-          >
-            <Trash className="w-[15px] h-[15px] mr-2" /> Delete Job
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

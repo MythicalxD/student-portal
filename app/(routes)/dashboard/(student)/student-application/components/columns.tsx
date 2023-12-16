@@ -3,8 +3,6 @@
 import { Button } from "@/components/ui/button";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown, CheckCircle } from "lucide-react";
-import { CellAction } from "./cell-actions";
-import { Badge } from "@/components/ui/badge";
 
 export type Job = {
   company: string;

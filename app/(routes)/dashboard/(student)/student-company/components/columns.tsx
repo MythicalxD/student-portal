@@ -5,6 +5,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown } from "lucide-react";
 
 export type Company = {
+  id: string;
   company_industry: string;
   company_logo: string;
   linked_jobs: string[];

@@ -10,7 +10,7 @@ async function getData(token: string, session: string): Promise<Application[]> {
     session: session,
   };
 
-  const apiUrl = "/api/manage-applications/application";
+  const apiUrl = "/api/applications";
 
   try {
     const response = await axios.post(apiUrl, dataToSend);

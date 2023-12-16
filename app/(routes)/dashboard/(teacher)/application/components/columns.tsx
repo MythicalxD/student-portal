@@ -7,18 +7,16 @@ import { CellAction } from "./cell-actions";
 import { Badge } from "@/components/ui/badge";
 
 export type Application = {
-  company: string;
   id: number;
-  job_category: string;
-  job_description: string;
+  job_name: string;
   status: string;
-  title: string;
+  student_name: string;
 };
 
 export const columns: ColumnDef<Application>[] = [
   {
     accessorKey: "id",
-    header: ({ column }) => {
+    header: () => {
       return <div className="text-start ml-2">ID</div>;
     },
     cell: ({ row }) => {
@@ -26,35 +24,33 @@ export const columns: ColumnDef<Application>[] = [
     },
   },
   {
-    accessorKey: "name",
+    accessorKey: "job_name",
     header: ({ column }) => {
       return (
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Title
+          Job Name
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
     },
     cell: ({ row }) => {
       return (
-        <div className="text-start font-medium ml-4">{row.original.title}</div>
+        <div className="text-start font-medium ml-4">
+          {row.original.job_name}
+        </div>
       );
     },
   },
   {
-    accessorKey: "job_category",
-    header: "Category",
-  },
-  {
-    accessorKey: "company",
-    header: "Company",
+    accessorKey: "student_name",
+    header: "Student Name",
   },
   {
     accessorKey: "status",
-    header: ({ column }) => {
+    header: () => {
       return <div className="text-start ml-2">Status</div>;
     },
     cell: ({ row }) => {
