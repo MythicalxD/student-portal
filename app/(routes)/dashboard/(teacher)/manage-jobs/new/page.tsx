@@ -51,6 +51,7 @@ import {
 } from "@/components/ui/command";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Skill } from "../../../(super-admin)/skills/components/columns";
+import { Check, ChevronsUpDown } from "lucide-react";
 
 const formSchema = z.object({
   title: z.string(),
@@ -74,17 +75,25 @@ const ImagePicker: React.FC = () => {
   const [jobData, setJobData] = useState<Job[]>([]);
   const [skillData, setSkillData] = useState<Skill[]>([]);
 
+  const [open, setOpen] = React.useState(false);
+  const [value, setValue] = React.useState("");
+
   const router = useRouter();
 
-  const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
-    if (event.target.files) {
-      setSelectedFile(event.target.files[0]);
-    }
-  };
-
-  const handleUpload = async (name: string, description: string) => {
+  const handleUpload = async (
+    name: string,
+    description: string,
+    status: string,
+    location: string,
+    skills: number[],
+    courses: number[],
+    experience: string,
+    url: string,
+    salary: string,
+    category: string,
+    company: string
+  ) => {
     try {
-      if (!selectedFile) return;
       //TODO add error on image not selected
       // Fetch the session
       const authToken = document.cookie
@@ -97,14 +106,26 @@ const ImagePicker: React.FC = () => {
         .find((row) => row.startsWith("session="))
         ?.split("=")[1];
 
-      const formData = new FormData();
-      formData.append("name", name);
-      formData.append("desc", description);
-      formData.append("session", session);
-      formData.append("token", authToken);
+      const dataToSend = {
+        token: authToken,
+        session: session,
+        name: name,
+        desc: description,
+        status: status,
+        location: location,
+        skills: skills,
+        courses: courses,
+        category: category,
+        experience: experience,
+        salary: salary,
+        url: url,
+        company: company,
+      };
 
-      const apiUrl = "/api/manage-jobs/upload";
-      const response = await axios.post(apiUrl, formData);
+      console.log(dataToSend);
+
+      const apiUrl = "/api/manage-jobs/job/upload";
+      const response = await axios.post(apiUrl, dataToSend);
 
       console.log(response.data);
       const { token } = response.data;
@@ -135,8 +156,19 @@ const ImagePicker: React.FC = () => {
   // 2. Define a submit handler.
   function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
-    //handleUpload(values.title, values.description);
-    console.log(values);
+    handleUpload(
+      values.title,
+      values.description,
+      values.status,
+      values.location,
+      values.skills,
+      values.courses,
+      values.experience,
+      values.web_url,
+      values.salary,
+      values.job_category_id,
+      values.company_id
+    );
   }
 
   async function getDataCompany(
@@ -458,57 +490,78 @@ const ImagePicker: React.FC = () => {
               )}
             />
 
-            <FormField
-              control={form.control}
-              name="skills"
-              render={() => (
-                <FormItem>
-                  <div className="mb-4">
-                    <FormLabel className="text-base">Skills</FormLabel>
-                    <FormDescription>
-                      Select the skills you want to add.
-                    </FormDescription>
-                  </div>
-                  {skillData.map((item, index) => (
-                    <FormField
-                      key={index + 1}
-                      control={form.control}
-                      name="skills"
-                      render={({ field }) => {
-                        return (
-                          <FormItem
-                            key={index + 1}
-                            className="flex flex-row items-start space-x-3 space-y-0"
-                          >
-                            <FormControl>
-                              <Checkbox
-                                checked={field.value?.includes(index + 1)}
-                                onCheckedChange={(checked) => {
-                                  return checked
-                                    ? field.onChange([
-                                        ...field.value,
-                                        index + 1,
-                                      ])
-                                    : field.onChange(
-                                        field.value?.filter(
-                                          (value) => value !== index + 1
-                                        )
-                                      );
-                                }}
-                              />
-                            </FormControl>
-                            <FormLabel className="font-normal">
-                              {item.name}
-                            </FormLabel>
-                          </FormItem>
-                        );
-                      }}
-                    />
-                  ))}
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            <Popover open={open} onOpenChange={setOpen}>
+              <PopoverTrigger asChild>
+                <Button
+                  variant="outline"
+                  role="combobox"
+                  aria-expanded={open}
+                  className="w-[200px] justify-between"
+                >
+                  {"Select Skills..."}
+                  <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-[200px] p-0">
+                <Command>
+                  <CommandInput placeholder="Search skills..." />
+                  <CommandEmpty>No skills found.</CommandEmpty>
+                  <CommandGroup>
+                    {skillData.map((item, index) => (
+                      <FormField
+                        key={item.id}
+                        control={form.control}
+                        name="skills"
+                        render={({ field }) => {
+                          return (
+                            <FormItem
+                              key={item.id}
+                              className="flex flex-row items-start space-x-3 space-y-0"
+                            >
+                              <FormControl>
+                                <CommandItem
+                                  key={item.id}
+                                  value={item.id}
+                                  onSelect={(currentValue) => {
+                                    setValue(
+                                      currentValue === value ? "" : currentValue
+                                    );
+                                    setOpen(false);
+                                  }}
+                                >
+                                  <Checkbox
+                                    checked={field.value?.includes(
+                                      Number.parseInt(item.id)
+                                    )}
+                                    onCheckedChange={(checked) => {
+                                      return checked
+                                        ? field.onChange([
+                                            ...field.value,
+                                            item.id,
+                                          ])
+                                        : field.onChange(
+                                            field.value?.filter(
+                                              (value) =>
+                                                value !==
+                                                Number.parseInt(item.id)
+                                            )
+                                          );
+                                    }}
+                                  />
+                                </CommandItem>
+                              </FormControl>
+                              <FormLabel className="font-normal pt-2">
+                                {item.name}
+                              </FormLabel>
+                            </FormItem>
+                          );
+                        }}
+                      />
+                    ))}
+                  </CommandGroup>
+                </Command>
+              </PopoverContent>
+            </Popover>
 
             <FormField
               control={form.control}

@@ -11,7 +11,7 @@ export async function POST(
 
     try {
 
-        const { name, token, session } = await req.json();
+        const { name, desc, status, location, skills, courses, category, experience, salary, url, company, session, token } = await req.json();
 
         let headersList = {
             "Accept": "*/*",
@@ -20,10 +20,10 @@ export async function POST(
             "Content-Type": "application/json"
         }
 
-        let bodyContent = JSON.stringify({ "name": name });
+        let bodyContent = JSON.stringify({ "title": name, "company_id": company, "status": status, "description": desc, "location": location, "skills": skills, "courses": courses, "job_category_id": category, "experience": experience, "salary": salary, "web_url": url });
 
         let reqOptions = {
-            url: `${process.env.BASEURL}/api/v1/jobCategories/category/register`,
+            url: `${process.env.BASEURL}/api/v1/job/register`,
             method: "POST",
             headers: headersList,
             data: bodyContent,
