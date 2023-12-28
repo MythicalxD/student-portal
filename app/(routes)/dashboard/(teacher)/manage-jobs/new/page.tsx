@@ -34,7 +34,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Job } from "../components/columns";
+import { Job, JobCategory } from "../components/columns";
 import { Company } from "../../../(student)/student-company/components/columns";
 import { Course } from "../../../(super-admin)/course/components/columns";
 import {
@@ -72,11 +72,14 @@ const ImagePicker: React.FC = () => {
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const [companyData, setDataCompany] = useState<Company[]>([]);
   const [courseData, setCourseData] = useState<Course[]>([]);
-  const [jobData, setJobData] = useState<Job[]>([]);
+  const [jobData, setJobData] = useState<JobCategory[]>([]);
   const [skillData, setSkillData] = useState<Skill[]>([]);
 
   const [open, setOpen] = React.useState(false);
   const [value, setValue] = React.useState("");
+
+  const [open1, setOpen1] = React.useState(false);
+  const [value1, setValue1] = React.useState("");
 
   const router = useRouter();
 
@@ -107,8 +110,6 @@ const ImagePicker: React.FC = () => {
         ?.split("=")[1];
 
       const dataToSend = {
-        token: authToken,
-        session: session,
         name: name,
         desc: description,
         status: status,
@@ -120,6 +121,8 @@ const ImagePicker: React.FC = () => {
         salary: salary,
         url: url,
         company: company,
+        token: authToken,
+        session: session,
       };
 
       console.log(dataToSend);
@@ -213,13 +216,13 @@ const ImagePicker: React.FC = () => {
     }
   }
 
-  async function getDataJob(token: string, session: string): Promise<Job[]> {
+  async function getDataJob(token: string, session: string): Promise<JobCategory[]> {
     const dataToSend = {
       id: token,
       session: session,
     };
 
-    const apiUrl = "/api/manage-jobs/job";
+    const apiUrl = "/api/manage-jobs/job/get/jobs";
 
     try {
       const response = await axios.post(apiUrl, dataToSend);
@@ -365,7 +368,7 @@ const ImagePicker: React.FC = () => {
                     <SelectContent>
                       {jobData.map((data) => (
                         <SelectItem value={`${data.id}`} key={data.id}>
-                          {data.title}
+                          {data.name}
                         </SelectItem>
                       ))}
                     </SelectContent>
@@ -441,127 +444,155 @@ const ImagePicker: React.FC = () => {
               )}
             />
 
-            <FormField
-              control={form.control}
-              name="courses"
-              render={() => (
-                <FormItem>
-                  <div className="mb-4">
-                    <FormLabel className="text-base">Courses</FormLabel>
-                    <FormDescription>
-                      Select the courses you want to add.
-                    </FormDescription>
-                  </div>
-                  {courseData.map((item) => (
-                    <FormField
-                      key={item.id}
-                      control={form.control}
-                      name="courses"
-                      render={({ field }) => {
-                        return (
-                          <FormItem
-                            key={item.id}
-                            className="flex flex-row items-start space-x-3 space-y-0"
-                          >
-                            <FormControl>
-                              <Checkbox
-                                checked={field.value?.includes(item.id)}
-                                onCheckedChange={(checked) => {
-                                  return checked
-                                    ? field.onChange([...field.value, item.id])
-                                    : field.onChange(
-                                        field.value?.filter(
-                                          (value) => value !== item.id
-                                        )
+            <div className="flex flex-col gap-y-4">
+              <FormLabel>Courses in Job</FormLabel>
+              <Popover open={open1} onOpenChange={setOpen1}>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="outline"
+                    role="combobox"
+                    aria-expanded={open1}
+                    className="w-[300px] justify-between"
+                  >
+                    {"Select Courses..."}
+                    <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-[300px] p-0">
+                  <Command>
+                    <CommandInput placeholder="Search courses..." />
+                    <CommandEmpty>No courses found.</CommandEmpty>
+                    <CommandGroup>
+                      {courseData.map((item, index) => (
+                        <FormField
+                          key={item.id}
+                          control={form.control}
+                          name="courses"
+                          render={({ field }) => {
+                            return (
+                              <FormItem
+                                key={item.id}
+                                className="flex flex-row items-center space-x-3 space-y-0 mt-2"
+                              >
+                                <FormControl>
+                                  <CommandItem
+                                    key={item.id}
+                                    value={item.id.toString()}
+                                    onSelect={(currentValue) => {
+                                      setValue1(
+                                        currentValue === value1 ? "" : currentValue
                                       );
-                                }}
-                              />
-                            </FormControl>
-                            <FormLabel className="font-normal">
-                              {item.name}
-                            </FormLabel>
-                          </FormItem>
-                        );
-                      }}
-                    />
-                  ))}
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <Popover open={open} onOpenChange={setOpen}>
-              <PopoverTrigger asChild>
-                <Button
-                  variant="outline"
-                  role="combobox"
-                  aria-expanded={open}
-                  className="w-[200px] justify-between"
-                >
-                  {"Select Skills..."}
-                  <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-[200px] p-0">
-                <Command>
-                  <CommandInput placeholder="Search skills..." />
-                  <CommandEmpty>No skills found.</CommandEmpty>
-                  <CommandGroup>
-                    {skillData.map((item, index) => (
-                      <FormField
-                        key={item.id}
-                        control={form.control}
-                        name="skills"
-                        render={({ field }) => {
-                          return (
-                            <FormItem
-                              key={item.id}
-                              className="flex flex-row items-start space-x-3 space-y-0"
-                            >
-                              <FormControl>
-                                <CommandItem
-                                  key={item.id}
-                                  value={item.id}
-                                  onSelect={(currentValue) => {
-                                    setValue(
-                                      currentValue === value ? "" : currentValue
-                                    );
-                                    setOpen(false);
-                                  }}
-                                >
-                                  <Checkbox
-                                    checked={field.value?.includes(
-                                      Number.parseInt(item.id)
-                                    )}
-                                    onCheckedChange={(checked) => {
-                                      return checked
-                                        ? field.onChange([
+                                      setOpen1(false);
+                                    }}
+                                  >
+                                    <Checkbox
+                                      checked={field.value?.includes(
+                                        Number.parseInt(item.id.toString())
+                                      )}
+                                      onCheckedChange={(checked) => {
+                                        return checked
+                                          ? field.onChange([
                                             ...field.value,
                                             item.id,
                                           ])
-                                        : field.onChange(
+                                          : field.onChange(
+                                            field.value?.filter(
+                                              (value) =>
+                                                value !==
+                                                Number.parseInt(item.id.toString())
+                                            )
+                                          );
+                                      }}
+                                    />
+                                  </CommandItem>
+                                </FormControl>
+                                <FormLabel className="font-normal">
+                                  {item.name}
+                                </FormLabel>
+                              </FormItem>
+                            );
+                          }}
+                        />
+                      ))}
+                    </CommandGroup>
+                  </Command>
+                </PopoverContent>
+              </Popover>
+
+              <FormLabel>Skills in Job</FormLabel>
+              <Popover open={open} onOpenChange={setOpen}>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="outline"
+                    role="combobox"
+                    aria-expanded={open}
+                    className="w-[300px] justify-between"
+                  >
+                    {"Select Skills..."}
+                    <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-[300px] p-0">
+                  <Command>
+                    <CommandInput placeholder="Search skills..." />
+                    <CommandEmpty>No skills found.</CommandEmpty>
+                    <CommandGroup>
+                      {skillData.map((item, index) => (
+                        <FormField
+                          key={item.id}
+                          control={form.control}
+                          name="skills"
+                          render={({ field }) => {
+                            return (
+                              <FormItem
+                                key={item.id}
+                                className="flex flex-row items-center space-x-3 space-y-0"
+                              >
+                                <FormControl>
+                                  <CommandItem
+                                    key={item.id}
+                                    value={item.id}
+                                    onSelect={(currentValue) => {
+                                      setValue(
+                                        currentValue === value ? "" : currentValue
+                                      );
+                                      setOpen(false);
+                                    }}
+                                  >
+                                    <Checkbox
+                                      checked={field.value?.includes(
+                                        Number.parseInt(item.id)
+                                      )}
+                                      onCheckedChange={(checked) => {
+                                        return checked
+                                          ? field.onChange([
+                                            ...field.value,
+                                            item.id,
+                                          ])
+                                          : field.onChange(
                                             field.value?.filter(
                                               (value) =>
                                                 value !==
                                                 Number.parseInt(item.id)
                                             )
                                           );
-                                    }}
-                                  />
-                                </CommandItem>
-                              </FormControl>
-                              <FormLabel className="font-normal pt-2">
-                                {item.name}
-                              </FormLabel>
-                            </FormItem>
-                          );
-                        }}
-                      />
-                    ))}
-                  </CommandGroup>
-                </Command>
-              </PopoverContent>
-            </Popover>
+                                      }}
+                                    />
+                                  </CommandItem>
+                                </FormControl>
+                                <FormLabel className="font-normal">
+                                  {item.name}
+                                </FormLabel>
+                              </FormItem>
+                            );
+                          }}
+                        />
+                      ))}
+                    </CommandGroup>
+                  </Command>
+                </PopoverContent>
+              </Popover>
+            </div>
 
             <FormField
               control={form.control}

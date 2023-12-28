@@ -4,24 +4,22 @@ import { NextRequest, NextResponse } from 'next/server';
 export async function POST(req: NextRequest, res: NextResponse) {
     try {
 
-        const { token, session, id } = await req.json();
+        const { id, session } = await req.json();
 
         let headersList = {
             "Accept": "*/*",
-            "Authorization": `Bearer ${token}`,
+            "Authorization": `Bearer ${id}`,
             "Cookie": `session=${session}`
         }
 
 
         let reqOptions = {
-            url: `${process.env.BASEURL}/api/v1/job/job/${id}`,
+            url: `${process.env.BASEURL}/api/v1/jobCategories/categories`,
             method: "GET",
             headers: headersList,
         }
 
         let response = await axios.request(reqOptions);
-        console.log(response);
-
 
         return NextResponse.json(response.data, { status: 200 })
         // Handle success as needed

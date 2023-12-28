@@ -6,6 +6,11 @@ import { ArrowUpDown } from "lucide-react";
 import { CellAction } from "./cell-actions";
 import { Badge } from "@/components/ui/badge";
 
+export type JobCategory = {
+  id: number;
+  name: string;
+};
+
 export type Job = {
   company: string;
   id: number;
@@ -19,7 +24,7 @@ export type JobFull = {
   applications: string[]; // Assuming application IDs or references are strings
   company_name: string;
   courses: string[];
-  detailed_description: string; // Corrected the typo in property name
+  detiled_description: string; // Corrected the typo in property name
   experience: number;
   job_category_name: string;
   location: string;

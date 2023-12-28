@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 import { useRouter } from "next/navigation";
-import { CheckCircle, Eye, MoreHorizontal, Trash } from "lucide-react";
+import { CheckCircle, Download, Eye, Inspect, MoreHorizontal, Trash, X } from "lucide-react";
 import { useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
@@ -27,32 +27,43 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
   const [loading] = useState(false);
   const [id, setId] = useState("");
 
-  const handleUpload = async (name: string) => {
-    const authToken = document.cookie
-      .split("; ")
-      .find((row) => row.startsWith("token="))
-      ?.split("=")[1];
+  const handleUploadApprove = async (
+    comment: string,
+    status: string,
+    id: string
+  ) => {
+    try {
+      const authToken = document.cookie
+        .split("; ")
+        .find((row) => row.startsWith("token="))
+        ?.split("=")[1];
 
-    const session = document.cookie
-      .split("; ")
-      .find((row) => row.startsWith("session="))
-      ?.split("=")[1];
+      const session = document.cookie
+        .split("; ")
+        .find((row) => row.startsWith("session="))
+        ?.split("=")[1];
 
-    const dataToSend = {
-      token: authToken,
-      session: session,
-      id: id,
-    };
+      const formData = new FormData();
+      formData.append("comment", comment);
+      formData.append("status", status);
+      formData.append("id", id);
+      formData.append("session", session!);
+      formData.append("token", authToken!);
 
-    const apiUrl = "/api/job/delete";
-    const response = await axios.post(apiUrl, dataToSend);
+      const apiUrl = "/api/applications/update";
+      const response = await axios.post(apiUrl, formData);
 
-    if (response.status === 200) {
-      toast.success("Job Deleted");
-      window.location.href = "/dashboard/jobs";
+      console.log(response.data);
+      const { token } = response.data;
+      if (token === "done") {
+        toast.success("Application Updated");
+        router.refresh();
+      }
+    } catch (error) {
+      toast.error("Error Updating Application");
+      console.error("Error uploading file:", error);
+      // Handle the error
     }
-
-    console.log(response.data);
   };
 
   return (
@@ -72,9 +83,21 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
             <Eye className="w-[15px] h-[15px] mr-2" />
             View Application
           </DropdownMenuItem>
+          <DropdownMenuItem
+            onClick={() => router.push(`/dashboard/application/${data.id}`)}
+          >
+            <Download className="w-[15px] h-[15px] mr-2" />
+            Download Resume
+          </DropdownMenuItem>
           <DropdownMenuSeparator />
-          <DropdownMenuItem className=" text-green-700" onClick={() => {}}>
+          <DropdownMenuItem className=" text-green-700" onClick={() => { handleUploadApprove("none", "Approved", data.id.toString()) }}>
             <CheckCircle className="w-[15px] h-[15px] mr-2" /> Approve
+          </DropdownMenuItem>
+          <DropdownMenuItem className=" text-red-700" onClick={() => { handleUploadApprove("none", "Rejected", data.id.toString()) }}>
+            <X className="w-[15px] h-[15px] mr-2" /> Reject
+          </DropdownMenuItem>
+          <DropdownMenuItem className=" text-yellow-700" onClick={() => { handleUploadApprove("none", "Under Review", data.id.toString()) }}>
+            <Inspect className="w-[15px] h-[15px] mr-2" /> Under Review
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

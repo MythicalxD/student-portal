@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, ChangeEvent, FormEvent, useEffect } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
@@ -15,14 +15,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-
 import { Input } from "@/components/ui/input";
 
 import axios from "axios";
@@ -32,10 +24,48 @@ import * as z from "zod";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 import { Icons } from "@/components/icons";
+import { Textarea } from "@/components/ui/textarea";
 import toast from "react-hot-toast";
-import { JobFull } from "../../components/columns";
 import Link from "next/link";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+} from "@/components/ui/command";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Check, ChevronsUpDown } from "lucide-react";
+import { Company } from "@/app/(routes)/dashboard/(student)/student-company/components/columns";
+import { Course } from "@/app/(routes)/dashboard/(super-admin)/course/components/columns";
+import { Skill } from "@/app/(routes)/dashboard/(super-admin)/skills/components/columns";
+import { Job, JobFull } from "../../components/columns";
+
+const formSchema = z.object({
+  title: z.string(),
+  company_id: z.string(),
+  status: z.string(),
+  description: z.string(),
+  location: z.string(),
+  job_category_id: z.string(),
+  experience: z.string(),
+  salary: z.string(),
+  web_url: z.string(),
+  skills: z.array(z.number()),
+  courses: z.array(z.number()),
+});
 
 interface JobProps {
   params: {
@@ -43,52 +73,216 @@ interface JobProps {
   };
 }
 
-const formSchema = z.object({
-  applications: z.array(z.string()), // Assuming application IDs or references are strings
-  company_name: z.string(),
-  courses: z.array(z.string()),
-  detailed_description: z.string(),
-  experience: z.number(),
-  job_category_name: z.string(),
-  location: z.string(),
-  salary: z.string(),
-  skills: z.array(z.string()),
-  status: z.string(),
-  title: z.string(),
-  web_url: z.string(),
-});
-
-async function getData(
-  token: string,
-  session: string,
-  id: string
-): Promise<JobFull> {
-  const dataToSend = {
-    token: token,
-    session: session,
-    id: id,
-  };
-
-  const apiUrl = "/api/manage-jobs/get";
-
-  try {
-    const response = await axios.post(apiUrl, dataToSend);
-    return response.data;
-  } catch (error: any) {
-    if (error.response.status === 401) {
-      return error;
-    } else {
-      console.error("Error:", error);
-      return error;
-    }
-  }
-}
-
 const UpdateJob: React.FC<JobProps> = ({ params }) => {
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
+  const [companyData, setDataCompany] = useState<Company[]>([]);
+  const [courseData, setCourseData] = useState<Course[]>([]);
+  const [jobData, setJobData] = useState<Job[]>([]);
+  const [skillData, setSkillData] = useState<Skill[]>([]);
+
+  const [open, setOpen] = React.useState(false);
+  const [value, setValue] = React.useState("");
+
+  const [open1, setOpen1] = React.useState(false);
+  const [value1, setValue1] = React.useState("");
+
   const [data, setData] = useState<JobFull>();
 
   const router = useRouter();
+
+  const handleUpload = async (
+    name: string,
+    description: string,
+    status: string,
+    location: string,
+    skills: number[],
+    courses: number[],
+    experience: string,
+    url: string,
+    salary: string,
+    category: string,
+    company: string
+  ) => {
+    try {
+      //TODO add error on image not selected
+      // Fetch the session
+      const authToken = document.cookie
+        .split("; ")
+        .find((row) => row.startsWith("token="))
+        ?.split("=")[1];
+
+      const session = document.cookie
+        .split("; ")
+        .find((row) => row.startsWith("session="))
+        ?.split("=")[1];
+
+      const dataToSend = {
+        name: name,
+        desc: description,
+        status: status,
+        location: location,
+        skills: skills,
+        courses: courses,
+        category: category,
+        experience: experience,
+        salary: salary,
+        url: url,
+        company: company,
+        token: authToken,
+        session: session,
+      };
+
+      const apiUrl = "/api/manage-jobs/job/upload";
+      const response = await axios.post(apiUrl, dataToSend);
+
+      const { token } = response.data;
+      if (token === "done") {
+        toast.success("Job Created");
+        router.push("/dashboard/manage-jobs");
+      }
+      setIsLoading(false);
+    } catch (error) {
+      setIsLoading(false);
+      toast.error("Error Creating Job");
+      console.error("Error uploading file:", error);
+      // Handle the error
+    }
+  };
+
+  // 1. Define your form.
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      title: "",
+      description: "",
+      courses: [],
+      skills: [],
+    },
+  });
+
+  // 2. Define a submit handler.
+  function onSubmit(values: z.infer<typeof formSchema>) {
+    setIsLoading(true);
+    handleUpload(
+      values.title,
+      values.description,
+      values.status,
+      values.location,
+      values.skills,
+      values.courses,
+      values.experience,
+      values.web_url,
+      values.salary,
+      values.job_category_id,
+      values.company_id
+    );
+  }
+
+  async function getDataCompany(
+    token: string,
+    session: string
+  ): Promise<Company[]> {
+    const dataToSend = {
+      id: token,
+      session: session,
+    };
+
+    const apiUrl = "/api/manage-jobs/job/get/company";
+
+    try {
+      const response = await axios.post(apiUrl, dataToSend);
+      return response.data;
+    } catch (error: any) {
+      console.error();
+      return error;
+    }
+  }
+
+  async function getDataCourses(
+    token: string,
+    session: string
+  ): Promise<Course[]> {
+    const dataToSend = {
+      id: token,
+      session: session,
+    };
+
+    const apiUrl = "/api/manage-jobs/job/get/course";
+
+    try {
+      const response = await axios.post(apiUrl, dataToSend);
+      return response.data;
+    } catch (error: any) {
+      console.error();
+      return error;
+    }
+  }
+
+  async function getDataJob(token: string, session: string): Promise<Job[]> {
+    const dataToSend = {
+      id: token,
+      session: session,
+    };
+
+    const apiUrl = "/api/manage-jobs/job";
+
+    try {
+      const response = await axios.post(apiUrl, dataToSend);
+      return response.data;
+    } catch (error: any) {
+      console.error();
+      return error;
+    }
+  }
+
+  async function getDataSkill(
+    token: string,
+    session: string
+  ): Promise<Skill[]> {
+    const dataToSend = {
+      id: token,
+      session: session,
+    };
+
+    const apiUrl = "/api/manage-jobs/job/get/skills";
+
+    try {
+      const response = await axios.post(apiUrl, dataToSend);
+      return response.data;
+    } catch (error: any) {
+      console.error();
+      return error;
+    }
+  }
+
+  async function getData(
+    token: string,
+    session: string,
+    id: string
+  ): Promise<JobFull> {
+
+
+    const dataToSend = {
+      token: token,
+      session: session,
+      id: id,
+    };
+
+    const apiUrl = "/api/manage-jobs/job/get";
+
+    try {
+      const response = await axios.post(apiUrl, dataToSend);
+      return response.data;
+    } catch (error: any) {
+      if (error.response.status === 401) {
+        return error;
+      } else {
+        console.error("Error:", error);
+        return error;
+      }
+    }
+  }
 
   useEffect(() => {
     const fetchData = async () => {
@@ -105,8 +299,24 @@ const UpdateJob: React.FC<JobProps> = ({ params }) => {
       const fetchedData = await getData(authToken!, session!, params.id);
       setData(fetchedData);
 
+      const fetchedDataCompany = await getDataCompany(authToken!, session!);
+      const fetchedDataCourses = await getDataCourses(authToken!, session!);
+      const fetchedDataJob = await getDataJob(authToken!, session!);
+      const fetchedDataSkill = await getDataSkill(authToken!, session!);
+      setDataCompany(fetchedDataCompany);
+      setCourseData(fetchedDataCourses);
+      setJobData(fetchedDataJob);
+      setSkillData(fetchedDataSkill);
+
       // Populate the form fields with the fetched data
       form.setValue("title", fetchedData.title);
+      form.setValue("description", fetchedData.detiled_description);
+      form.setValue("location", fetchedData.location);
+      form.setValue("salary", fetchedData.salary);
+      form.setValue("status", fetchedData.status);
+      form.setValue("web_url", fetchedData.web_url);
+      form.setValue("experience", fetchedData.experience.toString());
+
     };
 
     fetchData(); // Call the fetchData function when the component mounts
@@ -114,89 +324,23 @@ const UpdateJob: React.FC<JobProps> = ({ params }) => {
     // Optionally, you can include a cleanup function here if needed
   }, []); // The empty dependency array ensures that the effect runs only once
 
-  // 1. Define your form.
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      applications: [],
-      company_name: "",
-      courses: [],
-      detailed_description: "",
-      experience: 0,
-      job_category_name: "",
-      location: "",
-      salary: "",
-      skills: [],
-      status: "",
-      title: "",
-      web_url: "",
-    },
-  });
-
-  const handleUpload = async (id: string) => {
-    try {
-      const authToken = document.cookie
-        .split("; ")
-        .find((row) => row.startsWith("token="))
-        ?.split("=")[1];
-
-      const session = document.cookie
-        .split("; ")
-        .find((row) => row.startsWith("session="))
-        ?.split("=")[1];
-
-      const formData = new FormData();
-      formData.append("title");
-      formData.append("session", session);
-      formData.append("token", authToken);
-
-      const apiUrl = "/api/job/update";
-      const response = await axios.post(apiUrl, formData);
-
-      const { token } = response.data;
-      if (token === "done") {
-        toast.success("Job Updated");
-        router.push("/dashboard/jobs");
-      }
-      setIsLoading(false);
-    } catch (error) {
-      setIsLoading(false);
-      toast.error("Error Updating Job");
-      console.error("Error uploading file:", error);
-      // Handle the error
-    }
-  };
-
-  // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    setIsLoading(true);
-    handleUpload(params.id);
-  }
-
   return (
     <div className="m-4">
-      <div className="flex flex-col w-[80vw]">
-        <div className="flex">
-          <div className="flex flex-col">
-            <p className="text-3xl text-black font-bold">Update Job</p>
-            <p className="text-sm text-gray-600 mb-2">
-              Please provide updated information for job.
-            </p>
-          </div>
-        </div>
-        <Separator className="mb-4" />
-      </div>
+      <p className="text-3xl text-black font-bold mb-1">Create new Job</p>
+      <p className="text-sm text-gray-500 mb-2">
+        Please provide information for creating a new job profile.
+      </p>
 
       <Link
-        href="../"
+        href="/dashboard/manage-jobs"
         className={cn(
           buttonVariants({ variant: "outline" }),
-          "absolute right-[2rem] top-[6rem]"
+          "absolute right-[2rem] top-[6rem] z-0"
         )}
       >
         Go Back
       </Link>
-
+      <Separator className="mb-4" />
       <div className="flex">
         <Form {...form}>
           <form
@@ -342,106 +486,155 @@ const UpdateJob: React.FC<JobProps> = ({ params }) => {
               )}
             />
 
-            <FormField
-              control={form.control}
-              name="courses"
-              render={() => (
-                <FormItem>
-                  <div className="mb-4">
-                    <FormLabel className="text-base">Courses</FormLabel>
-                    <FormDescription>
-                      Select the courses you want to add.
-                    </FormDescription>
-                  </div>
-                  {courseData.map((item) => (
-                    <FormField
-                      key={item.id}
-                      control={form.control}
-                      name="courses"
-                      render={({ field }) => {
-                        return (
-                          <FormItem
-                            key={item.id}
-                            className="flex flex-row items-start space-x-3 space-y-0"
-                          >
-                            <FormControl>
-                              <Checkbox
-                                checked={field.value?.includes(item.id)}
-                                onCheckedChange={(checked) => {
-                                  return checked
-                                    ? field.onChange([...field.value, item.id])
-                                    : field.onChange(
-                                        field.value?.filter(
-                                          (value) => value !== item.id
-                                        )
+            <div className="flex flex-col gap-y-4">
+              <FormLabel>Courses in Job</FormLabel>
+              <Popover open={open1} onOpenChange={setOpen1}>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="outline"
+                    role="combobox"
+                    aria-expanded={open1}
+                    className="w-[300px] justify-between"
+                  >
+                    {"Select Courses..."}
+                    <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-[300px] p-0">
+                  <Command>
+                    <CommandInput placeholder="Search courses..." />
+                    <CommandEmpty>No courses found.</CommandEmpty>
+                    <CommandGroup>
+                      {courseData.map((item, index) => (
+                        <FormField
+                          key={item.id}
+                          control={form.control}
+                          name="courses"
+                          render={({ field }) => {
+                            return (
+                              <FormItem
+                                key={item.id}
+                                className="flex flex-row items-center space-x-3 space-y-0 mt-2"
+                              >
+                                <FormControl>
+                                  <CommandItem
+                                    key={item.id}
+                                    value={item.id.toString()}
+                                    onSelect={(currentValue) => {
+                                      setValue1(
+                                        currentValue === value1 ? "" : currentValue
                                       );
-                                }}
-                              />
-                            </FormControl>
-                            <FormLabel className="font-normal">
-                              {item.name}
-                            </FormLabel>
-                          </FormItem>
-                        );
-                      }}
-                    />
-                  ))}
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+                                      setOpen1(false);
+                                    }}
+                                  >
+                                    <Checkbox
+                                      checked={field.value?.includes(
+                                        Number.parseInt(item.id.toString())
+                                      )}
+                                      onCheckedChange={(checked) => {
+                                        return checked
+                                          ? field.onChange([
+                                            ...field.value,
+                                            item.id,
+                                          ])
+                                          : field.onChange(
+                                            field.value?.filter(
+                                              (value) =>
+                                                value !==
+                                                Number.parseInt(item.id.toString())
+                                            )
+                                          );
+                                      }}
+                                    />
+                                  </CommandItem>
+                                </FormControl>
+                                <FormLabel className="font-normal">
+                                  {item.name}
+                                </FormLabel>
+                              </FormItem>
+                            );
+                          }}
+                        />
+                      ))}
+                    </CommandGroup>
+                  </Command>
+                </PopoverContent>
+              </Popover>
 
-            <FormField
-              control={form.control}
-              name="skills"
-              render={() => (
-                <FormItem>
-                  <div className="mb-4">
-                    <FormLabel className="text-base">Skills</FormLabel>
-                    <FormDescription>
-                      Select the skills you want to add.
-                    </FormDescription>
-                  </div>
-                  {skillData.map((item, index) => (
-                    <FormField
-                      key={index + 1}
-                      control={form.control}
-                      name="skills"
-                      render={({ field }) => {
-                        return (
-                          <FormItem
-                            key={index + 1}
-                            className="flex flex-row items-start space-x-3 space-y-0"
-                          >
-                            <FormControl>
-                              <Checkbox
-                                checked={field.value?.includes(index + 1)}
-                                onCheckedChange={(checked) => {
-                                  return checked
-                                    ? field.onChange([
-                                        ...field.value,
-                                        index + 1,
-                                      ])
-                                    : field.onChange(
-                                        field.value?.filter(
-                                          (value) => value !== index + 1
-                                        )
+              <FormLabel>Skills in Job</FormLabel>
+              <Popover open={open} onOpenChange={setOpen}>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="outline"
+                    role="combobox"
+                    aria-expanded={open}
+                    className="w-[300px] justify-between"
+                  >
+                    {"Select Skills..."}
+                    <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-[300px] p-0">
+                  <Command>
+                    <CommandInput placeholder="Search skills..." />
+                    <CommandEmpty>No skills found.</CommandEmpty>
+                    <CommandGroup>
+                      {skillData.map((item, index) => (
+                        <FormField
+                          key={item.id}
+                          control={form.control}
+                          name="skills"
+                          render={({ field }) => {
+                            return (
+                              <FormItem
+                                key={item.id}
+                                className="flex flex-row items-center space-x-3 space-y-0"
+                              >
+                                <FormControl>
+                                  <CommandItem
+                                    key={item.id}
+                                    value={item.id}
+                                    onSelect={(currentValue) => {
+                                      setValue(
+                                        currentValue === value ? "" : currentValue
                                       );
-                                }}
-                              />
-                            </FormControl>
-                            <FormLabel className="font-normal">
-                              {item.name}
-                            </FormLabel>
-                          </FormItem>
-                        );
-                      }}
-                    />
-                  ))}
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+                                      setOpen(false);
+                                    }}
+                                  >
+                                    <Checkbox
+                                      checked={field.value?.includes(
+                                        Number.parseInt(item.id)
+                                      )}
+                                      onCheckedChange={(checked) => {
+                                        return checked
+                                          ? field.onChange([
+                                            ...field.value,
+                                            item.id,
+                                          ])
+                                          : field.onChange(
+                                            field.value?.filter(
+                                              (value) =>
+                                                value !==
+                                                Number.parseInt(item.id)
+                                            )
+                                          );
+                                      }}
+                                    />
+                                  </CommandItem>
+                                </FormControl>
+                                <FormLabel className="font-normal">
+                                  {item.name}
+                                </FormLabel>
+                              </FormItem>
+                            );
+                          }}
+                        />
+                      ))}
+                    </CommandGroup>
+                  </Command>
+                </PopoverContent>
+              </Popover>
+            </div>
 
             <FormField
               control={form.control}
@@ -472,7 +665,7 @@ const UpdateJob: React.FC<JobProps> = ({ params }) => {
                 {isLoading && (
                   <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
                 )}
-                Create
+                Update Details
               </Button>
             </div>
           </form>

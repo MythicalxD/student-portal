@@ -11,6 +11,17 @@ export type Application = {
   job_name: string;
   status: string;
   student_name: string;
+  created_date: string;
+  company_name: string;
+  comments: string[];
+};
+
+export type ApplicationList = {
+  id: number;
+  job_name: string;
+  status: string;
+  student_name: string;
+  selected: number;
 };
 
 export const columns: ColumnDef<Application>[] = [
@@ -56,9 +67,8 @@ export const columns: ColumnDef<Application>[] = [
     cell: ({ row }) => {
       return (
         <Badge
-          variant={`${
-            row.original.status == "Inactive" ? "destructive" : "secondary"
-          }`}
+          variant={`${row.original.status == "Inactive" ? "destructive" : "secondary"
+            }`}
         >
           {row.original.status}
         </Badge>
