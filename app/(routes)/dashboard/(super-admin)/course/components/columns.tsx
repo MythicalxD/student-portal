@@ -4,23 +4,17 @@ import { ColumnDef } from "@tanstack/react-table";
 import { CellAction } from "./cell-actions";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 
 export type Course = {
+  created_at: string;
+  created_by: number;
   description: string;
   id: number;
   name: string;
   skills: string[];
-};
-
-export type IndustryFull = {
-  id: string;
-  name: string;
-  description: string;
-  logo: string;
   updated_at: string;
-  created_at: string;
-  created_by: string;
-  updated_by: string;
+  updated_by: number;
 };
 
 export const columns: ColumnDef<Course>[] = [
@@ -41,6 +35,28 @@ export const columns: ColumnDef<Course>[] = [
   {
     accessorKey: "description",
     header: "Description",
+  },
+  {
+    accessorKey: "updated_at",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Updated At
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
+  },
+  {
+    header: "Skills",
+    cell: ({ row }) => <div className="flex flex-wrap" >
+      {row.original.skills.map((item, index) => (
+        <Badge variant="secondary" className="mr-2 mb-2" key={index}>{item}</Badge>
+      ))}
+    </div>,
   },
   {
     header: "Actions",

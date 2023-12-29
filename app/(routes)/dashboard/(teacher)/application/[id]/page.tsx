@@ -29,13 +29,10 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 
 const FormSchema = z.object({
   comment: z
-    .string()
-    .min(10, {
-      message: "Comment must be at least 10 characters.",
-    })
+    .string().min(2)
     .max(1000, {
       message: "Comment must not be longer than 1000 characters.",
-    }),
+    }).optional(),
   status: z.string()
 })
 
@@ -125,7 +122,7 @@ const Application: React.FC<AppProps> = ({ params }) => {
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
     setIsLoading(true);
-    handleUpload(data.comment, data.status, params.id);
+    handleUpload(data.comment!, data.status, params.id);
     console.log(data);
   }
 
@@ -222,10 +219,6 @@ const Application: React.FC<AppProps> = ({ params }) => {
                           <SelectItem value="Under Review">Under Review</SelectItem>
                         </SelectContent>
                       </Select>
-                      <FormDescription>
-                        You can manage email addresses in your{" "}
-                        <Link href="/examples/forms">email settings</Link>.
-                      </FormDescription>
                       <FormMessage />
                     </FormItem>
                   )}

@@ -224,10 +224,6 @@ const Application: React.FC<AppProps> = ({ params }) => {
                           <SelectItem value="Under Review">Under Review</SelectItem>
                         </SelectContent>
                       </Select>
-                      <FormDescription>
-                        You can manage email addresses in your{" "}
-                        <Link href="/examples/forms">email settings</Link>.
-                      </FormDescription>
                       <FormMessage />
                     </FormItem>
                   )}

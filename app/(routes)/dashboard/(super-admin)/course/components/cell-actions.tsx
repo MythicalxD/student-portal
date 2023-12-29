@@ -12,14 +12,14 @@ import {
 
 import { useRouter } from "next/navigation";
 import { Edit, Eye, MoreHorizontal, Trash } from "lucide-react";
-import { Industry } from "./columns";
+import { Course } from "./columns";
 import { AlertModal } from "@/components/modals/alert-modal";
 import { useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
 
 interface CellActionProps {
-  data: Industry;
+  data: Course;
 }
 
 export const CellAction: React.FC<CellActionProps> = ({ data }) => {
@@ -45,12 +45,12 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
       id: id,
     };
 
-    const apiUrl = "/api/industry/delete";
+    const apiUrl = "/api/course/delete";
     const response = await axios.post(apiUrl, dataToSend);
 
     if (response.status === 200) {
-      toast.success("Industry Deleted");
-      window.location.href = "/dashboard/industry";
+      toast.success("Course Deleted");
+      window.location.href = "/dashboard/course";
     }
 
     console.log(response.data);
@@ -80,25 +80,25 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
         <DropdownMenuContent align="end">
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
           <DropdownMenuItem
-            onClick={() => router.push(`/dashboard/industry/${data.id}`)}
+            onClick={() => router.push(`/dashboard/course/${data.id}`)}
           >
             <Eye className="w-[15px] h-[15px] mr-2" />
             View
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem
-            onClick={() => router.push(`/dashboard/industry/update/${data.id}`)}
+            onClick={() => router.push(`/dashboard/course/update/${data.id}`)}
           >
-            <Edit className="w-[15px] h-[15px] mr-2" /> Update Industry
+            <Edit className="w-[15px] h-[15px] mr-2" /> Update Course
           </DropdownMenuItem>
           <DropdownMenuItem
             className=" text-red-700"
             onClick={() => {
-              setId(data.id);
+              setId(data.id.toString());
               setOpen(true);
             }}
           >
-            <Trash className="w-[15px] h-[15px] mr-2" /> Delete Industry
+            <Trash className="w-[15px] h-[15px] mr-2" /> Delete Course
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

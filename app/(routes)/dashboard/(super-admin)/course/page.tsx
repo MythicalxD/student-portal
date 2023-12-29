@@ -10,7 +10,7 @@ async function getData(token: string, session: string): Promise<Course[]> {
     session: session,
   };
 
-  const apiUrl = "/api/industry";
+  const apiUrl = "/api/course";
 
   try {
     const response = await axios.post(apiUrl, dataToSend);
@@ -57,7 +57,7 @@ export default function DemoPage() {
   return (
     <div className="container mx-auto py-4">
       <div className="flex justify-between items-center">
-        <p className="text-2xl font-extrabold">ALL INDUSTRIES</p>
+        <p className="text-2xl font-extrabold">ALL COURSES</p>
       </div>
 
       <DataTable columns={columns} data={data} />

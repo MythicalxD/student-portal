@@ -71,7 +71,7 @@ export function DataTable<TData, TValue>({
           />
         </div>
         <Link
-          href={`/dashboard/industry/new`}
+          href={`/dashboard/course/new`}
           className={cn(
             buttonVariants({ variant: "default" }),
             "md:right-8 md:top-8"
