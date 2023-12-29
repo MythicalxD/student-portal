@@ -35,4 +35,26 @@ export type JobApplication = {
     status: string;
     student_cv: string;
     student_name: string;
+};
+
+type Comment = {
+    application: number;
+    comment: string;
+    created_at: string;
+    created_by: number;
+    id: number;
+    updated_at: string;
+    updated_by: number;
   };
+
+export type JobApplicationAdmin = {
+    approved_by: number;
+    comments: Comment[];
+    created_at: string;
+    created_by: number;
+    id: number;
+    job: string;
+    status: string;
+    updated_at: string;
+    updated_by: number;
+};
