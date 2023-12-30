@@ -23,13 +23,13 @@ export type Job = {
 export type JobFull = {
   applications: string[]; // Assuming application IDs or references are strings
   company_name: string;
-  courses: string[];
+  courses: number[];
   detiled_description: string; // Corrected the typo in property name
   experience: number;
   job_category_name: string;
   location: string;
   salary: string;
-  skills: string[];
+  skills: number[];
   status: string;
   title: string;
   web_url: string;

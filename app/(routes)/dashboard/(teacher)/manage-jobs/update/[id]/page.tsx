@@ -315,7 +315,9 @@ const UpdateJob: React.FC<JobProps> = ({ params }) => {
       form.setValue("salary", fetchedData.salary);
       form.setValue("status", fetchedData.status);
       form.setValue("web_url", fetchedData.web_url);
-      form.setValue("experience", fetchedData.experience.toString());
+      form.setValue("experience", fetchedData.experience!.toString());
+      form.setValue("skills", fetchedData.skills);
+      form.setValue("courses", fetchedData.courses);
 
     };
 

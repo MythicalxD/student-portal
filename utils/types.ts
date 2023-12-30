@@ -27,16 +27,24 @@ export type Job = {
     updated_by: number;
 };
 
+type Skill = {
+    id: number;
+    name: string;
+};
+
 export type JobStudent = {
     company: string;
-    experience: number;
+    company_id: number;
+    company_logo: string;
+    exprience: number;
     id: number;
+    industry: string;
     job_category: string;
     job_description: string;
     location: string;
     salary: string;
-    skills: string[];
-    status: string;
+    skills: Skill[];
+    status: string; // Add other possible status values as needed
     title: string;
     web_url: string;
 };

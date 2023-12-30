@@ -43,7 +43,7 @@ export function CompanyCard({ item }: CompanyListProps) {
             >
               <Bookmark className="w-5 h-5 text-yellow-600" />
               <Heart className="w-5 h-5" />
-             
+
             </div>
           </div>
           <div className="text-xs font-medium text-gray-500">By {item.company}</div>
@@ -62,8 +62,8 @@ export function CompanyCard({ item }: CompanyListProps) {
       {item.skills.length ? (
         <div className="flex flex-wrap items-center gap-2">
           {item.skills.map((label) => (
-            <Badge key={label} className="rounded-md bg-gray-700" >
-              {label}
+            <Badge key={label.id} className="rounded-md bg-gray-700" >
+              {label.name}
             </Badge>
           ))}
         </div>
