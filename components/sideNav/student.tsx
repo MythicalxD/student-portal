@@ -3,8 +3,10 @@ import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
+  BookmarkPlus,
   Compass,
   GraduationCap,
+  Workflow,
 } from "lucide-react";
 
 export default function Student() {
@@ -31,7 +33,28 @@ export default function Student() {
               Explore Jobs
             </li>
           </Link>
-
+          <Link href={"/dashboard/student-intern"}>
+            <li
+              className={`px-2 py-2 rounded-md text-black text-sm flex items-center mb-2 ${pathname == "/dashboard/student-intern"
+                ? " bg-[#73a9ff] transition-all duration-300"
+                : "bg-gray-100 transition-all duration-300 hover:bg-gray-300"
+                }`}
+            >
+              <Workflow className="w-[15px] h-[15px] mr-2" />
+              View Internships
+            </li>
+          </Link>
+          <Link href={"/dashboard/student-training"}>
+            <li
+              className={`px-2 py-2 rounded-md text-black text-sm flex items-center mb-2 ${pathname == "/dashboard/student-training"
+                ? " bg-[#73a9ff] transition-all duration-300"
+                : "bg-gray-100 transition-all duration-300 hover:bg-gray-300"
+                }`}
+            >
+              <BookmarkPlus className="w-[15px] h-[15px] mr-2" />
+              Training Modules
+            </li>
+          </Link>
           <Link href={"/dashboard/student-application"}>
             <li
               className={`px-2 py-2 rounded-md text-black text-sm flex items-center mb-2 ${pathname == "/dashboard/student-application"

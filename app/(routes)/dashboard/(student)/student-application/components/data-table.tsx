@@ -21,12 +21,9 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-import { Button, buttonVariants } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import React from "react";
-import Link from "next/link";
-import { cn } from "@/lib/utils";
-import { Plus } from "lucide-react";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];

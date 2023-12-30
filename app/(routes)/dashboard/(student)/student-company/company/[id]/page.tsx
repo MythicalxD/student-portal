@@ -9,7 +9,9 @@ import { JobFull } from "@/utils/types";
 import axios from "axios";
 import { CircleDollarSign, CopyIcon, Info, MapPin } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
 interface IndustryProps {
     params: {
@@ -85,10 +87,52 @@ const Industry: React.FC<IndustryProps> = ({ params }) => {
     const [skillData, setSkillData] = useState<Skill[]>([]);
     const [courseData, setCourseData] = useState<Course[]>([]);
 
+    const router = useRouter();
+
     function getSkillNameById(skillId: string): string | undefined {
         const skill = skillData.find((s) => s.id === skillId);
         return skill ? skill.name : undefined;
     }
+
+    const handleUploadApprove = async (
+        id: string
+    ) => {
+        try {
+            const authToken = document.cookie
+                .split("; ")
+                .find((row) => row.startsWith("token="))
+                ?.split("=")[1];
+
+            const session = document.cookie
+                .split("; ")
+                .find((row) => row.startsWith("session="))
+                ?.split("=")[1];
+
+            const dataToSend = {
+                id: id,
+                token: authToken,
+                session: session,
+            };
+
+            const apiUrl = "/api/my-application/update";
+            const response = await axios.post(apiUrl, dataToSend);
+
+            console.log(response.data['status']);
+            const { token } = response.data;
+            if (token === "done") {
+                toast.success("Application Updated");
+                router.push("/dashboard/student-company");
+            }
+            if (response.data['status'] === 409) {
+                toast.success("You've already applied for this job");
+                router.push("/dashboard/student-company");
+            }
+        } catch (error) {
+            toast.error("Error Updating Application");
+            console.error("Error uploading file:", error);
+            // Handle the error
+        }
+    };
 
     useEffect(() => {
         const fetchData = async () => {
@@ -181,7 +225,7 @@ const Industry: React.FC<IndustryProps> = ({ params }) => {
                 </div>
                 <div className="flex space-x-2">
                     <div className="flex justify-center items-center font-medium bg-gray-50 text-gray-400 p-2 px-3 rounded-md">{data?.web_url}<CopyIcon className="w-5 h-5 ml-2" /></div>
-                    <Button className="bg-green-700" >Apply For Job</Button>
+                    <Button className="bg-green-700" onClick={() => { handleUploadApprove(params.id!); }} >Apply For Job</Button>
                 </div>
             </div>
         </main>

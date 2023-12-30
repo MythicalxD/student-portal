@@ -1,16 +1,17 @@
 "use client";
 import { useState, useEffect } from "react";
-import { Job, columns } from "./components/columns";
+import { columns } from "./components/columns";
 import { DataTable } from "./components/data-table";
 import axios from "axios";
+import { ApplicationStatus } from "@/utils/types";
 
-async function getData(token: string, session: string): Promise<Job[]> {
+async function getData(token: string, session: string): Promise<ApplicationStatus[]> {
   const dataToSend = {
     id: token,
     session: session,
   };
 
-  const apiUrl = "/api/manage-jobs/job";
+  const apiUrl = "/api/my-application";
 
   try {
     const response = await axios.post(apiUrl, dataToSend);
@@ -24,7 +25,7 @@ async function getData(token: string, session: string): Promise<Job[]> {
 }
 
 export default function DemoPage() {
-  const [data, setData] = useState<Job[]>([]);
+  const [data, setData] = useState<ApplicationStatus[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -50,7 +51,7 @@ export default function DemoPage() {
   return (
     <div className="container mx-auto py-4">
       <div className="flex justify-between items-center">
-        <p className="text-2xl font-extrabold">APPLY FOR JOBS</p>
+        <p className="text-2xl font-extrabold">Manage Applications</p>
       </div>
 
       <DataTable columns={columns} data={data} />

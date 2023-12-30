@@ -1,19 +1,14 @@
 "use client";
 
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { ApplicationStatus } from "@/utils/types";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown, CheckCircle } from "lucide-react";
+import { CellAction } from "./cell-actions";
 
-export type Job = {
-  company: string;
-  id: number;
-  job_category: string;
-  job_description: string;
-  status: string;
-  title: string;
-};
 
-export const columns: ColumnDef<Job>[] = [
+export const columns: ColumnDef<ApplicationStatus>[] = [
   {
     accessorKey: "name",
     header: ({ column }) => {
@@ -29,34 +24,29 @@ export const columns: ColumnDef<Job>[] = [
     },
     cell: ({ row }) => {
       return (
-        <div className="text-start font-medium ml-4">{row.original.title}</div>
+        <div className="text-start font-medium ml-4">{row.original.job_name}</div>
       );
     },
   },
   {
-    accessorKey: "job_description",
-    header: "Description",
-  },
-  {
-    accessorKey: "job_category",
-    header: "Category",
-  },
-  {
-    accessorKey: "company",
-    header: "Company",
-  },
-  {
+    accessorKey: "status",
     header: ({ column }) => {
-      return <div className="text-center ml-2">Actions</div>;
+      return <div className="text-start ml-2">Status</div>;
     },
+    cell: ({ row }) => {
+      return (
+        <Badge
+          variant={`${row.original.status == "REJECTED" ? "destructive" : row.original.status == "WITHDRAWN" ? "medium" : row.original.status == "APPROVED" ? "done" : "secondary"
+            }`}
+        >
+          {row.original.status}
+        </Badge>
+      );
+    },
+  },
+  {
+    header: "Actions",
     id: "actions",
-    cell: ({ row }) => (
-      <div className="flex items-center justify-center">
-        <Button variant={"ghost"} className="text-green-500">
-          <CheckCircle className="w-4 h-4 mr-2" />
-          Apply
-        </Button>
-      </div>
-    ),
+    cell: ({ row }) => <CellAction data={row.original} />,
   },
 ];

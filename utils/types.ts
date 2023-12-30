@@ -87,3 +87,10 @@ export type JobApplicationAdmin = {
     updated_at: string;
     updated_by: number;
 };
+
+export type ApplicationStatus = {
+    id: number;
+    job_name: string;
+    status: "WITHDRAWN" | "APPROVED" | "REJECTED" | "PENDING" | "REVIEW" | "SUBMITTED"; // Add other possible status values as needed
+};
+
