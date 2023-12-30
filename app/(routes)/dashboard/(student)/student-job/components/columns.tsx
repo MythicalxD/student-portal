@@ -18,7 +18,7 @@ export const columns: ColumnDef<JobView>[] = [
       return <div className="text-start ml-2">ID</div>;
     },
     cell: ({ row }) => {
-      return <Badge variant="secondary">{row.index + 1}</Badge>;
+      return <Badge variant="secondary">{row.original.id}</Badge>;
     },
   },
   {

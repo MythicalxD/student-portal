@@ -11,6 +11,7 @@ export type Company = {
   linked_jobs: string[];
   name: string;
   website: string;
+  address: string;
 };
 
 export type CompanyFull = {

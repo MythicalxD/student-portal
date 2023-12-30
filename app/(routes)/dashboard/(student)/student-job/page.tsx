@@ -4,7 +4,7 @@ import { JobView, columns } from "./components/columns";
 import { DataTable } from "./components/data-table";
 import axios from "axios";
 
-async function getData(token: string, session: string): Promise<string[]> {
+async function getData(token: string, session: string): Promise<JobView[]> {
   const dataToSend = {
     id: token,
     session: session,
@@ -23,12 +23,7 @@ async function getData(token: string, session: string): Promise<string[]> {
 }
 
 export default function DemoPage() {
-  const [data, setData] = useState<string[]>([]);
-
-  const jsonData: JobView[] = data.map((item, index) => ({
-  id: index + 1,
-  name: item,
-}));
+  const [data, setData] = useState<JobView[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -56,7 +51,7 @@ export default function DemoPage() {
       <div className="flex justify-between items-center">
         <p className="text-2xl font-extrabold">ALL JOB CATEGORIES</p>
       </div>
-      <DataTable columns={columns} data={jsonData} />
+      <DataTable columns={columns} data={data} />
     </div>
   );
 }

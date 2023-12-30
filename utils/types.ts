@@ -27,6 +27,35 @@ export type Job = {
     updated_by: number;
 };
 
+export type JobStudent = {
+    company: string;
+    experience: number;
+    id: number;
+    job_category: string;
+    job_description: string;
+    location: string;
+    salary: string;
+    skills: string[];
+    status: string;
+    title: string;
+    web_url: string;
+};
+
+export type JobFull = {
+    company_name: string;
+    courses: number[];
+    detiled_description: string;
+    experience: number;
+    job_category_name: string;
+    location: string;
+    salary: string;
+    skills: number[];
+    status: string;
+    title: string;
+    web_url: string;
+};
+
+
 export type JobApplication = {
     comments: string[]; // Assuming comments are strings, you can adjust the type accordingly
     company_name: string;
@@ -45,7 +74,7 @@ type Comment = {
     id: number;
     updated_at: string;
     updated_by: number;
-  };
+};
 
 export type JobApplicationAdmin = {
     approved_by: number;

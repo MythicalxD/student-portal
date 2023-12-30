@@ -1,18 +1,21 @@
 "use client";
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { Company } from "./components/columns";
-import { AlbumArtwork } from "./components/card";
-import { Separator } from "@/components/ui/separator";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+import { CompanyCard } from "./components/card";
+import { Separator } from "@/components/ui/separator";
+import { Input } from "@/components/ui/input";
+import { Search } from "lucide-react";
+import { JobStudent } from "@/utils/types";
+import { Button } from "@/components/ui/button";
 
-async function getData(token: string, session: string): Promise<Company[]> {
+async function getData(token: string, session: string): Promise<JobStudent[]> {
   const dataToSend = {
     id: token,
     session: session,
   };
 
-  const apiUrl = "/api/company";
+  const apiUrl = "/api/manage-jobs/job";
 
   try {
     const response = await axios.post(apiUrl, dataToSend);
@@ -26,7 +29,7 @@ async function getData(token: string, session: string): Promise<Company[]> {
 }
 
 export default function DemoPage() {
-  const [data, setData] = useState<Company[]>([]);
+  const [data, setData] = useState<JobStudent[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -50,31 +53,31 @@ export default function DemoPage() {
   }, []); // The empty dependency array ensures that the effect runs only once
 
   return (
-    <div className="container mx-auto">
+    <div className="w-full">
       <div className="space-y-1">
         <h2 className="text-2xl font-semibold tracking-tight">
-          Unlock Opportunities
+          Finest Jobs Opportunities
         </h2>
         <p className="text-sm text-muted-foreground">
-          Explore All Featured Companies.
+          where your aspirations meet their perfect match.
         </p>
       </div>
       <Separator className="my-4" />
-      <ScrollArea>
-        <div className="flex space-x-4 pb-4">
-          {data.map((company) => (
-            <AlbumArtwork
-              key={company.name}
-              company={company}
-              className="w-[150px]"
-              aspectRatio="square"
-              width={150}
-              height={150}
-            />
-          ))}
+      <div className="w-full">
+        <div className="relative mb-4 mr-4 flex">
+          <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
+          <Input placeholder="Search" className="pl-8" />
+          <Button type="submit" className="ml-2" >Search</Button>
         </div>
-        <ScrollBar orientation="horizontal" />
-      </ScrollArea>
+        <ScrollArea>
+          <div className="flex flex-col h-[80vh] space-y-4 pb-4">
+            {data.map((job) => (
+              <CompanyCard item={job} />
+            ))}
+          </div>
+          <ScrollBar orientation="vertical" />
+        </ScrollArea>
+      </div>
     </div>
   );
 }
