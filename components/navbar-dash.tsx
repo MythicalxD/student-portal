@@ -18,7 +18,7 @@ const NavbarDash = () => {
         </a>
       </div>
       <div className="flex items-center gap-x-4">
-        <UserNav />
+
       </div>
     </div>
   );
