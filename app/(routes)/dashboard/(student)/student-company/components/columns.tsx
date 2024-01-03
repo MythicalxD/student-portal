@@ -24,6 +24,17 @@ export type CompanyFull = {
   website: string;
 };
 
+export type CompanyPublic = {
+  address: string;
+  company_industry: string;
+  company_logo: string;
+  id: number;
+  linked_in: string;
+  linked_jobs: string[];
+  name: string;
+  website: string;
+};
+
 export const columns: ColumnDef<Company>[] = [
   {
     accessorKey: "logo",

@@ -102,3 +102,28 @@ export type ApplicationStatus = {
     status: "WITHDRAWN" | "APPROVED" | "REJECTED" | "PENDING" | "REVIEW" | "SUBMITTED"; // Add other possible status values as needed
 };
 
+export type Course = {
+    description: string;
+    id: number;
+    name: string;
+    skills: Skill[];
+};
+
+export type JobListing = {
+    company: string;
+    company_id: number;
+    company_logo: string;
+    experience: number;
+    id: number;
+    industry: string;
+    job_category: string;
+    job_description: string;
+    location: string;
+    salary: string;
+    skills: Skill[];
+    status: string;
+    title: string;
+    web_url: string;
+};
+
+
