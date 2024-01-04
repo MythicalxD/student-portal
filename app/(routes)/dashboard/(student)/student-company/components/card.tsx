@@ -7,12 +7,14 @@ import { Badge } from "@/components/ui/badge"
 import { useRouter } from "next/navigation";
 import { JobStudent } from "@/utils/types";
 import { Bookmark, CircleDollarSign, Heart, MapPin } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 interface CompanyListProps {
-  item: JobStudent
+  item: JobStudent,
+  status: string | undefined,
 }
 
-export function CompanyCard({ item }: CompanyListProps) {
+export function CompanyCard({ item, status }: CompanyListProps) {
 
   const router = useRouter();
 
@@ -20,7 +22,7 @@ export function CompanyCard({ item }: CompanyListProps) {
 
     <button
       className={cn(
-        "flex flex-col items-start gap-2 mr-4 rounded-lg border p-3 text-left text-sm transition-all hover:bg-accent",
+        "flex flex-col relative items-start gap-2 mr-4 rounded-lg border p-3 text-left text-sm transition-all hover:bg-accent",
         false && "bg-muted"
       )}
       onClick={() => { router.push(`/dashboard/student-company/company/${item.id}`) }
@@ -49,6 +51,8 @@ export function CompanyCard({ item }: CompanyListProps) {
           <div className="text-xs font-medium text-gray-500">By {item.company}</div>
         </div>
       </div>
+
+      <div className="flex absolute right-2 bottom-2">{(status == undefined) ? (<Button variant={"outline"} className="ml-2" >APPLY</Button>) : (<p className="ml-2 text-sm font-bold" >{status}</p>)}</div>
 
       <div className="line-clamp-2 text-xs text-muted-foreground">
         This is some very long job description purposely written to demonstrate. {item.job_description}

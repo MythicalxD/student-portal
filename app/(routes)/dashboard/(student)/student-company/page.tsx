@@ -6,7 +6,7 @@ import { CompanyCard } from "./components/card";
 import { Separator } from "@/components/ui/separator";
 import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
-import { JobStudent } from "@/utils/types";
+import { ApplicationStatus, JobStudent } from "@/utils/types";
 import { Button } from "@/components/ui/button";
 
 async function getData(token: string, session: string): Promise<JobStudent[]> {
@@ -28,8 +28,32 @@ async function getData(token: string, session: string): Promise<JobStudent[]> {
   }
 }
 
+async function getApplication(token: string, session: string): Promise<ApplicationStatus[]> {
+  const dataToSend = {
+    id: token,
+    session: session,
+  };
+
+  const apiUrl = "/api/my-application";
+
+  try {
+    const response = await axios.post(apiUrl, dataToSend);
+    console.log(response);
+    return response.data;
+  } catch (error: any) {
+    window.location.href = "/login";
+    console.error();
+    return error;
+  }
+}
+
+export const findApplicationStatusById = (id: number, statuses: ApplicationStatus[]): ApplicationStatus | undefined => {
+  return statuses.find(status => status.id === id);
+};
+
 export default function DemoPage() {
   const [data, setData] = useState<JobStudent[]>([]);
+  const [data1, setData1] = useState<ApplicationStatus[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -45,6 +69,8 @@ export default function DemoPage() {
 
       const fetchedData = await getData(authToken!, session!);
       setData(fetchedData);
+      const fetchedData1 = await getApplication(authToken!, session!);
+      setData1(fetchedData1);
     };
 
     fetchData(); // Call the fetchData function when the component mounts
@@ -72,7 +98,7 @@ export default function DemoPage() {
         <ScrollArea>
           <div className="flex flex-col h-[80vh] space-y-4 pb-4">
             {data.map((job) => (
-              <CompanyCard item={job} />
+              <CompanyCard item={job} status={findApplicationStatusById(job.id, data1)?.status} />
             ))}
           </div>
           <ScrollBar orientation="vertical" />
