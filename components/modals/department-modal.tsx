@@ -34,7 +34,7 @@ interface NewModalProps {
   loading: boolean;
 }
 
-export const NewModal: React.FC<NewModalProps> = ({
+export const DepartmentModal: React.FC<NewModalProps> = ({
   isOpen,
   onClose,
   onConfirm,
@@ -72,26 +72,24 @@ export const NewModal: React.FC<NewModalProps> = ({
         session: session,
       };
 
-      const apiUrl = "/api/job/upload";
+      const apiUrl = "/api/department/upload";
       const response = await axios.post(apiUrl, dataToSend);
 
-      console.log(response.data);
-      const { token } = response.data;
-      if (token === "done") {
-        toast.success("Job Created");
-        router.push("/dashboard/jobs");
+      if (response.status == 200) {
+        toast.success("Department Created");
+        router.push("/dashboard/department");
       }
+
     } catch (error) {
-      toast.error("Error Creating Job");
-      console.error("Error uploading file:", error);
+      toast.error("Error Creating department");
       // Handle the error
     }
   }
 
   return (
     <Modal1
-      title="Create a New Job"
-      description="Enter the name of the job you want to create."
+      title="Create a New Department"
+      description="Enter the name of the department you want to create."
       isOpen={isOpen}
       onClose={onClose}
     >
@@ -107,7 +105,7 @@ export const NewModal: React.FC<NewModalProps> = ({
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <Input placeholder={`Enter Job name`} {...field} />
+                    <Input placeholder={`Enter Department name`} {...field} />
                   </FormControl>
                   {error ? (
                     <FormDescription>The text do not match!</FormDescription>

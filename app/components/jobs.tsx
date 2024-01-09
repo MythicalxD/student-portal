@@ -35,7 +35,7 @@ export function JobCard({
                 )}
 
             </div>
-            <div className="flex absolute bottom-4 text-blue-800 text-sm font-bold justify-center items-center w-[300px]"><p className="" >APPLY NOW</p></div>
+            <div className="flex absolute bottom-4 text-blue-800 text-sm font-bold justify-center items-center w-full"><p className="" >APPLY NOW</p></div>
         </div>
     );
 }

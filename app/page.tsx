@@ -98,8 +98,8 @@ export default function Home() {
         <div className="absolute flex bg-black h-[500px] w-screen opacity-60"></div>
         <Image src={img} alt="Students Image" className="w-full h-[500px] object-cover" />
         <div className="flex flex-col justify-center items-center absolute top-0 w-full h-[500px]">
-          <div className="text-white text-[64px] font-semibold mt-[80px]">Placement And Career Cell</div>
-          <div className="max-w-[815px] text-center text-gray-300 text-2xl font-normal">The Placement and Career Cell facilitates the process of placement of students, graduating from the Institute.</div>
+          <div className="text-white text-[32px] font-semibold mt-[80px] md:text-[64px] text-center px-4">Placement And Career Cell</div>
+          <div className="max-w-[815px] text-center text-gray-300 md:text-2xl text-md font-normal">The Placement and Career Cell facilitates the process of placement of students, graduating from the Institute.</div>
           <div className="flex items-center justify-center w-[200px] h-[60px] relative mt-[60px] cursor-pointer bg-amber-300 hover:bg-amber-400 rounded-sm" onClick={() => { router.push("./login") }} >
             <div className="w-[200px] h-[60px] left-0 top-0 absolute" />
             <div className="text-neutral-700 text-lg font-bold">{(login) ? "DASHBOARD" : "PORTAL LOGIN"}</div>
@@ -109,7 +109,7 @@ export default function Home() {
 
       {/* Top Companies */}
       <div className="flex flex-col m-4 mt-8">
-        <div className="text-neutral-700 text-4xl font-semibold m-4">Top Recruiters</div>
+        <div className="text-neutral-700 md:text-4xl text-3xl font-semibold md:m-4 m-2">Top Recruiters</div>
         <ScrollArea>
           <div className="flex space-x-4 pb-4 m-4">
             {data.map((company) => (
@@ -128,9 +128,9 @@ export default function Home() {
         <div className="absolute flex bg-black h-[400px] w-screen opacity-60"></div>
         <Image src={img1} alt="Students Image" className="w-full h-[400px] object-cover" />
         <div className="flex flex-col justify-center items-center absolute top-0 w-full h-[500px]">
-          <div className="text-white text-[32px] font-semibold">Your career journey begins here, where potential meets placement</div>
-          <div className="max-w-[815px] text-center text-gray-300 text-xl font-normal mt-[10px]">Embark on a transformative path as we navigate your potential towards tailored placements, sculpting your success story.</div>
-          <div className="flex items-center justify-center w-[200px] h-[60px] relative mt-[40px] cursor-pointer bg-amber-300 hover:bg-amber-400 rounded-sm" onClick={() => { router.push("./login") }} >
+          <div className="text-white md:text-[32px] text-[20px] text-center px-2 font-semibold">Your career journey begins here, where potential meets placement</div>
+          <div className="max-w-[815px] text-center text-gray-300 text-xl font-normal mt-[10px] px-2">Embark on a transformative path as we navigate your potential towards tailored placements, sculpting your success story.</div>
+          <div className="flex items-center justify-center w-[200px] h-[60px] relative md:mt-[40px] mt-[20px] cursor-pointer bg-amber-300 hover:bg-amber-400 rounded-sm" onClick={() => { router.push("./login") }} >
             <div className="w-[200px] h-[60px] left-0 top-0 absolute" />
             <div className="text-neutral-700 text-lg font-bold">EXPLORE MORE</div>
           </div>
@@ -139,7 +139,7 @@ export default function Home() {
 
       {/* Top Jobs */}
       <div className="flex flex-col m-4 mt-8">
-        <div className="text-neutral-700 text-4xl font-semibold m-4">Top Courses</div>
+        <div className="text-neutral-700 md:text-4xl text-3xl font-semibold md:m-4 m-2">Top Courses</div>
         <ScrollArea>
           <div className="flex space-x-4 pb-4 m-4">
             {courses.map((course) => (
@@ -158,15 +158,15 @@ export default function Home() {
         <div className="absolute flex bg-black h-[400px] w-screen opacity-70"></div>
         <Image src={img2} alt="Students Image" className="w-full h-[400px] object-cover" />
         <div className="flex flex-col items-center absolute top-0 w-full h-[500px]">
-          <div className="text-white text-5xl font-semibold mt-[60px]">SAM GLOBAL UNIVERSITY</div>
-          <div className="flex flex-col w-screen gap-y-8 mt-[50px]">
+          <div className="text-white md:text-5xl text-3xl text-center px-4 font-semibold mt-[60px]">SAM GLOBAL UNIVERSITY</div>
+          <div className="flex flex-col w-screen gap-y-8 mt-[50px] md:px-2 px-4">
             <div className="flex flex-1 w-full justify-center items-center">
-              <div className="w-full text-center text-gray-300 text-5xl font-normal mt-[10px]">90+ Faculty</div>
-              <div className="w-full text-center text-gray-300 text-5xl font-normal mt-[10px]">60+ Companies</div>
+              <div className="w-full text-center text-gray-300 md:text-5xl text-2xl font-normal mt-[10px]">90+ Faculty</div>
+              <div className="w-full text-center text-gray-300 md:text-5xl text-2xl font-normal mt-[10px]">60+ Companies</div>
             </div>
             <div className="flex flex-1 w-full justify-center items-center">
-              <div className="w-full text-center text-gray-300 text-5xl font-normal mt-[10px]">6000+ Students</div>
-              <div className="w-full text-center text-gray-300 text-5xl font-normal mt-[10px]">30+ Researchers</div>
+              <div className="w-full text-center text-gray-300 md:text-5xl text-2xl font-normal mt-[10px]">6000+ Students</div>
+              <div className="w-full text-center text-gray-300 md:text-5xl text-2xl font-normal mt-[10px]">30+ Researchers</div>
             </div>
           </div>
 
@@ -175,7 +175,7 @@ export default function Home() {
 
       {/* Top Jobs */}
       <div className="flex flex-col m-4 mt-8">
-        <div className="text-neutral-700 text-4xl font-semibold m-4">Job Opportunities</div>
+        <div className="text-neutral-700 md:text-4xl text-3xl font-semibold md:m-4 m-2">Job Opportunities</div>
         <ScrollArea>
           <div className="flex space-x-4 pb-4 m-4">
             {jobs.map((job) => (
@@ -194,9 +194,9 @@ export default function Home() {
         <div className="absolute flex bg-black h-[350px] w-screen opacity-60"></div>
         <Image src={img1} alt="Students Image" className="w-full h-[350px] object-cover" />
         <div className="flex flex-col items-center absolute top-0 w-full h-[500px] mt-[70px]">
-          <div className="text-white text-[32px] font-semibold">Most Placements in India - Watch Video</div>
+          <div className="text-white md:text-[32px] text-[20px] text-center px-4 font-semibold">Most Placements in India - Watch Video</div>
           <div className="max-w-[815px] text-center text-gray-300 text-xl font-normal mt-[10px]">Embark on a transformative path as we navigate your potential towards tailored placements, sculpting your success story.</div>
-          <div className="flex items-center justify-center w-[200px] h-[60px] relative mt-[40px] cursor-pointer bg-amber-300 hover:bg-amber-400 rounded-sm" onClick={() => { router.push("./login") }} >
+          <div className="flex items-center justify-center w-[200px] h-[60px] relative md:mt-[40px] mt-[20px] cursor-pointer bg-amber-300 hover:bg-amber-400 rounded-sm" onClick={() => { router.push("./login") }} >
             <div className="w-[200px] h-[60px] left-0 top-0 absolute" />
             <div className="text-neutral-700 text-lg font-bold">EXPLORE MORE</div>
           </div>

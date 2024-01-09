@@ -17,12 +17,17 @@ import { useRouter } from "next/navigation";
 import { PlusIcon } from "lucide-react";
 
 export function UserNav() {
+
   const router = useRouter();
   let email: string | null = null;
   let accountType: string | null = null;
 
   if (typeof window !== "undefined") {
     accountType = localStorage.getItem("accountType");
+  }
+
+  function gotoProfile() {
+    router.push("/dashboard/profile");
   }
 
   async function logout() {
@@ -82,11 +87,13 @@ export function UserNav() {
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
+
         <DropdownMenuGroup>
-          <DropdownMenuItem>
+          {((accountType == "Student") && <DropdownMenuItem onClick={gotoProfile}>
             Profile
             <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
           </DropdownMenuItem>
+          )}
           <DropdownMenuItem>
             Settings
             <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>

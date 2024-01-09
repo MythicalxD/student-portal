@@ -8,6 +8,7 @@ import {
   BookMarked,
   Compass,
   Factory,
+  GalleryHorizontal,
   GanttChart,
   GraduationCap,
   ScrollText,
@@ -105,6 +106,17 @@ export default function SuperAdmin() {
             >
               <GraduationCap className="w-[15px] h-[15px] mr-2" />
               Manage Jobs
+            </li>
+          </Link>
+          <Link href={"/dashboard/department"}>
+            <li
+              className={`px-2 py-2 rounded-md text-black text-sm flex items-center mb-2 ${pathname == "/dashboard/department"
+                ? " bg-[#73a9ff] transition-all duration-300"
+                : "bg-gray-100 transition-all duration-300 hover:bg-gray-300"
+                }`}
+            >
+              <GalleryHorizontal className="w-[15px] h-[15px] mr-2" />
+              Manage Departments
             </li>
           </Link>
           <Link href={"/dashboard/application-admin"}>

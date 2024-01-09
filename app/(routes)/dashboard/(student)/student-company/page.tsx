@@ -22,7 +22,7 @@ async function getData(token: string, session: string): Promise<JobStudent[]> {
     console.log(response);
     return response.data;
   } catch (error: any) {
-    window.location.href = "/login";
+    //window.location.href = "/login";
     console.error();
     return error;
   }
@@ -41,7 +41,7 @@ async function getApplication(token: string, session: string): Promise<Applicati
     console.log(response);
     return response.data;
   } catch (error: any) {
-    window.location.href = "/login";
+    //window.location.href = "/login";
     console.error();
     return error;
   }

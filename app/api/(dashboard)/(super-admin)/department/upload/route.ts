@@ -11,8 +11,7 @@ export async function POST(
 
     try {
 
-        const { name, desc, skills, department, token, session } = await req.json();
-
+        const { name, token, session } = await req.json();
 
         let headersList = {
             "Accept": "*/*",
@@ -21,11 +20,10 @@ export async function POST(
             "Content-Type": "application/json"
         }
 
-        let bodyContent = JSON.stringify({ "name": name, "description": desc, "skills": skills, "department_id": department });
-
+        let bodyContent = JSON.stringify({ "name": name });
 
         let reqOptions = {
-            url: `${process.env.BASEURL}/api/v1/courses`,
+            url: `${process.env.BASEURL}/api/v1/departments`,
             method: "POST",
             headers: headersList,
             data: bodyContent,
@@ -33,6 +31,7 @@ export async function POST(
 
         let response = await axios.request(reqOptions);
         console.log(response.data);
+
 
         return NextResponse.json({ token: `done` }, { status: 200 })
     } catch (error) {

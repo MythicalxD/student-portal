@@ -9,10 +9,12 @@ export async function POST(
         return NextResponse.json({ msg: 'Method Not Allowed' }, { status: 405 })
     }
 
+    let formData = await req.formData();
+    let body = Object.fromEntries(formData);
+
     try {
 
-        const { name, desc, skills, department, token, session } = await req.json();
-
+        const { name, id, session, token } = body;
 
         let headersList = {
             "Accept": "*/*",
@@ -21,12 +23,11 @@ export async function POST(
             "Content-Type": "application/json"
         }
 
-        let bodyContent = JSON.stringify({ "name": name, "description": desc, "skills": skills, "department_id": department });
-
+        let bodyContent = JSON.stringify({ "name": name });
 
         let reqOptions = {
-            url: `${process.env.BASEURL}/api/v1/courses`,
-            method: "POST",
+            url: `${process.env.BASEURL}/api/v1/department/${id}`,
+            method: "PUT",
             headers: headersList,
             data: bodyContent,
         }

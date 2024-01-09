@@ -9,30 +9,38 @@ export async function POST(
         return NextResponse.json({ msg: 'Method Not Allowed' }, { status: 405 })
     }
 
+    let formData = await req.formData();
+    let body = Object.fromEntries(formData);
+
     try {
 
-        const { name, desc, skills, department, token, session } = await req.json();
-
+        const { password, cpassword, file, cv, session, token } = body;
 
         let headersList = {
             "Accept": "*/*",
             "Authorization": `Bearer ${token}`,
-            "Cookie": `session=${session}`,
-            "Content-Type": "application/json"
+            "Cookie": `session=${session}`
         }
 
-        let bodyContent = JSON.stringify({ "name": name, "description": desc, "skills": skills, "department_id": department });
+        const formdata = new FormData();
+        if (password != "null") formdata.append("new_password", password);
+        if (password != "null") formdata.append("confirm_password", password);
+        if (file != "null") formdata.append("profile_pic", file);
+        if (cv != "null") formdata.append("cv", cv);
+
+        console.log(file);
 
 
         let reqOptions = {
-            url: `${process.env.BASEURL}/api/v1/courses`,
+            url: `${process.env.BASEURL}/api/v1/users/profile`,
             method: "POST",
             headers: headersList,
-            data: bodyContent,
+            data: formdata,
         }
 
         let response = await axios.request(reqOptions);
         console.log(response.data);
+
 
         return NextResponse.json({ token: `done` }, { status: 200 })
     } catch (error) {

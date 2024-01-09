@@ -18,7 +18,6 @@ import {
 import { Input } from "@/components/ui/input";
 
 import axios from "axios";
-import FormData from "form-data";
 
 import * as z from "zod";
 import { Separator } from "@/components/ui/separator";
@@ -27,15 +26,6 @@ import { Icons } from "@/components/icons";
 import { Textarea } from "@/components/ui/textarea";
 import toast from "react-hot-toast";
 import Link from "next/link";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Course } from "../components/columns";
-import { Company } from "../../../(student)/student-company/components/columns";
 import {
   Popover,
   PopoverContent,
@@ -51,26 +41,33 @@ import {
 import { Checkbox } from "@/components/ui/checkbox";
 import { Skill } from "../../../(super-admin)/skills/components/columns";
 import { Check, ChevronsUpDown } from "lucide-react";
+import { Department } from "../../department/components/columns";
 
 const formSchema = z.object({
   name: z.string(),
   description: z.string(),
   skills: z.array(z.number()),
+  department: z.array(z.number()),
 });
 
 const ImagePicker: React.FC = () => {
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const [skillData, setSkillData] = useState<Skill[]>([]);
+  const [departmentData, setDepartmentData] = useState<Department[]>([]);
 
   const [open, setOpen] = React.useState(false);
   const [value, setValue] = React.useState("");
+
+  const [open1, setOpen1] = React.useState(false);
+  const [value1, setValue1] = React.useState("");
 
   const router = useRouter();
 
   const handleUpload = async (
     name: string,
     description: string,
-    skills: number[]
+    skills: number[],
+    department: number[]
   ) => {
     try {
       //TODO add error on image not selected
@@ -89,6 +86,7 @@ const ImagePicker: React.FC = () => {
         name: name,
         desc: description,
         skills: skills,
+        department: department,
         token: authToken,
         session: session,
       };
@@ -120,16 +118,20 @@ const ImagePicker: React.FC = () => {
       name: "",
       description: "",
       skills: [],
+      department: []
     },
   });
 
   // 2. Define a submit handler.
   function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
+    console.log(values);
+
     handleUpload(
       values.name,
       values.description,
       values.skills,
+      values.department
     );
   }
 
@@ -143,6 +145,27 @@ const ImagePicker: React.FC = () => {
     };
 
     const apiUrl = "/api/manage-jobs/job/get/skills";
+
+    try {
+      const response = await axios.post(apiUrl, dataToSend);
+      console.log(response);
+      return response.data;
+    } catch (error: any) {
+      console.error();
+      return error;
+    }
+  }
+
+  async function getDataDepartment(
+    token: string,
+    session: string
+  ): Promise<Department[]> {
+    const dataToSend = {
+      id: token,
+      session: session,
+    };
+
+    const apiUrl = "/api/department";
 
     try {
       const response = await axios.post(apiUrl, dataToSend);
@@ -168,6 +191,8 @@ const ImagePicker: React.FC = () => {
 
       const fetchedDataSkill = await getDataSkill(authToken!, session!);
       setSkillData(fetchedDataSkill);
+      const fetchedDataDepartment = await getDataDepartment(authToken!, session!);
+      setDepartmentData(fetchedDataDepartment);
     };
 
     fetchData(); // Call the fetchData function when the component mounts
@@ -287,6 +312,81 @@ const ImagePicker: React.FC = () => {
                                               (value) =>
                                                 value !==
                                                 Number.parseInt(item.id)
+                                            )
+                                          );
+                                      }}
+                                    />
+                                  </CommandItem>
+                                </FormControl>
+                                <FormLabel className="font-normal">
+                                  {item.name}
+                                </FormLabel>
+                              </FormItem>
+                            );
+                          }}
+                        />
+                      ))}
+                    </CommandGroup>
+                  </Command>
+                </PopoverContent>
+              </Popover>
+            </div>
+
+            <div className="flex flex-col gap-y-4">
+              <FormLabel>Department in Course</FormLabel>
+              <Popover open={open1} onOpenChange={setOpen1}>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="outline"
+                    role="combobox"
+                    aria-expanded={open1}
+                    className="w-[300px] justify-between"
+                  >
+                    {"Select Department..."}
+                    <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-[300px] p-0">
+                  <Command>
+                    <CommandInput placeholder="Search Department..." />
+                    <CommandEmpty>No Department found.</CommandEmpty>
+                    <CommandGroup>
+                      {departmentData.map((item) => (
+                        <FormField
+                          key={item.id}
+                          control={form.control}
+                          name="department"
+                          render={({ field }) => {
+                            return (
+                              <FormItem
+                                key={item.id}
+                                className="flex flex-row items-center space-x-3 space-y-0"
+                              >
+                                <FormControl>
+                                  <CommandItem
+                                    key={item.id}
+                                    onSelect={(currentValue) => {
+                                      setValue1(
+                                        currentValue === value1 ? "" : currentValue
+                                      );
+                                      setOpen(false);
+                                    }}
+                                  >
+                                    <Checkbox
+                                      checked={field.value?.includes(
+                                        item.id
+                                      )}
+                                      onCheckedChange={(checked) => {
+                                        return checked
+                                          ? field.onChange([
+                                            ...field.value,
+                                            item.id,
+                                          ])
+                                          : field.onChange(
+                                            field.value?.filter(
+                                              (value) =>
+                                                value !==
+                                                item.id
                                             )
                                           );
                                       }}

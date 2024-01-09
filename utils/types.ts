@@ -126,4 +126,14 @@ export type JobListing = {
     web_url: string;
 };
 
+export interface User {
+    cv: string;
+    date_of_birth: string;
+    department_id: string;
+    email: string;
+    full_name: string;
+    profile_picture_url: string;
+    student_id: number;
+}
+
 
