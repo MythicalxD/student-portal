@@ -90,8 +90,8 @@ export const NewModal: React.FC<NewModalProps> = ({
 
   return (
     <Modal1
-      title="Create a New Job"
-      description="Enter the name of the job you want to create."
+      title="Create a New Job Category"
+      description="Enter the name of the job category you want to create."
       isOpen={isOpen}
       onClose={onClose}
     >
@@ -107,7 +107,7 @@ export const NewModal: React.FC<NewModalProps> = ({
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <Input placeholder={`Enter Job name`} {...field} />
+                    <Input placeholder={`Enter Job category name`} {...field} />
                   </FormControl>
                   {error ? (
                     <FormDescription>The text do not match!</FormDescription>
