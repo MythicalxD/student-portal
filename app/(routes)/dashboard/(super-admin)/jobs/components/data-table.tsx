@@ -48,31 +48,38 @@ export function DataTable<TData, TValue>({
   );
 
   const handleUpload = async (name: string) => {
-    const authToken = document.cookie
-      .split("; ")
-      .find((row) => row.startsWith("token="))
-      ?.split("=")[1];
+    try {
+      // Fetch the session
+      const authToken = document.cookie
+        .split("; ")
+        .find((row) => row.startsWith("token="))
+        ?.split("=")[1];
 
-    const session = document.cookie
-      .split("; ")
-      .find((row) => row.startsWith("session="))
-      ?.split("=")[1];
+      const session = document.cookie
+        .split("; ")
+        .find((row) => row.startsWith("session="))
+        ?.split("=")[1];
 
-    const dataToSend = {
-      token: authToken,
-      session: session,
-      id: id,
-    };
+      const dataToSend = {
+        name: name,
+        token: authToken,
+        session: session,
+      };
 
-    const apiUrl = "/api/company/delete";
-    const response = await axios.post(apiUrl, dataToSend);
+      const apiUrl = "/api/job/upload";
+      const response = await axios.post(apiUrl, dataToSend);
 
-    if (response.status === 200) {
-      toast.success("Company Deleted");
-      window.location.href = "/dashboard/company";
+      console.log(response.data);
+      const { token } = response.data;
+      if (token === "done") {
+        toast.success("Job category Created");
+        window.location.href = "/dashboard/jobs";
+      }
+    } catch (error) {
+      toast.error("Error Creating Job Category");
+      console.error("Error uploading file:", error);
+      // Handle the error
     }
-
-    console.log(response.data);
   };
 
   const table = useReactTable({
@@ -124,7 +131,7 @@ export function DataTable<TData, TValue>({
             }}
             className={cn(
               buttonVariants({ variant: "default" }),
-              "md:right-8 md:top-8"
+              "md:right-8 md:top-8 cursor-pointer"
             )}
           >
             <Plus className="w-[17px] h-[17px] mr-2" />
@@ -143,9 +150,9 @@ export function DataTable<TData, TValue>({
                         {header.isPlaceholder
                           ? null
                           : flexRender(
-                              header.column.columnDef.header,
-                              header.getContext()
-                            )}
+                            header.column.columnDef.header,
+                            header.getContext()
+                          )}
                       </TableHead>
                     );
                   })}

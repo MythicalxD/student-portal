@@ -124,7 +124,7 @@ export function DataTable<TData, TValue>({
             }}
             className={cn(
               buttonVariants({ variant: "default" }),
-              "md:right-8 md:top-8"
+              "md:right-8 md:top-8 cursor-pointer"
             )}
           >
             <Plus className="w-[17px] h-[17px] mr-2" />

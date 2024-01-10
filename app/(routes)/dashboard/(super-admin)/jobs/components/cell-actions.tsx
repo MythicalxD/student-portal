@@ -50,7 +50,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
     const response = await axios.post(apiUrl, dataToSend);
 
     if (response.status === 200) {
-      toast.success("Job Deleted");
+      toast.success("Job Category Deleted");
       window.location.href = "/dashboard/jobs";
     }
 

@@ -7,7 +7,6 @@ import { useForm } from "react-hook-form";
 import * as z from "zod";
 
 import axios from "axios";
-import router from "next/router";
 import toast from "react-hot-toast";
 import { Modal1 } from "../ui/modal1";
 import {
@@ -77,7 +76,8 @@ export const DepartmentModal: React.FC<NewModalProps> = ({
 
       if (response.status == 200) {
         toast.success("Department Created");
-        router.push("/dashboard/department");
+        window.location.href = "/dashboard/department";
+        onClose();
       }
 
     } catch (error) {

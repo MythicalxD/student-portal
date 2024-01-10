@@ -54,38 +54,8 @@ export const NewModal: React.FC<NewModalProps> = ({
 
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    try {
-      // Fetch the session
-      const authToken = document.cookie
-        .split("; ")
-        .find((row) => row.startsWith("token="))
-        ?.split("=")[1];
-
-      const session = document.cookie
-        .split("; ")
-        .find((row) => row.startsWith("session="))
-        ?.split("=")[1];
-
-      const dataToSend = {
-        name: values.name,
-        token: authToken,
-        session: session,
-      };
-
-      const apiUrl = "/api/job/upload";
-      const response = await axios.post(apiUrl, dataToSend);
-
-      console.log(response.data);
-      const { token } = response.data;
-      if (token === "done") {
-        toast.success("Job Created");
-        router.push("/dashboard/jobs");
-      }
-    } catch (error) {
-      toast.error("Error Creating Job");
-      console.error("Error uploading file:", error);
-      // Handle the error
-    }
+    onConfirm(values.name);
+    onClose();
   }
 
   return (
