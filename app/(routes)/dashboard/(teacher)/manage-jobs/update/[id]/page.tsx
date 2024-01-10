@@ -526,7 +526,7 @@ const UpdateJob: React.FC<JobProps> = ({ params }) => {
                                       setValue1(
                                         currentValue === value1 ? "" : currentValue
                                       );
-                                      setOpen1(false);
+                                      setOpen1(true);
                                     }}
                                   >
                                     <Checkbox
@@ -600,7 +600,7 @@ const UpdateJob: React.FC<JobProps> = ({ params }) => {
                                       setValue(
                                         currentValue === value ? "" : currentValue
                                       );
-                                      setOpen(false);
+                                      setOpen(true);
                                     }}
                                   >
                                     <Checkbox

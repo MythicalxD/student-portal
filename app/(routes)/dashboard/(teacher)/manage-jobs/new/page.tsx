@@ -482,7 +482,7 @@ const ImagePicker: React.FC = () => {
                                       setValue1(
                                         currentValue === value1 ? "" : currentValue
                                       );
-                                      setOpen1(false);
+                                      setOpen1(true);
                                     }}
                                   >
                                     <Checkbox
@@ -556,7 +556,7 @@ const ImagePicker: React.FC = () => {
                                       setValue(
                                         currentValue === value ? "" : currentValue
                                       );
-                                      setOpen(false);
+                                      setOpen(true);
                                     }}
                                   >
                                     <Checkbox
