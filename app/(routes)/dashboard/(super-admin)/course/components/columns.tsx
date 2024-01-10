@@ -13,6 +13,7 @@ export type Course = {
   id: number;
   name: string;
   skills: string[];
+  department: string;
   updated_at: string;
   updated_by: number;
 };

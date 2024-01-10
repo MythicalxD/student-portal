@@ -1,5 +1,6 @@
 import { NextResponse, NextRequest } from 'next/server';
 import axios from 'axios';
+import { number } from 'zod';
 
 export async function POST(
     req: NextRequest,
@@ -14,7 +15,7 @@ export async function POST(
 
     try {
 
-        const { name, desc, skills, id, session, token } = body;
+        const { name, desc, skills, department, id, session, token } = body;
 
         let headersList = {
             "Accept": "*/*",
@@ -23,7 +24,17 @@ export async function POST(
             "Content-Type": "application/json"
         }
 
-        let bodyContent = JSON.stringify({ "name": name, "description": desc, "skills": skills });
+        let skillsArray: number[] = skills.toString().split(',').map(Number);
+        let departmentArray: number[] = department.toString().split(',').map(Number);
+
+        let bodyContent = JSON.stringify({
+            "name": name,
+            "description": desc,
+            "skills": skillsArray,
+            "department_id": departmentArray,
+        });
+
+        console.log(bodyContent);
 
 
         let reqOptions = {

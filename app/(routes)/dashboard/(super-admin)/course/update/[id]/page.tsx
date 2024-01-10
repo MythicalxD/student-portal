@@ -45,6 +45,7 @@ import { Course } from "../../components/columns";
 import Link from "next/link";
 import { Textarea } from "@/components/ui/textarea";
 import { Skill } from "../../../skills/components/columns";
+import { Department } from "../../../department/components/columns";
 
 interface CompanyProps {
   params: {
@@ -55,7 +56,8 @@ interface CompanyProps {
 const formSchema = z.object({
   name: z.string().min(2),
   description: z.string().optional(),
-  skills: z.array(z.number()).optional()
+  skills: z.array(z.number()),
+  department: z.array(z.number())
 });
 
 async function getData(
@@ -88,9 +90,13 @@ const UpdateCompany: React.FC<CompanyProps> = ({ params }) => {
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const [data, setData] = useState<Course>();
   const [skillData, setSkillData] = useState<Skill[]>([]);
+  const [departmentData, setDepartmentData] = useState<Department[]>([]);
 
   const [open, setOpen] = React.useState(false);
   const [value, setValue] = React.useState("");
+
+  const [open1, setOpen1] = React.useState(false);
+  const [value1, setValue1] = React.useState("");
 
   const router = useRouter();
 
@@ -104,6 +110,27 @@ const UpdateCompany: React.FC<CompanyProps> = ({ params }) => {
     };
 
     const apiUrl = "/api/manage-jobs/job/get/skills";
+
+    try {
+      const response = await axios.post(apiUrl, dataToSend);
+      console.log(response);
+      return response.data;
+    } catch (error: any) {
+      console.error();
+      return error;
+    }
+  }
+
+  async function getDataDepartment(
+    token: string,
+    session: string
+  ): Promise<Department[]> {
+    const dataToSend = {
+      id: token,
+      session: session,
+    };
+
+    const apiUrl = "/api/department";
 
     try {
       const response = await axios.post(apiUrl, dataToSend);
@@ -133,11 +160,28 @@ const UpdateCompany: React.FC<CompanyProps> = ({ params }) => {
       const fetchedDataSkill = await getDataSkill(authToken!, session!);
       setSkillData(fetchedDataSkill);
 
-      const indices: number[] = fetchedData.skills.map((_, index) => index);
+      const fetchedDataDepartment = await getDataDepartment(authToken!, session!);
+      setDepartmentData(fetchedDataDepartment);
+
+      const skillIndices: number[] = [];
+      await fetchedDataSkill.forEach((skill) => {
+        // Assuming skill.name is the name of the skill you want to match
+        if (fetchedData.skills.includes(skill.name)) {
+          skillIndices.push(parseInt(skill.id));
+        }
+      });
+
+      const departmentIds: number[] = [];
+      await fetchedDataDepartment.forEach((department, index) => {
+        if (department.name === fetchedData.department) {
+          departmentIds[0] = department.id;
+        }
+      });
 
       // Populate the form fields with the fetched data
       form.setValue("name", fetchedData.name);
-      form.setValue("skills", indices);
+      form.setValue("skills", skillIndices);
+      form.setValue("department", departmentIds);
       form.setValue("description", fetchedData.description);
     };
 
@@ -160,6 +204,7 @@ const UpdateCompany: React.FC<CompanyProps> = ({ params }) => {
     name: string,
     desc: string,
     skills: number[],
+    department: number[],
     id: string
   ) => {
     try {
@@ -177,11 +222,14 @@ const UpdateCompany: React.FC<CompanyProps> = ({ params }) => {
       formData.append("name", name);
       formData.append("desc", desc);
       formData.append("skills", skills);
+      formData.append("department", department);
       formData.append("id", id);
       formData.append("session", session);
       formData.append("token", authToken);
 
       const apiUrl = "/api/course/update";
+
+      // Axios automatically sets the correct headers for FormData
       const response = await axios.post(apiUrl, formData);
 
       const { token } = response.data;
@@ -200,11 +248,11 @@ const UpdateCompany: React.FC<CompanyProps> = ({ params }) => {
   // 2. Define a submit handler.
   function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
-    const indices: number[] = values.skills!.map((_, index) => index);
     handleUpload(
       values.name,
       values.description!,
-      indices,
+      values.skills,
+      values.department,
       params.id
     );
   }
@@ -312,7 +360,7 @@ const UpdateCompany: React.FC<CompanyProps> = ({ params }) => {
                                       setValue(
                                         currentValue === value ? "" : currentValue
                                       );
-                                      setOpen(false);
+                                      setOpen(true);
                                     }}
                                   >
                                     <Checkbox
@@ -329,6 +377,81 @@ const UpdateCompany: React.FC<CompanyProps> = ({ params }) => {
                                             field.value?.filter(
                                               (value) =>
                                                 value !== parseInt(item.id)
+                                            )
+                                          );
+                                      }}
+                                    />
+                                  </CommandItem>
+                                </FormControl>
+                                <FormLabel className="font-normal">
+                                  {item.name}
+                                </FormLabel>
+                              </FormItem>
+                            );
+                          }}
+                        />
+                      ))}
+                    </CommandGroup>
+                  </Command>
+                </PopoverContent>
+              </Popover>
+            </div>
+
+            <div className="flex flex-col gap-y-4">
+              <FormLabel>Department in Course</FormLabel>
+              <Popover open={open1} onOpenChange={setOpen1}>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="outline"
+                    role="combobox"
+                    aria-expanded={open1}
+                    className="w-[300px] justify-between"
+                  >
+                    {"Select Department..."}
+                    <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-[300px] p-0">
+                  <Command>
+                    <CommandInput placeholder="Search Department..." />
+                    <CommandEmpty>No Department found.</CommandEmpty>
+                    <CommandGroup>
+                      {departmentData.map((item) => (
+                        <FormField
+                          key={item.id}
+                          control={form.control}
+                          name="department"
+                          render={({ field }) => {
+                            return (
+                              <FormItem
+                                key={item.id}
+                                className="flex flex-row items-center space-x-3 space-y-0"
+                              >
+                                <FormControl>
+                                  <CommandItem
+                                    key={item.id}
+                                    onSelect={(currentValue) => {
+                                      setValue1(
+                                        currentValue === value1 ? "" : currentValue
+                                      );
+                                      setOpen1(true);
+                                    }}
+                                  >
+                                    <Checkbox
+                                      checked={field.value?.includes(
+                                        item.id
+                                      )}
+                                      onCheckedChange={(checked) => {
+                                        return checked
+                                          ? field.onChange([
+                                            ...field.value,
+                                            item.id,
+                                          ])
+                                          : field.onChange(
+                                            field.value?.filter(
+                                              (value) =>
+                                                value !==
+                                                item.id
                                             )
                                           );
                                       }}
