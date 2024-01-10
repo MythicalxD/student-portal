@@ -51,7 +51,7 @@ import { Check, ChevronsUpDown } from "lucide-react";
 import { Company } from "@/app/(routes)/dashboard/(student)/student-company/components/columns";
 import { Course } from "@/app/(routes)/dashboard/(super-admin)/course/components/columns";
 import { Skill } from "@/app/(routes)/dashboard/(super-admin)/skills/components/columns";
-import { Job, JobFull } from "../../components/columns";
+import { Job } from "../../components/columns";
 
 const formSchema = z.object({
   title: z.string(),
@@ -87,7 +87,7 @@ const UpdateJob: React.FC<JobProps> = ({ params }) => {
   const [open1, setOpen1] = React.useState(false);
   const [value1, setValue1] = React.useState("");
 
-  const [data, setData] = useState<JobFull>();
+  const [data, setData] = useState<Job>();
 
   const router = useRouter();
 
@@ -260,7 +260,7 @@ const UpdateJob: React.FC<JobProps> = ({ params }) => {
     token: string,
     session: string,
     id: string
-  ): Promise<JobFull> {
+  ): Promise<Job> {
 
 
     const dataToSend = {
@@ -298,6 +298,8 @@ const UpdateJob: React.FC<JobProps> = ({ params }) => {
 
       const fetchedData = await getData(authToken!, session!, params.id);
       setData(fetchedData);
+      console.log(fetchedData);
+
 
       const fetchedDataCompany = await getDataCompany(authToken!, session!);
       const fetchedDataCourses = await getDataCourses(authToken!, session!);
@@ -308,16 +310,32 @@ const UpdateJob: React.FC<JobProps> = ({ params }) => {
       setJobData(fetchedDataJob);
       setSkillData(fetchedDataSkill);
 
+      const skillIndices: number[] = [];
+      await fetchedDataSkill.forEach((skill) => {
+        // Assuming skill.name is the name of the skill you want to match
+        if (fetchedData.job_description.skills.includes(skill.name)) {
+          skillIndices.push(parseInt(skill.id));
+        }
+      });
+
+      const courseIds: number[] = [];
+      await fetchedDataCourses.forEach((course) => {
+
+        if (fetchedData.courses.includes(course.name)) {
+          courseIds.push(course.id);
+        }
+      });
+
       // Populate the form fields with the fetched data
       form.setValue("title", fetchedData.title);
-      form.setValue("description", fetchedData.detiled_description);
-      form.setValue("location", fetchedData.location);
-      form.setValue("salary", fetchedData.salary);
+      form.setValue("description", fetchedData.job_description.detiled_description);
+      form.setValue("location", fetchedData.job_description.location);
+      form.setValue("salary", fetchedData.job_description.salary);
       form.setValue("status", fetchedData.status);
-      form.setValue("web_url", fetchedData.web_url);
-      form.setValue("experience", fetchedData.experience!.toString());
-      form.setValue("skills", fetchedData.skills);
-      form.setValue("courses", fetchedData.courses);
+      form.setValue("web_url", fetchedData.job_description.web_url);
+      form.setValue("experience", fetchedData.job_description.exprience!.toString());
+      form.setValue("skills", skillIndices);
+      form.setValue("courses", courseIds);
 
     };
 
@@ -328,9 +346,9 @@ const UpdateJob: React.FC<JobProps> = ({ params }) => {
 
   return (
     <div className="m-4">
-      <p className="text-3xl text-black font-bold mb-1">Create new Job</p>
+      <p className="text-3xl text-black font-bold mb-1">Update Job</p>
       <p className="text-sm text-gray-500 mb-2">
-        Please provide information for creating a new job profile.
+        Please provide updated information for job profile.
       </p>
 
       <Link

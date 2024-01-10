@@ -246,11 +246,12 @@ const ImagePicker: React.FC = () => {
               control={form.control}
               name="dob"
               render={({ field }) => (
-                <FormItem className="flex flex-col w-[200px]">
+                <FormItem className="flex flex-col w-[500px]">
                   <FormLabel>Date of birth</FormLabel>
                   <DatePicker
                     onChange={field.onChange}
                     value={field.value}
+                    slotProps={{ textField: { size: 'small' } }}
                     format="dd-MM-yyyy"
                   />
                   <FormMessage />
