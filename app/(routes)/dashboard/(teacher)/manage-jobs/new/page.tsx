@@ -377,6 +377,7 @@ const ImagePicker: React.FC = () => {
                 </FormItem>
               )}
             />
+
             <FormField
               control={form.control}
               name="company_id"
@@ -404,6 +405,7 @@ const ImagePicker: React.FC = () => {
                 </FormItem>
               )}
             />
+
             <FormField
               control={form.control}
               name="experience"

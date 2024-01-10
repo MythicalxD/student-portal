@@ -42,12 +42,13 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Skill } from "../../../(super-admin)/skills/components/columns";
 import { Check, ChevronsUpDown } from "lucide-react";
 import { Department } from "../../department/components/columns";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 const formSchema = z.object({
   name: z.string(),
   description: z.string(),
   skills: z.array(z.number()),
-  department: z.array(z.number()),
+  department: z.string(),
 });
 
 const ImagePicker: React.FC = () => {
@@ -58,16 +59,13 @@ const ImagePicker: React.FC = () => {
   const [open, setOpen] = React.useState(false);
   const [value, setValue] = React.useState("");
 
-  const [open1, setOpen1] = React.useState(false);
-  const [value1, setValue1] = React.useState("");
-
   const router = useRouter();
 
   const handleUpload = async (
     name: string,
     description: string,
     skills: number[],
-    department: number[]
+    department: string
   ) => {
     try {
       //TODO add error on image not selected
@@ -118,7 +116,7 @@ const ImagePicker: React.FC = () => {
       name: "",
       description: "",
       skills: [],
-      department: []
+      department: ""
     },
   });
 
@@ -131,7 +129,7 @@ const ImagePicker: React.FC = () => {
       values.name,
       values.description,
       values.skills,
-      values.department
+      values.department.toString()
     );
   }
 
@@ -202,13 +200,13 @@ const ImagePicker: React.FC = () => {
 
   return (
     <div className="m-4">
-      <p className="text-3xl text-black font-bold mb-1">Create new Job</p>
+      <p className="text-3xl text-black font-bold mb-1">Create new Course</p>
       <p className="text-sm text-gray-500 mb-2">
-        Please provide information for creating a new job profile.
+        Please provide information for creating a new Course.
       </p>
 
       <Link
-        href="/dashboard/manage-jobs"
+        href="./"
         className={cn(
           buttonVariants({ variant: "outline" }),
           "absolute right-[2rem] top-[6rem] z-0"
@@ -228,7 +226,7 @@ const ImagePicker: React.FC = () => {
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Job Title</FormLabel>
+                  <FormLabel>Course Title</FormLabel>
                   <FormControl>
                     <Input placeholder="Minimum 2 characters" {...field} />
                   </FormControl>
@@ -244,10 +242,10 @@ const ImagePicker: React.FC = () => {
               name="description"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Job Description</FormLabel>
+                  <FormLabel>Course Description</FormLabel>
                   <FormControl>
                     <Textarea
-                      placeholder="Enter job description in detail."
+                      placeholder="Enter Course description in detail."
                       {...field}
                     />
                   </FormControl>
@@ -257,7 +255,7 @@ const ImagePicker: React.FC = () => {
             />
 
             <div className="flex flex-col gap-y-4">
-              <FormLabel>Skills in Job</FormLabel>
+              <FormLabel>Skills in Course</FormLabel>
               <Popover open={open} onOpenChange={setOpen}>
                 <PopoverTrigger asChild>
                   <Button
@@ -294,7 +292,7 @@ const ImagePicker: React.FC = () => {
                                       setValue(
                                         currentValue === value ? "" : currentValue
                                       );
-                                      setOpen(false);
+                                      setOpen(true);
                                     }}
                                   >
                                     <Checkbox
@@ -332,80 +330,33 @@ const ImagePicker: React.FC = () => {
               </Popover>
             </div>
 
-            <div className="flex flex-col gap-y-4">
-              <FormLabel>Department in Course</FormLabel>
-              <Popover open={open1} onOpenChange={setOpen1}>
-                <PopoverTrigger asChild>
-                  <Button
-                    variant="outline"
-                    role="combobox"
-                    aria-expanded={open1}
-                    className="w-[300px] justify-between"
+            <FormField
+              control={form.control}
+              name="department"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Select Department</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value.toString()}
                   >
-                    {"Select Department..."}
-                    <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-[300px] p-0">
-                  <Command>
-                    <CommandInput placeholder="Search Department..." />
-                    <CommandEmpty>No Department found.</CommandEmpty>
-                    <CommandGroup>
-                      {departmentData.map((item) => (
-                        <FormField
-                          key={item.id}
-                          control={form.control}
-                          name="department"
-                          render={({ field }) => {
-                            return (
-                              <FormItem
-                                key={item.id}
-                                className="flex flex-row items-center space-x-3 space-y-0"
-                              >
-                                <FormControl>
-                                  <CommandItem
-                                    key={item.id}
-                                    onSelect={(currentValue) => {
-                                      setValue1(
-                                        currentValue === value1 ? "" : currentValue
-                                      );
-                                      setOpen(false);
-                                    }}
-                                  >
-                                    <Checkbox
-                                      checked={field.value?.includes(
-                                        item.id
-                                      )}
-                                      onCheckedChange={(checked) => {
-                                        return checked
-                                          ? field.onChange([
-                                            ...field.value,
-                                            item.id,
-                                          ])
-                                          : field.onChange(
-                                            field.value?.filter(
-                                              (value) =>
-                                                value !==
-                                                item.id
-                                            )
-                                          );
-                                      }}
-                                    />
-                                  </CommandItem>
-                                </FormControl>
-                                <FormLabel className="font-normal">
-                                  {item.name}
-                                </FormLabel>
-                              </FormItem>
-                            );
-                          }}
-                        />
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select a Department" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {departmentData.map((data) => (
+                        <SelectItem value={`${data.id}`} key={data.id}>
+                          {data.name}
+                        </SelectItem>
                       ))}
-                    </CommandGroup>
-                  </Command>
-                </PopoverContent>
-              </Popover>
-            </div>
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
             <div className="flex flex-col space-y-4">
               <Button type="submit" disabled={isLoading}>
