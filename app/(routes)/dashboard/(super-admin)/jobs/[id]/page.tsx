@@ -1,10 +1,10 @@
 "use client";
 import axios from "axios";
+import { JobFull } from "../components/columns";
 import { useEffect, useState } from "react";
 import React from "react";
-import { GalleryHorizontal, GraduationCap, Settings2, Timer, TimerOff, User } from "lucide-react";
+import { GalleryHorizontal, GraduationCap, Settings2, Timer, TimerOff, TimerReset, User } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { Skill } from "../components/columns";
 
 interface IndustryProps {
     params: {
@@ -16,14 +16,14 @@ async function getData(
     token: string,
     session: string,
     id: string
-): Promise<Skill> {
+): Promise<JobFull> {
     const dataToSend = {
         token: token,
         session: session,
         id: id,
     };
 
-    const apiUrl = "/api/skill/get";
+    const apiUrl = "/api/job/get";
 
     try {
         const response = await axios.post(apiUrl, dataToSend);
@@ -41,7 +41,7 @@ async function getData(
 
 const Industry: React.FC<IndustryProps> = ({ params }) => {
     const [isLoading, setIsLoading] = React.useState<boolean>(false);
-    const [data, setData] = useState<Skill>();
+    const [data, setData] = useState<JobFull>();
 
     useEffect(() => {
         const fetchData = async () => {
@@ -67,34 +67,52 @@ const Industry: React.FC<IndustryProps> = ({ params }) => {
         <main className="flex min-h-screen flex-col p-4">
             <div>
                 <div className="flex flex-col">
-                    <p className="text-xl font-bold">Skills Details</p>
-                    <div className="grid md:grid-cols-2 grid-cols-1 gap-4">
+                    <p className="text-xl font-bold">Job Category Details</p>
+                    <div className="grid md:grid-cols-3 grid-cols-1 gap-4">
                         <div className="flex items-center space-x-4 rounded-md min-h-[70px] bg-gray-100 p-2 px-4 mt-2">
-                            <User className="mt-px h-5 w-5" />
+                            <GraduationCap className="mt-px h-5 w-5" />
                             <div className="space-y-1">
-                                <p className="text-sm font-medium leading-none">Skill ID</p>
-                                <p className="text-sm text-muted-foreground">
-                                    {data?.id}
-                                </p>
-                            </div>
-                        </div>
-
-                        <div className="flex items-center space-x-4 rounded-md min-h-[70px] bg-gray-100 p-2 px-4 mt-2">
-                            <TimerOff className="mt-px h-5 w-5" />
-                            <div className="space-y-1">
-                                <p className="text-sm font-medium leading-none">Skill Name</p>
+                                <p className="text-sm font-medium leading-none">Job Category</p>
                                 <p className="text-sm text-muted-foreground">
                                     {data?.name}
                                 </p>
                             </div>
                         </div>
+                        <div className="flex items-center space-x-4 rounded-md min-h-[70px] bg-gray-100 p-2 px-4 mt-2">
+                            <Timer className="mt-px h-5 w-5" />
+                            <div className="space-y-1">
+                                <p className="text-sm font-medium leading-none">Created On</p>
+                                <p className="text-sm text-muted-foreground">
+                                    {data?.created_at}
+                                </p>
+                            </div>
+                        </div>
+                        <div className="flex items-center space-x-4 rounded-md min-h-[70px] bg-gray-100 p-2 px-4 mt-2">
+                            <User className="mt-px h-5 w-5" />
+                            <div className="space-y-1">
+                                <p className="text-sm font-medium leading-none">Created By</p>
+                                <p className="text-sm text-muted-foreground">
+                                    {data?.created_by}
+                                </p>
+                            </div>
+                        </div>
+
+                        <div className="flex items-center space-x-4 rounded-md min-h-[70px] bg-gray-100 p-2 px-4 mt-2">
+                            <TimerReset className="mt-px h-5 w-5" />
+                            <div className="space-y-1">
+                                <p className="text-sm font-medium leading-none">Updated On</p>
+                                <p className="text-sm text-muted-foreground">
+                                    {data?.updated_at}
+                                </p>
+                            </div>
+                        </div>
 
                         <div className="flex items-center space-x-4 rounded-md min-h-[70px] bg-gray-100 p-2 px-4 mt-2">
                             <User className="mt-px h-5 w-5" />
                             <div className="space-y-1">
-                                <p className="text-sm font-medium leading-none">Skill Description</p>
+                                <p className="text-sm font-medium leading-none">Updated By</p>
                                 <p className="text-sm text-muted-foreground">
-                                    {data?.description}
+                                    {data?.updated_by}
                                 </p>
                             </div>
                         </div>

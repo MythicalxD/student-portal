@@ -81,7 +81,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
         <DropdownMenuContent align="end">
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
           <DropdownMenuItem
-            onClick={() => router.push(`/dashboard/job/${data.id}`)}
+            onClick={() => router.push(`/dashboard/jobs/${data.id}`)}
           >
             <Eye className="w-[15px] h-[15px] mr-2" />
             View

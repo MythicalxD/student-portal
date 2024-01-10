@@ -69,7 +69,7 @@ const Industry: React.FC<IndustryProps> = ({ params }) => {
     <main className="flex min-h-screen flex-col p-4">
       <div>
         <div className="flex flex-col">
-          <p className="text-xl font-bold">Course Details</p>
+          <p className="text-xl font-bold">Job Details</p>
           <div className="grid md:grid-cols-3 grid-cols-1 gap-4">
             <div className="flex items-center space-x-4 rounded-md min-h-[70px] bg-gray-100 p-2 px-4 mt-2">
               <GraduationCap className="mt-px h-5 w-5" />
