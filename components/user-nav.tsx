@@ -89,7 +89,7 @@ export function UserNav() {
         <DropdownMenuSeparator />
 
         <DropdownMenuGroup>
-          {((accountType == "Student") && <DropdownMenuItem onClick={gotoProfile}>
+          {((accountType == "Student") || (accountType == "Teacher") && <DropdownMenuItem onClick={gotoProfile}>
             Profile
             <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
           </DropdownMenuItem>

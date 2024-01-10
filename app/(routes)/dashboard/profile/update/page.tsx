@@ -273,6 +273,7 @@ const UpdateIndustry: React.FC<IndustryProps> = ({ params }) => {
                             <input
                                 type="file"
                                 id="image"
+                                accept=".jpg, .jpeg, .png"
                                 className="absolute top-10 inset-0 opacity-0 cursor-pointer" // Hide the actual file input
                                 onChange={handleFileChange}
                             />
@@ -298,12 +299,13 @@ const UpdateIndustry: React.FC<IndustryProps> = ({ params }) => {
                         >
                             <input
                                 type="file"
-                                id="image"
+                                id="cv"
+                                accept=".pdf"
                                 className="absolute top-10 inset-0 opacity-0 cursor-pointer" // Hide the actual file input
                                 onChange={handleFileChange1}
                             />
                             <label
-                                htmlFor="image"
+                                htmlFor="cv"
                                 className="flex items-center justify-center w-full h-full p-2 bg-gray-200 rounded-md cursor-pointer"
                             >
                                 <Image className="w-[20px] h-[20px] mr-2" />
