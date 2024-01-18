@@ -14,7 +14,7 @@ export async function POST(
 
     try {
 
-        const { name, desc, id, session, token } = body;
+        const { name, desc, id, file, session, token } = body;
 
         let headersList = {
             "Accept": "*/*",
@@ -25,6 +25,10 @@ export async function POST(
         const formdata = new FormData();
         formdata.append("name", name);
         formdata.append("description", desc);
+
+        if (file != "null") {
+            formdata.append("file", file);
+        }
 
         let reqOptions = {
             url: `${process.env.BASEURL}/api/v1/companyIndustry/industry/${id}`,

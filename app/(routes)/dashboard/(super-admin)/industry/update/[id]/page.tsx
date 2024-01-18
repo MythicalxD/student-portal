@@ -71,8 +71,15 @@ async function getData(
 const UpdateIndustry: React.FC<IndustryProps> = ({ params }) => {
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const [data, setData] = useState<IndustryFull>();
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
   const router = useRouter();
+
+  const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files) {
+      setSelectedFile(event.target.files[0]);
+    }
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -114,6 +121,7 @@ const UpdateIndustry: React.FC<IndustryProps> = ({ params }) => {
     id: string
   ) => {
     try {
+
       const authToken = document.cookie
         .split("; ")
         .find((row) => row.startsWith("token="))
@@ -128,6 +136,14 @@ const UpdateIndustry: React.FC<IndustryProps> = ({ params }) => {
       formData.append("name", name);
       formData.append("desc", description);
       formData.append("id", id);
+
+      // add the logo if it is not empty/null
+      if (selectedFile) {
+        formData.append("file", selectedFile);
+      } else {
+        formData.append("file", "null");
+      }
+
       formData.append("session", session);
       formData.append("token", authToken);
 
@@ -230,6 +246,37 @@ const UpdateIndustry: React.FC<IndustryProps> = ({ params }) => {
               )}
             />
             <div className="flex flex-col space-y-4">
+              <div className="flex items-center space-x-3">
+                <div
+                  className={cn(
+                    "w-[150px] cursor-pointer relative overflow-hidden"
+                  )}
+                >
+                  <input
+                    type="file"
+                    id="image"
+                    className="absolute top-10 inset-0 opacity-0 cursor-pointer" // Hide the actual file input
+                    onChange={handleFileChange}
+                  />
+                  <label
+                    htmlFor="image"
+                    className="flex items-center justify-center w-full h-full p-2 bg-gray-200 rounded-md cursor-pointer"
+                  >
+                    <Image className="w-[20px] h-[20px] mr-2" />
+                    {selectedFile ? (
+                      <span>Uploaded</span>
+                    ) : (
+                      <span>Update Logo</span>
+                    )}
+                  </label>
+                </div>
+                {selectedFile ? <span>{selectedFile.name}</span> : null}
+              </div>
+
+              <FormDescription>
+                Leave the logo blank if there is no update.
+              </FormDescription>
+
               <Button type="submit" disabled={isLoading}>
                 {isLoading && (
                   <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
