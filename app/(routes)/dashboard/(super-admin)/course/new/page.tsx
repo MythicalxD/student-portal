@@ -129,7 +129,7 @@ const ImagePicker: React.FC = () => {
       values.name,
       values.description,
       values.skills,
-      values.department.toString()
+      values.department
     );
   }
 

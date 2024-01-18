@@ -46,6 +46,7 @@ import Link from "next/link";
 import { Textarea } from "@/components/ui/textarea";
 import { Skill } from "../../../skills/components/columns";
 import { Department } from "../../../department/components/columns";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 interface CompanyProps {
   params: {
@@ -57,7 +58,7 @@ const formSchema = z.object({
   name: z.string().min(2),
   description: z.string().optional(),
   skills: z.array(z.number()),
-  department: z.array(z.number())
+  department: z.string(),
 });
 
 async function getData(
@@ -96,7 +97,7 @@ const UpdateCompany: React.FC<CompanyProps> = ({ params }) => {
   const [value, setValue] = React.useState("");
 
   const [open1, setOpen1] = React.useState(false);
-  const [value1, setValue1] = React.useState("");
+  const [value1, setValue1] = React.useState("3");
 
   const router = useRouter();
 
@@ -171,17 +172,18 @@ const UpdateCompany: React.FC<CompanyProps> = ({ params }) => {
         }
       });
 
-      const departmentIds: number[] = [];
-      await fetchedDataDepartment.forEach((department, index) => {
+      var departmentID: string = "";
+      await fetchedDataDepartment.forEach((department) => {
         if (department.name === fetchedData.department) {
-          departmentIds[0] = department.id;
+          departmentID = department.id.toString();
+          setValue1(departmentID);
         }
       });
 
       // Populate the form fields with the fetched data
       form.setValue("name", fetchedData.name);
       form.setValue("skills", skillIndices);
-      form.setValue("department", departmentIds);
+      form.setValue("department", departmentID);
       form.setValue("description", fetchedData.description);
     };
 
@@ -197,6 +199,7 @@ const UpdateCompany: React.FC<CompanyProps> = ({ params }) => {
       name: "",
       description: "",
       skills: [],
+      department: ""
     },
   });
 
@@ -204,7 +207,7 @@ const UpdateCompany: React.FC<CompanyProps> = ({ params }) => {
     name: string,
     desc: string,
     skills: number[],
-    department: number[],
+    department: string,
     id: string
   ) => {
     try {
@@ -397,80 +400,33 @@ const UpdateCompany: React.FC<CompanyProps> = ({ params }) => {
               </Popover>
             </div>
 
-            <div className="flex flex-col gap-y-4">
-              <FormLabel>Department in Course</FormLabel>
-              <Popover open={open1} onOpenChange={setOpen1}>
-                <PopoverTrigger asChild>
-                  <Button
-                    variant="outline"
-                    role="combobox"
-                    aria-expanded={open1}
-                    className="w-[300px] justify-between"
+            <FormField
+              control={form.control}
+              name="department"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Select Department</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
                   >
-                    {"Select Department..."}
-                    <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-[300px] p-0">
-                  <Command>
-                    <CommandInput placeholder="Search Department..." />
-                    <CommandEmpty>No Department found.</CommandEmpty>
-                    <CommandGroup>
-                      {departmentData.map((item) => (
-                        <FormField
-                          key={item.id}
-                          control={form.control}
-                          name="department"
-                          render={({ field }) => {
-                            return (
-                              <FormItem
-                                key={item.id}
-                                className="flex flex-row items-center space-x-3 space-y-0"
-                              >
-                                <FormControl>
-                                  <CommandItem
-                                    key={item.id}
-                                    onSelect={(currentValue) => {
-                                      setValue1(
-                                        currentValue === value1 ? "" : currentValue
-                                      );
-                                      setOpen1(true);
-                                    }}
-                                  >
-                                    <Checkbox
-                                      checked={field.value?.includes(
-                                        item.id
-                                      )}
-                                      onCheckedChange={(checked) => {
-                                        return checked
-                                          ? field.onChange([
-                                            ...field.value,
-                                            item.id,
-                                          ])
-                                          : field.onChange(
-                                            field.value?.filter(
-                                              (value) =>
-                                                value !==
-                                                item.id
-                                            )
-                                          );
-                                      }}
-                                    />
-                                  </CommandItem>
-                                </FormControl>
-                                <FormLabel className="font-normal">
-                                  {item.name}
-                                </FormLabel>
-                              </FormItem>
-                            );
-                          }}
-                        />
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select a Department" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {departmentData.map((data) => (
+                        <SelectItem value={data.id.toString()} key={data.id}>
+                          {data.name}
+                        </SelectItem>
                       ))}
-                    </CommandGroup>
-                  </Command>
-                </PopoverContent>
-              </Popover>
-            </div>
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
             <div className="flex flex-col space-y-4">
               <Button type="submit" disabled={isLoading}>
