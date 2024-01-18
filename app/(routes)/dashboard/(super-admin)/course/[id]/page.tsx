@@ -5,6 +5,9 @@ import { useEffect, useState } from "react";
 import React from "react";
 import { GalleryHorizontal, GraduationCap, Settings2, Timer, TimerOff, TimerReset, User } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import Link from "next/link";
+import { cn } from "@/lib/utils";
+import { buttonVariants } from "@/components/ui/button";
 
 interface IndustryProps {
     params: {
@@ -67,6 +70,15 @@ const Industry: React.FC<IndustryProps> = ({ params }) => {
         <main className="flex min-h-screen flex-col p-4">
             <div>
                 <div className="flex flex-col">
+                    <Link
+                        href="./"
+                        className={cn(
+                            buttonVariants({ variant: "outline" }),
+                            "absolute right-[2rem] top-[5rem]"
+                        )}
+                    >
+                        Go Back
+                    </Link>
                     <p className="text-xl font-bold">Course Details</p>
                     <div className="grid md:grid-cols-3 grid-cols-1 gap-4">
                         <div className="flex items-center space-x-4 rounded-md min-h-[70px] bg-gray-100 p-2 px-4 mt-2">
