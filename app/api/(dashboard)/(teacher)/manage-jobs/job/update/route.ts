@@ -9,12 +9,9 @@ export async function POST(
         return NextResponse.json({ msg: 'Method Not Allowed' }, { status: 405 })
     }
 
-    let formData = await req.formData();
-    let body = Object.fromEntries(formData);
-
     try {
 
-        const { name, id, session, token } = body;
+        const { name, desc, status, location, skills, courses, category, experience, salary, url, company, id, session, token } = await req.json();
 
         let headersList = {
             "Accept": "*/*",
@@ -23,10 +20,10 @@ export async function POST(
             "Content-Type": "application/json"
         }
 
-        let bodyContent = JSON.stringify({ "name": name });
+        let bodyContent = JSON.stringify({ "title": name, "status": status, "description": desc, "location": location, "skills": skills, "courses": courses, "job_category_id": category, "experience": experience, "salary": salary, "web_url": url });
 
         let reqOptions = {
-            url: `${process.env.BASEURL}/api/v1/jobCategories/category/${id}`,
+            url: `${process.env.BASEURL}/api/v1/job/job/${id}`,
             method: "PUT",
             headers: headersList,
             data: bodyContent,

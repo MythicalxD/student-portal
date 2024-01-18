@@ -112,7 +112,7 @@ const Application: React.FC<AppProps> = ({ params }) => {
       const { token } = response.data;
       if (token === "done") {
         toast.success("Application Updated");
-        router.push("/dashboard/application");
+        router.push("/dashboard/application-admin");
       }
       setIsLoading(false);
     } catch (error) {
@@ -131,6 +131,17 @@ const Application: React.FC<AppProps> = ({ params }) => {
 
   const [data, setData] = useState<JobApplicationAdmin>();
 
+  const statusLookup: Record<string, string> = {
+    'APPROVED': 'Approved',
+    'PENDING': "Pending",
+    'SUBMITTED': "Submitted",
+    'REJECTED': "Rejected",
+    'WITHDRAWN': "Withdrawn",
+    'REVIEW': "Under Review"
+
+    // Add other statuses as needed
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       const authToken = document.cookie
@@ -146,8 +157,8 @@ const Application: React.FC<AppProps> = ({ params }) => {
       const fetchedData = await getData(authToken!, session!, params.id);
       setData(fetchedData);
 
-      form.setValue("comment", data?.comments[0].comment!);
-      form.setValue("status", data?.status!);
+      form.setValue("comment", fetchedData?.comments[0].comment!);
+      form.setValue("status", statusLookup[fetchedData?.status!]);
     };
 
     fetchData(); // Call the fetchData function when the component mounts
@@ -209,7 +220,7 @@ const Application: React.FC<AppProps> = ({ params }) => {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Application Status</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <Select onValueChange={field.onChange} defaultValue={field.value} value={field.value}>
                         <FormControl>
                           <SelectTrigger>
                             <SelectValue placeholder="Select a status" />

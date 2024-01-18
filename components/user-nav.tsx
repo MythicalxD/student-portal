@@ -89,11 +89,20 @@ export function UserNav() {
         <DropdownMenuSeparator />
 
         <DropdownMenuGroup>
-          {((accountType == "Student") || (accountType == "Teacher") && <DropdownMenuItem onClick={gotoProfile}>
-            Profile
-            <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
-          </DropdownMenuItem>
-          )}
+          {
+            accountType === "Student" ? (
+              <DropdownMenuItem onClick={gotoProfile}>
+                Profile
+                <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
+              </DropdownMenuItem>
+            ) : accountType === "Teacher" ? (
+              <DropdownMenuItem onClick={gotoProfile}>
+                Profile
+                <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
+              </DropdownMenuItem>
+            ) : null
+          }
+
           <DropdownMenuItem>
             Settings
             <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>

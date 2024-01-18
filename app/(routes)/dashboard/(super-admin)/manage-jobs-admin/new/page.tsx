@@ -34,6 +34,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Job, JobCategory } from "../components/columns";
+import { Company } from "../../../(student)/student-company/components/columns";
+import { Course } from "../../../(super-admin)/course/components/columns";
 import {
   Popover,
   PopoverContent,
@@ -47,11 +50,8 @@ import {
   CommandItem,
 } from "@/components/ui/command";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Skill } from "../../../(super-admin)/skills/components/columns";
 import { Check, ChevronsUpDown } from "lucide-react";
-import { Company } from "@/app/(routes)/dashboard/(student)/student-company/components/columns";
-import { Course } from "@/app/(routes)/dashboard/(super-admin)/course/components/columns";
-import { Skill } from "@/app/(routes)/dashboard/(super-admin)/skills/components/columns";
-import { JobSingle, JobTeacher } from "@/utils/types";
 
 const formSchema = z.object({
   title: z.string(),
@@ -67,19 +67,12 @@ const formSchema = z.object({
   courses: z.array(z.number()),
 });
 
-interface JobProps {
-  params: {
-    id: string;
-  };
-}
-
-const UpdateJob: React.FC<JobProps> = ({ params }) => {
+const ImagePicker: React.FC = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const [companyData, setDataCompany] = useState<Company[]>([]);
   const [courseData, setCourseData] = useState<Course[]>([]);
-  const [jobData, setJobData] = useState<JobTeacher[]>([]);
-  const [jobCategoryData, setJobCategoryData] = useState<JobSingle[]>([]);
+  const [jobData, setJobData] = useState<JobCategory[]>([]);
   const [skillData, setSkillData] = useState<Skill[]>([]);
 
   const [open, setOpen] = React.useState(false);
@@ -87,8 +80,6 @@ const UpdateJob: React.FC<JobProps> = ({ params }) => {
 
   const [open1, setOpen1] = React.useState(false);
   const [value1, setValue1] = React.useState("");
-
-  const [data, setData] = useState<JobTeacher>();
 
   const router = useRouter();
 
@@ -130,23 +121,25 @@ const UpdateJob: React.FC<JobProps> = ({ params }) => {
         salary: salary,
         url: url,
         company: company,
-        id: params.id,
         token: authToken,
         session: session,
       };
 
-      const apiUrl = "/api/manage-jobs/job/update";
+      console.log(dataToSend);
+
+      const apiUrl = "/api/manage-jobs/job/upload";
       const response = await axios.post(apiUrl, dataToSend);
 
+      console.log(response.data);
       const { token } = response.data;
       if (token === "done") {
-        toast.success("Job Updated");
-        router.push("/dashboard/manage-jobs");
+        toast.success("Job Created");
+        router.push("/dashboard/manage-jobs-admin");
       }
       setIsLoading(false);
     } catch (error) {
       setIsLoading(false);
-      toast.error("Error Updating Job");
+      toast.error("Error Creating Job");
       console.error("Error uploading file:", error);
       // Handle the error
     }
@@ -194,6 +187,7 @@ const UpdateJob: React.FC<JobProps> = ({ params }) => {
 
     try {
       const response = await axios.post(apiUrl, dataToSend);
+      console.log(response);
       return response.data;
     } catch (error: any) {
       console.error();
@@ -214,6 +208,7 @@ const UpdateJob: React.FC<JobProps> = ({ params }) => {
 
     try {
       const response = await axios.post(apiUrl, dataToSend);
+      console.log(response);
       return response.data;
     } catch (error: any) {
       console.error();
@@ -221,36 +216,17 @@ const UpdateJob: React.FC<JobProps> = ({ params }) => {
     }
   }
 
-  async function getDataJob(token: string, session: string): Promise<JobTeacher[]> {
+  async function getDataJob(token: string, session: string): Promise<JobCategory[]> {
     const dataToSend = {
       id: token,
       session: session,
     };
 
-    const apiUrl = "/api/manage-jobs/job";
+    const apiUrl = "/api/manage-jobs/job/get/jobs";
 
     try {
       const response = await axios.post(apiUrl, dataToSend);
-      return response.data;
-    } catch (error: any) {
-      console.error();
-      return error;
-    }
-  }
-
-  async function getDataJobCategory(
-    token: string,
-    session: string
-  ): Promise<JobSingle[]> {
-    const dataToSend = {
-      id: token,
-      session: session,
-    };
-
-    const apiUrl = "/api/job";
-
-    try {
-      const response = await axios.post(apiUrl, dataToSend);
+      console.log(response);
       return response.data;
     } catch (error: any) {
       console.error();
@@ -271,38 +247,11 @@ const UpdateJob: React.FC<JobProps> = ({ params }) => {
 
     try {
       const response = await axios.post(apiUrl, dataToSend);
+      console.log(response);
       return response.data;
     } catch (error: any) {
       console.error();
       return error;
-    }
-  }
-
-  async function getData(
-    token: string,
-    session: string,
-    id: string
-  ): Promise<JobTeacher> {
-
-
-    const dataToSend = {
-      token: token,
-      session: session,
-      id: id,
-    };
-
-    const apiUrl = "/api/manage-jobs/job/get";
-
-    try {
-      const response = await axios.post(apiUrl, dataToSend);
-      return response.data;
-    } catch (error: any) {
-      if (error.response.status === 401) {
-        return error;
-      } else {
-        console.error("Error:", error);
-        return error;
-      }
     }
   }
 
@@ -318,48 +267,14 @@ const UpdateJob: React.FC<JobProps> = ({ params }) => {
         .find((row) => row.startsWith("session="))
         ?.split("=")[1];
 
-      const fetchedData = await getData(authToken!, session!, params.id);
-      setData(fetchedData);
-      console.log(fetchedData);
-
-
       const fetchedDataCompany = await getDataCompany(authToken!, session!);
       const fetchedDataCourses = await getDataCourses(authToken!, session!);
       const fetchedDataJob = await getDataJob(authToken!, session!);
       const fetchedDataSkill = await getDataSkill(authToken!, session!);
-      const fetchedDataJobCategory = await getDataJobCategory(authToken!, session!);
       setDataCompany(fetchedDataCompany);
       setCourseData(fetchedDataCourses);
       setJobData(fetchedDataJob);
       setSkillData(fetchedDataSkill);
-      setJobCategoryData(fetchedDataJobCategory);
-
-      var JobcategoryNumber: string = "";
-      await fetchedDataJobCategory.forEach((jobCategory) => {
-        if (jobCategory.name === fetchedData.job_category_name) {
-          JobcategoryNumber = jobCategory.id.toString();
-        }
-      });
-
-      var CompanyNumber: string = "";
-      await fetchedDataCompany.forEach((company) => {
-        if (company.name === fetchedData.company_name) {
-          CompanyNumber = company.id.toString();
-        }
-      });
-
-      // Populate the form fields with the fetched data
-      form.setValue("title", fetchedData.title);
-      form.setValue("description", fetchedData.detiled_description);
-      form.setValue("location", fetchedData.location);
-      form.setValue("salary", fetchedData.salary);
-      form.setValue("status", fetchedData.status);
-      form.setValue("job_category_id", JobcategoryNumber);
-      form.setValue("company_id", CompanyNumber);
-      form.setValue("web_url", fetchedData.web_url);
-      form.setValue("experience", fetchedData.experience!.toString());
-      form.setValue("skills", fetchedData.skills);
-      form.setValue("courses", fetchedData.courses);
     };
 
     fetchData(); // Call the fetchData function when the component mounts
@@ -367,12 +282,11 @@ const UpdateJob: React.FC<JobProps> = ({ params }) => {
     // Optionally, you can include a cleanup function here if needed
   }, []); // The empty dependency array ensures that the effect runs only once
 
-
   return (
     <div className="m-4">
-      <p className="text-3xl text-black font-bold mb-1">Update Job</p>
+      <p className="text-3xl text-black font-bold mb-1">Create new Job</p>
       <p className="text-sm text-gray-500 mb-2">
-        Please provide updated information for job profile.
+        Please provide information for creating a new job profile.
       </p>
 
       <Link
@@ -445,7 +359,6 @@ const UpdateJob: React.FC<JobProps> = ({ params }) => {
                   <Select
                     onValueChange={field.onChange}
                     defaultValue={field.value}
-                    value={field.value}
                   >
                     <FormControl>
                       <SelectTrigger>
@@ -453,7 +366,7 @@ const UpdateJob: React.FC<JobProps> = ({ params }) => {
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      {jobCategoryData.map((data) => (
+                      {jobData.map((data) => (
                         <SelectItem value={`${data.id}`} key={data.id}>
                           {data.name}
                         </SelectItem>
@@ -464,6 +377,7 @@ const UpdateJob: React.FC<JobProps> = ({ params }) => {
                 </FormItem>
               )}
             />
+
             <FormField
               control={form.control}
               name="company_id"
@@ -473,7 +387,6 @@ const UpdateJob: React.FC<JobProps> = ({ params }) => {
                   <Select
                     onValueChange={field.onChange}
                     defaultValue={field.value}
-                    value={field.value}
                   >
                     <FormControl>
                       <SelectTrigger>
@@ -492,6 +405,7 @@ const UpdateJob: React.FC<JobProps> = ({ params }) => {
                 </FormItem>
               )}
             />
+
             <FormField
               control={form.control}
               name="experience"
@@ -691,7 +605,6 @@ const UpdateJob: React.FC<JobProps> = ({ params }) => {
                   <Select
                     onValueChange={field.onChange}
                     defaultValue={field.value}
-                    value={field.value}
                   >
                     <FormControl>
                       <SelectTrigger>
@@ -712,7 +625,7 @@ const UpdateJob: React.FC<JobProps> = ({ params }) => {
                 {isLoading && (
                   <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
                 )}
-                Update Details
+                Create
               </Button>
             </div>
           </form>
@@ -722,8 +635,4 @@ const UpdateJob: React.FC<JobProps> = ({ params }) => {
   );
 };
 
-export default UpdateJob;
-
-function forceUpdate() {
-  throw new Error("Function not implemented.");
-}
+export default ImagePicker;

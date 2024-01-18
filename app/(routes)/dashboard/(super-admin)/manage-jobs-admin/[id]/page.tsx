@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import React from "react";
 import { GalleryHorizontal, GraduationCap, LocateIcon, Settings2, Timer, TimerOff, User, Wallet } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { JobTeacher } from "@/utils/types";
+import { Job, JobFull } from "@/utils/types";
 import Link from "next/link";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -19,7 +19,7 @@ async function getData(
   token: string,
   session: string,
   id: string
-): Promise<JobTeacher> {
+): Promise<Job> {
   const dataToSend = {
     token: token,
     session: session,
@@ -44,7 +44,7 @@ async function getData(
 
 const Industry: React.FC<IndustryProps> = ({ params }) => {
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
-  const [data, setData] = useState<JobTeacher>();
+  const [data, setData] = useState<Job>();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -106,7 +106,7 @@ const Industry: React.FC<IndustryProps> = ({ params }) => {
               <div className="space-y-1">
                 <p className="text-sm font-medium leading-none">Skills</p>
                 <p className="text-sm text-muted-foreground">
-                  {data?.skills?.map((skill) => (<Badge className="mr-1 mt-1" variant={"outline"} >{skill}</Badge>))}
+                  {data?.job_description.skills.map((skill) => (<Badge className="mr-1 mt-1" variant={"outline"} >{skill}</Badge>))}
                 </p>
               </div>
             </div>
@@ -115,7 +115,7 @@ const Industry: React.FC<IndustryProps> = ({ params }) => {
               <div className="space-y-1">
                 <p className="text-sm font-medium leading-none">Experience</p>
                 <p className="text-sm text-muted-foreground">
-                  {data?.experience}
+                  {data?.job_description.exprience}
                 </p>
               </div>
             </div>
@@ -124,7 +124,7 @@ const Industry: React.FC<IndustryProps> = ({ params }) => {
               <div className="space-y-1">
                 <p className="text-sm font-medium leading-none">Location</p>
                 <p className="text-sm text-muted-foreground">
-                  {data?.location}
+                  {data?.job_description.location}
                 </p>
               </div>
             </div>
@@ -134,7 +134,7 @@ const Industry: React.FC<IndustryProps> = ({ params }) => {
               <div className="space-y-1">
                 <p className="text-sm font-medium leading-none">Salary</p>
                 <p className="text-sm text-muted-foreground">
-                  {data?.salary}
+                  {data?.job_description.salary}
                 </p>
               </div>
             </div>
@@ -144,7 +144,7 @@ const Industry: React.FC<IndustryProps> = ({ params }) => {
               <div className="space-y-1">
                 <p className="text-sm font-medium leading-none">Courses</p>
                 <p className="text-sm text-muted-foreground">
-                  {data?.courses?.map((skill) => (<Badge className="mr-1 mt-1" variant={"outline"} >{skill}</Badge>))}
+                  {data?.courses.map((skill) => (<Badge className="mr-1 mt-1" variant={"outline"} >{skill}</Badge>))}
 
                 </p>
               </div>

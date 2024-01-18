@@ -57,7 +57,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
       const { token } = response.data;
       if (token === "done") {
         toast.success("Application Updated");
-        router.refresh();
+        window.location.href = "./application-admin";
       }
     } catch (error) {
       toast.error("Error Updating Application");

@@ -86,6 +86,16 @@ const UpdateIndustry: React.FC<IndustryProps> = ({ params }) => {
         }
     };
 
+
+    const [accountType, setAccountType] = useState<string | null>("");
+
+    useEffect(() => {
+        // This block will only run on the client side
+        if (typeof window !== "undefined") {
+            setAccountType(localStorage.getItem("accountType"));
+        }
+    }, []); // Empty dependency array ensures the effect runs once after mount
+
     const handleUpload = async (email: string, password: string, cpassword: string) => {
         try {
             //TODO add error on image not selected
@@ -216,6 +226,7 @@ const UpdateIndustry: React.FC<IndustryProps> = ({ params }) => {
                         <FormField
                             control={form.control}
                             name="email"
+                            disabled
                             render={({ field }) => (
                                 <FormItem>
                                     <FormLabel>Email</FormLabel>
@@ -291,7 +302,7 @@ const UpdateIndustry: React.FC<IndustryProps> = ({ params }) => {
                         </div>
                         {selectedFile ? <span>{selectedFile.name}</span> : null}
                     </div>
-                    <div className="flex h-full items-center space-x-3">
+                    {((accountType == "Student")) && <div className="flex h-full items-center space-x-3">
                         <div
                             className={cn(
                                 "w-[150px] cursor-pointer relative overflow-hidden"
@@ -317,7 +328,7 @@ const UpdateIndustry: React.FC<IndustryProps> = ({ params }) => {
                             </label>
                         </div>
                         {selectedFile1 ? <span>{selectedFile1.name}</span> : null}
-                    </div>
+                    </div>}
                 </div>
             </div>
         </div>

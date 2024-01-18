@@ -12,6 +12,21 @@ export type JobDescription = {
     web_url: string;
 };
 
+export type JobTeacher = {
+    applications: any[]; // You may want to replace 'any[]' with a more specific type if needed
+    company_name: string;
+    courses: number[]; // Assuming it's an array of course IDs
+    detiled_description: string; // Fixing the typo in the property name
+    experience: number;
+    job_category_name: string;
+    location: string;
+    salary: string;
+    skills: number[]; // Assuming it's an array of skill IDs
+    status: string;
+    title: string;
+    web_url: string;
+};
+
 export type Job = {
     applicants: number[];
     company: number;
@@ -136,4 +151,8 @@ export interface User {
     student_id: number;
 }
 
+export type JobSingle = {
+    id: string;
+    name: string;
+  };
 

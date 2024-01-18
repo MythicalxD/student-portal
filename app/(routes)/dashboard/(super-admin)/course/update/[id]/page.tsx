@@ -409,6 +409,7 @@ const UpdateCompany: React.FC<CompanyProps> = ({ params }) => {
                   <Select
                     onValueChange={field.onChange}
                     defaultValue={field.value}
+                    value={field.value}
                   >
                     <FormControl>
                       <SelectTrigger>

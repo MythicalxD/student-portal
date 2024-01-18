@@ -51,7 +51,8 @@ import { Check, ChevronsUpDown } from "lucide-react";
 import { Company } from "@/app/(routes)/dashboard/(student)/student-company/components/columns";
 import { Course } from "@/app/(routes)/dashboard/(super-admin)/course/components/columns";
 import { Skill } from "@/app/(routes)/dashboard/(super-admin)/skills/components/columns";
-import { JobSingle, JobTeacher } from "@/utils/types";
+import { Job } from "../../components/columns";
+import { JobSingle } from "@/utils/types";
 
 const formSchema = z.object({
   title: z.string(),
@@ -78,7 +79,7 @@ const UpdateJob: React.FC<JobProps> = ({ params }) => {
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const [companyData, setDataCompany] = useState<Company[]>([]);
   const [courseData, setCourseData] = useState<Course[]>([]);
-  const [jobData, setJobData] = useState<JobTeacher[]>([]);
+  const [jobData, setJobData] = useState<Job[]>([]);
   const [jobCategoryData, setJobCategoryData] = useState<JobSingle[]>([]);
   const [skillData, setSkillData] = useState<Skill[]>([]);
 
@@ -88,7 +89,7 @@ const UpdateJob: React.FC<JobProps> = ({ params }) => {
   const [open1, setOpen1] = React.useState(false);
   const [value1, setValue1] = React.useState("");
 
-  const [data, setData] = useState<JobTeacher>();
+  const [data, setData] = useState<Job>();
 
   const router = useRouter();
 
@@ -141,7 +142,7 @@ const UpdateJob: React.FC<JobProps> = ({ params }) => {
       const { token } = response.data;
       if (token === "done") {
         toast.success("Job Updated");
-        router.push("/dashboard/manage-jobs");
+        router.push("/dashboard/manage-jobs-admin");
       }
       setIsLoading(false);
     } catch (error) {
@@ -221,7 +222,7 @@ const UpdateJob: React.FC<JobProps> = ({ params }) => {
     }
   }
 
-  async function getDataJob(token: string, session: string): Promise<JobTeacher[]> {
+  async function getDataJob(token: string, session: string): Promise<Job[]> {
     const dataToSend = {
       id: token,
       session: session,
@@ -282,7 +283,7 @@ const UpdateJob: React.FC<JobProps> = ({ params }) => {
     token: string,
     session: string,
     id: string
-  ): Promise<JobTeacher> {
+  ): Promise<Job> {
 
 
     const dataToSend = {
@@ -334,32 +335,49 @@ const UpdateJob: React.FC<JobProps> = ({ params }) => {
       setSkillData(fetchedDataSkill);
       setJobCategoryData(fetchedDataJobCategory);
 
-      var JobcategoryNumber: string = "";
-      await fetchedDataJobCategory.forEach((jobCategory) => {
-        if (jobCategory.name === fetchedData.job_category_name) {
-          JobcategoryNumber = jobCategory.id.toString();
+      const skillIndices: number[] = [];
+      await fetchedDataSkill.forEach((skill) => {
+        // Assuming skill.name is the name of the skill you want to match
+        if (fetchedData.job_description.skills.includes(skill.name)) {
+          skillIndices.push(parseInt(skill.id));
         }
       });
 
-      var CompanyNumber: string = "";
-      await fetchedDataCompany.forEach((company) => {
-        if (company.name === fetchedData.company_name) {
-          CompanyNumber = company.id.toString();
+      const courseIndices: number[] = [];
+      await fetchedDataCourses.forEach((course) => {
+        // Assuming skill.name is the name of the skill you want to match
+        if (fetchedData.courses.includes(course.name)) {
+          courseIndices.push(course.id);
+        }
+      });
+
+      const courseIds: number[] = [];
+      await fetchedDataCourses.forEach((course) => {
+
+        if (fetchedData.courses.includes(course.name)) {
+          courseIds.push(course.id);
+        }
+      });
+
+      var JobcategoryNumber: string = "";
+      await fetchedDataJobCategory.forEach((jobCategory) => {
+        if (jobCategory.name === fetchedData.job_category) {
+          JobcategoryNumber = jobCategory.id.toString();
         }
       });
 
       // Populate the form fields with the fetched data
       form.setValue("title", fetchedData.title);
-      form.setValue("description", fetchedData.detiled_description);
-      form.setValue("location", fetchedData.location);
-      form.setValue("salary", fetchedData.salary);
+      form.setValue("description", fetchedData.job_description.detiled_description);
+      form.setValue("location", fetchedData.job_description.location);
+      form.setValue("salary", fetchedData.job_description.salary);
       form.setValue("status", fetchedData.status);
       form.setValue("job_category_id", JobcategoryNumber);
-      form.setValue("company_id", CompanyNumber);
-      form.setValue("web_url", fetchedData.web_url);
-      form.setValue("experience", fetchedData.experience!.toString());
-      form.setValue("skills", fetchedData.skills);
-      form.setValue("courses", fetchedData.courses);
+      form.setValue("company_id", fetchedData.company);
+      form.setValue("web_url", fetchedData.job_description.web_url);
+      form.setValue("experience", fetchedData.job_description.exprience!.toString());
+      form.setValue("skills", skillIndices);
+      form.setValue("courses", courseIndices);
     };
 
     fetchData(); // Call the fetchData function when the component mounts
@@ -376,7 +394,7 @@ const UpdateJob: React.FC<JobProps> = ({ params }) => {
       </p>
 
       <Link
-        href="/dashboard/manage-jobs"
+        href="./"
         className={cn(
           buttonVariants({ variant: "outline" }),
           "absolute right-[2rem] top-[6rem] z-0"
