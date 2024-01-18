@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, ChangeEvent } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
@@ -31,7 +31,7 @@ import FormData from "form-data";
 import * as z from "zod";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
-import { Factory } from "lucide-react";
+import { Factory, Image } from "lucide-react";
 import { Icons } from "@/components/icons";
 import toast from "react-hot-toast";
 import { CompanyFull } from "../../components/columns";
@@ -80,10 +80,17 @@ async function getData(
 }
 
 const UpdateCompany: React.FC<CompanyProps> = ({ params }) => {
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const [data, setData] = useState<CompanyFull>();
 
   const router = useRouter();
+
+  const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files) {
+      setSelectedFile(event.target.files[0]);
+    }
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -151,6 +158,11 @@ const UpdateCompany: React.FC<CompanyProps> = ({ params }) => {
       formData.append("contact", contact);
       formData.append("status", status);
       formData.append("id", id);
+
+      if (selectedFile) {
+        formData.append("file", selectedFile);
+      }
+
       formData.append("session", session);
       formData.append("token", authToken);
 
@@ -306,6 +318,37 @@ const UpdateCompany: React.FC<CompanyProps> = ({ params }) => {
             />
 
             <div className="flex flex-col space-y-4">
+              <div className="flex items-center space-x-3">
+                <div
+                  className={cn(
+                    "w-[150px] cursor-pointer relative overflow-hidden"
+                  )}
+                >
+                  <input
+                    type="file"
+                    id="image"
+                    className="absolute top-10 inset-0 opacity-0 cursor-pointer" // Hide the actual file input
+                    onChange={handleFileChange}
+                  />
+                  <label
+                    htmlFor="image"
+                    className="flex items-center justify-center w-full h-full p-2 bg-gray-200 rounded-md cursor-pointer"
+                  >
+                    <Image className="w-[20px] h-[20px] mr-2" />
+                    {selectedFile ? (
+                      <span>Uploaded</span>
+                    ) : (
+                      <span>Update Logo</span>
+                    )}
+                  </label>
+                </div>
+                {selectedFile ? <span>{selectedFile.name}</span> : null}
+              </div>
+
+              <FormDescription>
+                Leave the logo blank if there is no update.
+              </FormDescription>
+
               <Button type="submit" disabled={isLoading}>
                 {isLoading && (
                   <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
