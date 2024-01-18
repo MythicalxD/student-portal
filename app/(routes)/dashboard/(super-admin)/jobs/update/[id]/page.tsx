@@ -167,7 +167,7 @@ const UpdateJob: React.FC<JobProps> = ({ params }) => {
       </div>
 
       <Link
-        href="../"
+        href="./"
         className={cn(
           buttonVariants({ variant: "outline" }),
           "absolute right-[2rem] top-[6rem]"
