@@ -27,6 +27,10 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
   const [loading] = useState(false);
   const [id, setId] = useState("");
 
+  function openURL(url: string): void {
+    window.open(url, '_blank');
+  }
+
   const handleUploadApprove = async (
     comment: string,
     status: string,
