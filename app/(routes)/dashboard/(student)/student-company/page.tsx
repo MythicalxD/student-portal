@@ -39,17 +39,31 @@ async function getApplication(token: string, session: string): Promise<Applicati
   try {
     const response = await axios.post(apiUrl, dataToSend);
     console.log(response);
-    return response.data;
+    if (response.data) {
+      return response.data;
+    } else {
+      return [];
+    }
+
   } catch (error: any) {
     //window.location.href = "/login";
     console.error();
-    return error;
+    return [];
   }
 }
 
-export const findApplicationStatusById = (id: number, statuses: ApplicationStatus[]): ApplicationStatus | undefined => {
-  return statuses.find(status => status.id === id);
+export const findApplicationStatusById = (id: number, statuses: ApplicationStatus[] | undefined | null): ApplicationStatus | undefined => {
+
+  console.log(statuses);
+
+  if (!statuses || statuses.length === 0) {
+    return undefined;
+  } else {
+    return statuses.find(status => status.id === id);
+  }
+
 };
+
 
 export default function DemoPage() {
   const [data, setData] = useState<JobStudent[]>([]);
@@ -98,8 +112,13 @@ export default function DemoPage() {
         <ScrollArea>
           <div className="flex flex-col h-[80vh] space-y-4 pb-4">
             {data.map((job) => (
-              <CompanyCard item={job} status={findApplicationStatusById(job.id, data1)?.status} />
+              <CompanyCard
+                key={job.id}
+                item={job}
+                status={findApplicationStatusById(job.id, data1)?.status}
+              />
             ))}
+
           </div>
           <ScrollBar orientation="vertical" />
         </ScrollArea>

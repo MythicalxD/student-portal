@@ -18,9 +18,8 @@ async function getData(token: string, session: string): Promise<ApplicationStatu
     console.log(response);
     return response.data;
   } catch (error: any) {
-    window.location.href = "/login";
     console.error();
-    return error;
+    return [];
   }
 }
 
