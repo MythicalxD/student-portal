@@ -95,9 +95,9 @@ const Industry: React.FC<IndustryProps> = ({ params }) => {
             <div className="flex items-center space-x-4 rounded-md min-h-[70px] bg-gray-100 p-2 px-4 mt-2">
               <GalleryHorizontal className="mt-px h-5 w-5" />
               <div className="space-y-1">
-                <p className="text-sm font-medium leading-none">Company Name</p>
+                <p className="text-sm font-medium leading-none">Company ID</p>
                 <p className="text-sm text-muted-foreground">
-                  {data?.title}
+                  {data?.company}
                 </p>
               </div>
             </div>

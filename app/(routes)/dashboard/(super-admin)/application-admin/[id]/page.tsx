@@ -157,7 +157,7 @@ const Application: React.FC<AppProps> = ({ params }) => {
       const fetchedData = await getData(authToken!, session!, params.id);
       setData(fetchedData);
 
-      form.setValue("comment", fetchedData?.comments[0].comment!);
+      form.setValue("comment", fetchedData?.comments[0]?.comment ?? "");
       form.setValue("status", statusLookup[fetchedData?.status!]);
     };
 
@@ -186,12 +186,12 @@ const Application: React.FC<AppProps> = ({ params }) => {
       <div className="flex">
         <div className="flex flex-col">
           <div className="flex relative w-[500px]">
-            <img src="/app-bg.png" alt="Application background" className="absolute" />
-            <p className="text-4xl text-white absolute top-[20px] left-[20px]" >{data?.created_by}</p>
-            <p className="text-xl text-gray-300 absolute top-[80px] left-[20px]" >Company Description here</p>
+            <img src="/app-bg.png" alt="Application background" className="absolute w-[350px] left-2" />
+            <p className="text-md text-white absolute top-[15px] left-[20px]" >Applicant Name</p>
+            <p className="text-4xl text-white absolute top-[40px] left-[20px]" >{data?.created_by}</p>
           </div>
 
-          <div className="flex flex-col mt-[150px] mb-4 ml-2">
+          <div className="flex flex-col mt-[120px] mb-4 ml-2">
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)} className="w-2/3 space-y-6">
                 <FormField

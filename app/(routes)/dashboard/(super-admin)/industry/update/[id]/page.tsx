@@ -255,6 +255,7 @@ const UpdateIndustry: React.FC<IndustryProps> = ({ params }) => {
                   <input
                     type="file"
                     id="image"
+                    accept=".jpg, .jpeg, .png"
                     className="absolute top-10 inset-0 opacity-0 cursor-pointer" // Hide the actual file input
                     onChange={handleFileChange}
                   />

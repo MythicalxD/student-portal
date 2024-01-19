@@ -454,16 +454,16 @@ const UpdateJob: React.FC<JobProps> = ({ params }) => {
                 </FormItem>
               )}
             />
-            <FormField
+            {/* <FormField
               control={form.control}
               name="job_category_id"
+              disabled
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Select Job Category</FormLabel>
                   <Select
                     onValueChange={field.onChange}
                     defaultValue={field.value}
-                    value={field.value}
                   >
                     <FormControl>
                       <SelectTrigger>
@@ -472,7 +472,7 @@ const UpdateJob: React.FC<JobProps> = ({ params }) => {
                     </FormControl>
                     <SelectContent>
                       {jobCategoryData.map((data) => (
-                        <SelectItem value={`${data.id}`} key={data.id}>
+                        <SelectItem value={data.id} key={data.id}>
                           {data.name}
                         </SelectItem>
                       ))}
@@ -481,7 +481,7 @@ const UpdateJob: React.FC<JobProps> = ({ params }) => {
                   <FormMessage />
                 </FormItem>
               )}
-            />
+            /> */}
             <FormField
               control={form.control}
               name="company_id"

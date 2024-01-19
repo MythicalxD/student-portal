@@ -301,6 +301,7 @@ const UpdateCompany: React.FC<CompanyProps> = ({ params }) => {
                   <Select
                     onValueChange={field.onChange}
                     defaultValue={field.value}
+                    value={field.value}
                   >
                     <FormControl>
                       <SelectTrigger>
@@ -327,6 +328,7 @@ const UpdateCompany: React.FC<CompanyProps> = ({ params }) => {
                   <input
                     type="file"
                     id="image"
+                    accept=".jpg, .jpeg, .png"
                     className="absolute top-10 inset-0 opacity-0 cursor-pointer" // Hide the actual file input
                     onChange={handleFileChange}
                   />

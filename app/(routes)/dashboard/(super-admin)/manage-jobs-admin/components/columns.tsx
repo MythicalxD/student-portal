@@ -90,8 +90,10 @@ export const columns: ColumnDef<Job>[] = [
     header: "Category",
   },
   {
-    accessorKey: "company",
-    header: "Company",
+    header: "Created On",
+    cell: (({row}) => {
+      return (<p className="" >{row.original.created_at}</p>);
+    })
   },
   {
     accessorKey: "status",
