@@ -122,11 +122,28 @@ const Application: React.FC<AppProps> = ({ params }) => {
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
     setIsLoading(true);
-    handleUpload(data.comment!, data.status, params.id);
+    const myArray: string[] = [""];
+    myArray[0] = data.comment!;
+    handleUpload(myArray.toString(), data.status, params.id);
     console.log(data);
   }
 
   const [data, setData] = useState<JobApplication>();
+
+  const statusLookup: Record<string, string> = {
+    'APPROVED': 'Approved',
+    'PENDING': "Pending",
+    'SUBMITTED': "Submitted",
+    'REJECTED': "Rejected",
+    'WITHDRAWN': "Withdrawn",
+    'REVIEW': "Under Review"
+
+    // Add other statuses as needed
+  };
+
+  function openURL(url: string): void {
+    window.open(url, '_blank');
+  }
 
   useEffect(() => {
     const fetchData = async () => {
@@ -142,6 +159,9 @@ const Application: React.FC<AppProps> = ({ params }) => {
 
       const fetchedData = await getData(authToken!, session!, params.id);
       setData(fetchedData);
+
+      form.setValue("comment", fetchedData?.comments[-1] ?? "");
+      form.setValue("status", statusLookup[fetchedData?.status!]);
 
     };
 
@@ -163,19 +183,19 @@ const Application: React.FC<AppProps> = ({ params }) => {
       </Link>
       <div className="flex flex-col mb-4 ml-2">
         <div className="flex text-3xl mb-2 text-black font-bold items-center">
-          <User className="w-8 h-8 mr-2" /> {data?.student_name}
+          <User className="w-8 h-8 mr-2" /> {data?.job_name}
         </div>
         <Separator />
       </div>
       <div className="flex">
         <div className="flex flex-col">
           <div className="flex relative w-[500px]">
-            <img src="/app-bg.png" alt="Application background" className="absolute" />
-            <p className="text-4xl text-white absolute top-[20px] left-[20px]" >{data?.company_name}</p>
-            <p className="text-xl text-gray-300 absolute top-[80px] left-[20px]" >Company Description here</p>
+            <img src="/app-bg.png" alt="Application background" className="absolute w-[350px] left-2" />
+            <p className="text-md text-white absolute top-[15px] left-[20px]" >Applicant Name</p>
+            <p className="text-4xl text-white absolute top-[40px] left-[20px]" >{data?.student_name}</p>
           </div>
 
-          <div className="flex flex-col mt-[150px] mb-4 ml-2">
+          <div className="flex flex-col mt-[120px] mb-4 ml-2">
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)} className="w-2/3 space-y-6">
                 <FormField
@@ -204,7 +224,7 @@ const Application: React.FC<AppProps> = ({ params }) => {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Application Status</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <Select onValueChange={field.onChange} defaultValue={field.value} value={field.value}>
                         <FormControl>
                           <SelectTrigger>
                             <SelectValue placeholder="Select a status" />
@@ -265,7 +285,7 @@ const Application: React.FC<AppProps> = ({ params }) => {
                 </p>
               </div>
             </div>
-            <div className="flex items-center space-x-4 rounded-md min-h-[70px] bg-gray-100 p-2 px-4 mt-2 cursor-pointer hover:bg-gray-200">
+            <div className="flex items-center space-x-4 rounded-md min-h-[70px] bg-gray-100 p-2 px-4 mt-2 cursor-pointer hover:bg-gray-200" onClick={() => { openURL(data?.student_cv ?? "") }}>
               <Download className="mt-px h-5 w-5" />
               <div className="space-y-1">
                 <p className="text-sm font-medium leading-none">Download Resume</p>

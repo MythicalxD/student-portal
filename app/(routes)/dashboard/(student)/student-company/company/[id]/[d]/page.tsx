@@ -16,6 +16,7 @@ import toast from "react-hot-toast";
 interface IndustryProps {
     params: {
         id: string;
+        d: string;
     };
 }
 
@@ -223,9 +224,9 @@ const Industry: React.FC<IndustryProps> = ({ params }) => {
                     <img src="/sam-verify.png" alt="sam verified" className="w-[200px] h-[100px]" />
                     <img src="/other-mark.png" alt="sam verified" className="w-[200px] h-[100px]" />
                 </div>
-                <div className="flex space-x-2">
+                <div className="flex space-x-2 items-center">
                     <div className="flex justify-center items-center font-medium bg-gray-50 text-gray-400 p-2 px-3 rounded-md">{data?.web_url}<CopyIcon className="w-5 h-5 ml-2" /></div>
-                    <Button className="bg-green-700" onClick={() => { handleUploadApprove(params.id!); }} >Apply For Job</Button>
+                    {(params.d == "null") ? (<Button className="bg-green-700" onClick={() => { handleUploadApprove(params.id!); }} >Apply For Job</Button>) : <p className="ml-2" >{params.d}</p>}
                 </div>
             </div>
         </main>

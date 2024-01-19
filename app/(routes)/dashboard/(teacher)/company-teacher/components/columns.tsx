@@ -33,7 +33,19 @@ export type CompanyFull = {
   updatedby: string;
 };
 
-export const columns: ColumnDef<Company>[] = [
+export type CompanyTeacher = {
+  address: string;
+  company_industry: string;
+  company_logo: string;
+  id: number;
+  linked_in: string;
+  linked_jobs: string[];
+  name: string;
+  status: string;
+  website: string;
+};
+
+export const columns: ColumnDef<CompanyFull>[] = [
   {
     accessorKey: "logo",
     header: () => <div className="">Logo</div>,
@@ -73,12 +85,8 @@ export const columns: ColumnDef<Company>[] = [
     header: "Industry",
   },
   {
-    accessorKey: "company_email",
-    header: "Email ID",
-  },
-  {
-    accessorKey: "updated_at",
-    header: "Updated At",
+    accessorKey: "website",
+    header: "Website",
   },
   {
     accessorKey: "status",
@@ -88,9 +96,8 @@ export const columns: ColumnDef<Company>[] = [
     cell: ({ row }) => {
       return (
         <Badge
-          variant={`${
-            row.original.status == "Inactive" ? "destructive" : "secondary"
-          }`}
+          variant={`${row.original.status == "Inactive" ? "destructive" : "secondary"
+            }`}
         >
           {row.original.status}
         </Badge>

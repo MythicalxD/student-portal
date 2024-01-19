@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button";
 
 interface CompanyListProps {
   item: JobStudent,
-  status: string | undefined,
+  status: string | undefined
 }
 
 export function CompanyCard({ item, status }: CompanyListProps) {
@@ -25,7 +25,7 @@ export function CompanyCard({ item, status }: CompanyListProps) {
         "flex flex-col relative items-start gap-2 mr-4 rounded-lg border p-3 text-left text-sm transition-all hover:bg-accent",
         false && "bg-muted"
       )}
-      onClick={() => { router.push(`/dashboard/student-company/company/${item.id}`) }
+      onClick={() => { router.push(`/dashboard/student-company/company/${item.id}/${status === undefined ? "null" : status}`) }
       }
     >
       <div className="flex w-full">

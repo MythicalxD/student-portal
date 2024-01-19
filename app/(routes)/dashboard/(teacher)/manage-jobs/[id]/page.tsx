@@ -8,6 +8,7 @@ import { JobTeacher } from "@/utils/types";
 import Link from "next/link";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { Skill } from "../../../(super-admin)/skills/components/columns";
 
 interface IndustryProps {
   params: {
@@ -41,10 +42,33 @@ async function getData(
   }
 }
 
+async function getDataSkill(
+  token: string,
+  session: string
+): Promise<Skill[]> {
+  const dataToSend = {
+    id: token,
+    session: session,
+  };
+
+  const apiUrl = "/api/manage-jobs/job/get/skills";
+
+  try {
+    const response = await axios.post(apiUrl, dataToSend);
+    console.log(response);
+    return response.data;
+  } catch (error: any) {
+    console.error();
+    return error;
+  }
+}
+
 
 const Industry: React.FC<IndustryProps> = ({ params }) => {
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const [data, setData] = useState<JobTeacher>();
+  const [skillData, setSkillData] = useState<Skill[]>([]);
+  const [skillName, setSkillName] = useState([""]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -60,7 +84,19 @@ const Industry: React.FC<IndustryProps> = ({ params }) => {
 
       const fetchedData = await getData(authToken!, session!, params.id);
       setData(fetchedData);
-      console.log(fetchedData);
+
+      const fetchedDataSkill = await getDataSkill(authToken!, session!);
+      setSkillData(fetchedDataSkill);
+
+      const skillNames: string[] = [];
+      await fetchedDataSkill.forEach((skill) => {
+        // Assuming skill.name is the name of the skill you want to match
+        if (fetchedData.skills.includes(parseInt(skill.id))) {
+          skillNames.push(skill.name);
+        }
+      });
+
+      setSkillName(skillNames);
 
     };
 
@@ -97,7 +133,7 @@ const Industry: React.FC<IndustryProps> = ({ params }) => {
               <div className="space-y-1">
                 <p className="text-sm font-medium leading-none">Company Name</p>
                 <p className="text-sm text-muted-foreground">
-                  {data?.title}
+                  {data?.company_name}
                 </p>
               </div>
             </div>
@@ -106,7 +142,7 @@ const Industry: React.FC<IndustryProps> = ({ params }) => {
               <div className="space-y-1">
                 <p className="text-sm font-medium leading-none">Skills</p>
                 <p className="text-sm text-muted-foreground">
-                  {data?.skills?.map((skill) => (<Badge className="mr-1 mt-1" variant={"outline"} >{skill}</Badge>))}
+                  {skillName.map((skill: string) => (<Badge className="mr-1 mt-1" variant={"outline"} >{skill}</Badge>))}
                 </p>
               </div>
             </div>
@@ -139,7 +175,7 @@ const Industry: React.FC<IndustryProps> = ({ params }) => {
               </div>
             </div>
 
-            <div className="flex items-center space-x-4 rounded-md min-h-[70px] bg-gray-100 p-2 px-4 mt-2">
+            {/* <div className="flex items-center space-x-4 rounded-md min-h-[70px] bg-gray-100 p-2 px-4 mt-2">
               <GraduationCap className="mt-px h-5 w-5" />
               <div className="space-y-1">
                 <p className="text-sm font-medium leading-none">Courses</p>
@@ -148,7 +184,7 @@ const Industry: React.FC<IndustryProps> = ({ params }) => {
 
                 </p>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

@@ -12,14 +12,12 @@ import {
 
 import { useRouter } from "next/navigation";
 import { Edit, Eye, MoreHorizontal, Trash } from "lucide-react";
-import { Company } from "./columns";
+import { CompanyFull } from "./columns";
 import { AlertModal } from "@/components/modals/alert-modal";
 import { useState } from "react";
-import axios from "axios";
-import toast from "react-hot-toast";
 
 interface CellActionProps {
-  data: Company;
+  data: CompanyFull;
 }
 
 export const CellAction: React.FC<CellActionProps> = ({ data }) => {
@@ -51,14 +49,14 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
         <DropdownMenuContent align="end">
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
           <DropdownMenuItem
-            onClick={() => router.push(`/dashboard/company/${data.id}`)}
+            onClick={() => router.push(`/dashboard/company-teacher/${data.id}`)}
           >
             <Eye className="w-[15px] h-[15px] mr-2" />
             View
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem
-            onClick={() => router.push(`/dashboard/company/update/${data.id}`)}
+            onClick={() => router.push(`/dashboard/company-teacher/update/${data.id}`)}
           >
             <Edit className="w-[15px] h-[15px] mr-2" /> Update Company
           </DropdownMenuItem>

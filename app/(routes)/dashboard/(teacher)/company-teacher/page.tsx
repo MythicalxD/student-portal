@@ -1,10 +1,10 @@
 "use client";
 import { useState, useEffect } from "react";
-import { Company, columns } from "./components/columns";
+import { Company, CompanyFull, columns } from "./components/columns";
 import { DataTable } from "./components/data-table";
 import axios from "axios";
 
-async function getData(token: string, session: string): Promise<Company[]> {
+async function getData(token: string, session: string): Promise<CompanyFull[]> {
   const dataToSend = {
     id: token,
     session: session,
@@ -24,7 +24,7 @@ async function getData(token: string, session: string): Promise<Company[]> {
 }
 
 export default function DemoPage() {
-  const [data, setData] = useState<Company[]>([]);
+  const [data, setData] = useState<CompanyFull[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {

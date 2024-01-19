@@ -45,9 +45,6 @@ interface CompanyProps {
 
 const formSchema = z.object({
   name: z.string().min(2),
-  email: z.string().email(),
-  contact: z.string().min(2),
-  address: z.string().min(2),
   status: z.string({
     required_error: "Please select an Status.",
   }),
@@ -110,9 +107,6 @@ const UpdateCompany: React.FC<CompanyProps> = ({ params }) => {
       // Populate the form fields with the fetched data
       form.setValue("name", fetchedData.name);
       form.setValue("status", fetchedData.status);
-      form.setValue("email", fetchedData.company_email);
-      form.setValue("contact", fetchedData.company_contact);
-      form.setValue("address", fetchedData.company_address);
     };
 
     fetchData(); // Call the fetchData function when the component mounts
@@ -125,18 +119,12 @@ const UpdateCompany: React.FC<CompanyProps> = ({ params }) => {
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
-      email: "",
-      contact: "",
-      address: "",
       status: "",
     },
   });
 
   const handleUpload = async (
     name: string,
-    email: string,
-    contact: string,
-    address: string,
     status: string,
     id: string
   ) => {
@@ -153,9 +141,6 @@ const UpdateCompany: React.FC<CompanyProps> = ({ params }) => {
 
       const formData = new FormData();
       formData.append("name", name);
-      formData.append("email", email);
-      formData.append("address", address);
-      formData.append("contact", contact);
       formData.append("status", status);
       formData.append("id", id);
 
@@ -172,7 +157,7 @@ const UpdateCompany: React.FC<CompanyProps> = ({ params }) => {
       const { token } = response.data;
       if (token === "done") {
         toast.success("Company Updated");
-        router.push("/dashboard/company");
+        router.push("/dashboard/company-teacher");
       }
       setIsLoading(false);
     } catch (error) {
@@ -188,9 +173,6 @@ const UpdateCompany: React.FC<CompanyProps> = ({ params }) => {
     setIsLoading(true);
     handleUpload(
       values.name,
-      values.email,
-      values.contact,
-      values.address,
       values.status,
       params.id
     );
@@ -219,7 +201,7 @@ const UpdateCompany: React.FC<CompanyProps> = ({ params }) => {
       </div>
 
       <Link
-        href="../"
+        href="./"
         className={cn(
           buttonVariants({ variant: "outline" }),
           "absolute right-[2rem] top-[6rem]"
@@ -250,47 +232,6 @@ const UpdateCompany: React.FC<CompanyProps> = ({ params }) => {
                 </FormItem>
               )}
             />
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Company Email Address</FormLabel>
-                  <FormControl>
-                    <Input placeholder="company@example.com" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="contact"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Company Contact</FormLabel>
-                  <FormControl>
-                    <Input placeholder="+91(0000-000000)" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="address"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Company Address</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Enter Address" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
 
             <FormField
               control={form.control}
@@ -301,6 +242,7 @@ const UpdateCompany: React.FC<CompanyProps> = ({ params }) => {
                   <Select
                     onValueChange={field.onChange}
                     defaultValue={field.value}
+                    value={field.value}
                   >
                     <FormControl>
                       <SelectTrigger>
@@ -327,6 +269,7 @@ const UpdateCompany: React.FC<CompanyProps> = ({ params }) => {
                   <input
                     type="file"
                     id="image"
+                    accept=".png, .jpg, .jpeg"
                     className="absolute top-10 inset-0 opacity-0 cursor-pointer" // Hide the actual file input
                     onChange={handleFileChange}
                   />
@@ -359,51 +302,6 @@ const UpdateCompany: React.FC<CompanyProps> = ({ params }) => {
           </form>
         </Form>
 
-        <Separator orientation="vertical" className="h-auto mx-8" />
-
-        <div className="flex flex-col">
-          <p className="text-xl font-bold">Company Details</p>
-          <div className="grid grid-cols-2 gap-4">
-            <div className="flex items-center space-x-4 rounded-md min-h-[70px] bg-gray-100 p-2 px-4 mt-2">
-              <Factory className="mt-px h-5 w-5" />
-              <div className="space-y-1">
-                <p className="text-sm font-medium leading-none">Created On</p>
-                <p className="text-sm text-muted-foreground">
-                  {data?.created_at}
-                </p>
-              </div>
-            </div>
-            <div className="flex items-center space-x-4 rounded-md min-h-[70px] bg-gray-100 p-2 px-4 mt-2">
-              <Factory className="mt-px h-5 w-5" />
-              <div className="space-y-1">
-                <p className="text-sm font-medium leading-none">Created By</p>
-                <p className="text-sm text-muted-foreground">
-                  {data?.createdby}
-                </p>
-              </div>
-            </div>
-
-            <div className="flex items-center space-x-4 rounded-md min-h-[70px] bg-gray-100 p-2 px-4 mt-2">
-              <Factory className="mt-px h-5 w-5" />
-              <div className="space-y-1">
-                <p className="text-sm font-medium leading-none">Updated On</p>
-                <p className="text-sm text-muted-foreground">
-                  {data?.updated_at}
-                </p>
-              </div>
-            </div>
-
-            <div className="flex items-center space-x-4 rounded-md min-h-[70px] bg-gray-100 p-2 px-4 mt-2">
-              <Factory className="mt-px h-5 w-5" />
-              <div className="space-y-1">
-                <p className="text-sm font-medium leading-none">Updated By</p>
-                <p className="text-sm text-muted-foreground">
-                  {data?.updatedby}
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
   );

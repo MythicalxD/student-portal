@@ -436,7 +436,7 @@ const UpdateJob: React.FC<JobProps> = ({ params }) => {
                 </FormItem>
               )}
             />
-            <FormField
+            {/* <FormField
               control={form.control}
               name="job_category_id"
               render={({ field }) => (
@@ -463,7 +463,7 @@ const UpdateJob: React.FC<JobProps> = ({ params }) => {
                   <FormMessage />
                 </FormItem>
               )}
-            />
+            /> */}
             <FormField
               control={form.control}
               name="company_id"

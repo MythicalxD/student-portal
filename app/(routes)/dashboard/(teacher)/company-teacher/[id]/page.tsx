@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import { CompanyFull } from "../components/columns";
+import { CompanyTeacher } from "../components/columns";
 import axios from "axios";
 import { Factory, Link2, ListTodo, LocateIcon, Mail, Phone, Timer, TimerReset, User } from "lucide-react";
 import Link from "next/link";
@@ -18,7 +18,7 @@ async function getData(
     token: string,
     session: string,
     id: string
-): Promise<CompanyFull> {
+): Promise<CompanyTeacher> {
     const dataToSend = {
         token: token,
         session: session,
@@ -43,7 +43,7 @@ async function getData(
 }
 
 const Company: React.FC<IndustryProps> = ({ params }) => {
-    const [data, setData] = useState<CompanyFull>();
+    const [data, setData] = useState<CompanyTeacher>();
 
     useEffect(() => {
         const fetchData = async () => {
@@ -80,7 +80,7 @@ const Company: React.FC<IndustryProps> = ({ params }) => {
                         <div className="flex flex-col">
                             <p className="text-3xl text-black font-bold">{data?.name}</p>
                             <p className="text-sm text-gray-600 mb-2">
-                                {data?.company_email}
+                                {data?.name}
                             </p>
                         </div>
                     </div>
@@ -100,22 +100,13 @@ const Company: React.FC<IndustryProps> = ({ params }) => {
                 <div className="flex flex-col">
                     <p className="text-xl font-bold">Industry Details</p>
                     <div className="grid grid-cols-3 gap-4">
-                        <div className="flex items-center space-x-4 rounded-md min-h-[70px] bg-gray-100 p-2 px-4 mt-2">
-                            <Mail className="mt-px h-5 w-5" />
-                            <div className="space-y-1">
-                                <p className="text-sm font-medium leading-none">Company Email</p>
-                                <p className="text-sm text-muted-foreground">
-                                    {data?.company_email}
-                                </p>
-                            </div>
-                        </div>
 
                         <div className="flex items-center space-x-4 rounded-md min-h-[70px] bg-gray-100 p-2 px-4 mt-2">
                             <LocateIcon className="mt-px h-5 w-5" />
                             <div className="space-y-1">
                                 <p className="text-sm font-medium leading-none">Company Address</p>
                                 <p className="text-sm text-muted-foreground">
-                                    {data?.company_address}
+                                    {data?.address}
                                 </p>
                             </div>
                         </div>
@@ -135,17 +126,7 @@ const Company: React.FC<IndustryProps> = ({ params }) => {
                             <div className="space-y-1">
                                 <p className="text-sm font-medium leading-none">Company Website</p>
                                 <p className="text-sm text-muted-foreground">
-                                    {data?.company_website}
-                                </p>
-                            </div>
-                        </div>
-
-                        <div className="flex items-center space-x-4 rounded-md min-h-[70px] bg-gray-100 p-2 px-4 mt-2">
-                            <Phone className="mt-px h-5 w-5" />
-                            <div className="space-y-1">
-                                <p className="text-sm font-medium leading-none">Company Contact</p>
-                                <p className="text-sm text-muted-foreground">
-                                    {data?.company_contact}
+                                    {data?.website}
                                 </p>
                             </div>
                         </div>
@@ -156,45 +137,6 @@ const Company: React.FC<IndustryProps> = ({ params }) => {
                                 <p className="text-sm font-medium leading-none">Company Status</p>
                                 <p className="text-sm text-muted-foreground">
                                     {data?.status}
-                                </p>
-                            </div>
-                        </div>
-
-                        <div className="flex items-center space-x-4 rounded-md min-h-[70px] bg-gray-100 p-2 px-4 mt-2">
-                            <Timer className="mt-px h-5 w-5" />
-                            <div className="space-y-1">
-                                <p className="text-sm font-medium leading-none">Created On</p>
-                                <p className="text-sm text-muted-foreground">
-                                    {data?.created_at}
-                                </p>
-                            </div>
-                        </div>
-                        <div className="flex items-center space-x-4 rounded-md min-h-[70px] bg-gray-100 p-2 px-4 mt-2">
-                            <User className="mt-px h-5 w-5" />
-                            <div className="space-y-1">
-                                <p className="text-sm font-medium leading-none">Created By</p>
-                                <p className="text-sm text-muted-foreground">
-                                    {data?.createdby}
-                                </p>
-                            </div>
-                        </div>
-
-                        <div className="flex items-center space-x-4 rounded-md min-h-[70px] bg-gray-100 p-2 px-4 mt-2">
-                            <TimerReset className="mt-px h-5 w-5" />
-                            <div className="space-y-1">
-                                <p className="text-sm font-medium leading-none">Updated On</p>
-                                <p className="text-sm text-muted-foreground">
-                                    {data?.updated_at}
-                                </p>
-                            </div>
-                        </div>
-
-                        <div className="flex items-center space-x-4 rounded-md min-h-[70px] bg-gray-100 p-2 px-4 mt-2">
-                            <User className="mt-px h-5 w-5" />
-                            <div className="space-y-1">
-                                <p className="text-sm font-medium leading-none">Updated By</p>
-                                <p className="text-sm text-muted-foreground">
-                                    {data?.updatedby}
                                 </p>
                             </div>
                         </div>

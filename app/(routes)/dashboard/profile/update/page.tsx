@@ -27,6 +27,8 @@ import toast from "react-hot-toast";
 import Link from "next/link";
 import { User } from "@/utils/types";
 import { Image } from "lucide-react";
+import { Department } from "../../(super-admin)/department/components/columns";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 interface IndustryProps {
     params: {
@@ -35,7 +37,8 @@ interface IndustryProps {
 }
 
 const formSchema = z.object({
-    email: z.string(),
+    email: z.string().optional(),
+    department: z.string().optional(),
     password: z.string().optional(),
     cpassword: z.string().optional()
 });
@@ -66,11 +69,31 @@ async function getData(
     }
 }
 
+async function getDataDepartment(token: string, session: string): Promise<Department[]> {
+    const dataToSend = {
+        id: token,
+        session: session,
+    };
+
+    const apiUrl = "/api/department";
+
+    try {
+        const response = await axios.post(apiUrl, dataToSend);
+        console.log(response);
+        return response.data;
+    } catch (error: any) {
+        window.location.href = "/login";
+        console.error();
+        return error;
+    }
+}
+
 const UpdateIndustry: React.FC<IndustryProps> = ({ params }) => {
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [selectedFile1, setSelectedFile1] = useState<File | null>(null);
     const [isLoading, setIsLoading] = React.useState<boolean>(false);
     const [data, setData] = useState<User>();
+    const [dataDepartment, setDataDepartment] = useState<Department[]>([]);
 
     const router = useRouter();
 
@@ -96,7 +119,7 @@ const UpdateIndustry: React.FC<IndustryProps> = ({ params }) => {
         }
     }, []); // Empty dependency array ensures the effect runs once after mount
 
-    const handleUpload = async (email: string, password: string, cpassword: string) => {
+    const handleUpload = async (email: string, department: string, password: string, cpassword: string) => {
         try {
             //TODO add error on image not selected
             // Fetch the session
@@ -117,11 +140,12 @@ const UpdateIndustry: React.FC<IndustryProps> = ({ params }) => {
 
             if (selectedFile != null) { formData.append("file", selectedFile); } else { formData.append("file", "null"); }
             if (selectedFile1 != null) { formData.append("cv", selectedFile1); } else { formData.append("cv", "null"); }
+            if (department != null) { formData.append("depart", department); } else { formData.append("depart", "null"); }
 
             formData.append("session", session);
             formData.append("token", authToken);
 
-            const apiUrl = "/api/profile/upload";
+            const apiUrl = "/api/profile/update";
             const response = await axios.post(apiUrl, formData);
 
             console.log(response.data);
@@ -154,6 +178,9 @@ const UpdateIndustry: React.FC<IndustryProps> = ({ params }) => {
             const fetchedData = await getData(authToken!, session!);
             setData(fetchedData);
 
+            const fetchedDataDepartment = await getDataDepartment(authToken!, session!);
+            setDataDepartment(fetchedDataDepartment);
+
             // Populate the form fields with the fetched data
             form.setValue("email", fetchedData.email);
         };
@@ -171,7 +198,7 @@ const UpdateIndustry: React.FC<IndustryProps> = ({ params }) => {
     // 2. Define a submit handler.
     function onSubmit(values: z.infer<typeof formSchema>) {
         setIsLoading(true);
-        handleUpload(values.email, values.password ?? "null", values.cpassword ?? "null");
+        handleUpload(values.email ?? "null", values.department ?? "null", values.password ?? "null", values.cpassword ?? "null");
         console.log(values);
     }
 
@@ -237,6 +264,34 @@ const UpdateIndustry: React.FC<IndustryProps> = ({ params }) => {
                                 </FormItem>
                             )}
                         />
+                        {(accountType == "Teacher") && <FormField
+                            control={form.control}
+                            name="department"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Select Department</FormLabel>
+                                    <Select
+                                        onValueChange={field.onChange}
+                                        defaultValue={field.value}
+                                        value={field.value}
+                                    >
+                                        <FormControl>
+                                            <SelectTrigger>
+                                                <SelectValue placeholder="Select a Department" />
+                                            </SelectTrigger>
+                                        </FormControl>
+                                        <SelectContent>
+                                            {dataDepartment.map((data) => (
+                                                <SelectItem value={data.id.toString()} key={data.id}>
+                                                    {data.name}
+                                                </SelectItem>
+                                            ))}
+                                        </SelectContent>
+                                    </Select>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />}
                         <FormField
                             control={form.control}
                             name="password"
