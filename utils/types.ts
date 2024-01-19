@@ -154,5 +154,9 @@ export interface User {
 export type JobSingle = {
     id: string;
     name: string;
-  };
+};
 
+export type Industry = {
+    logo: string;
+    name: string;
+};

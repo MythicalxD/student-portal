@@ -319,7 +319,7 @@ const ImagePicker: React.FC = () => {
                     <SelectContent>
                       {data.length != 0 &&
                         data.map((item) => (
-                          <SelectItem key={item.id} value={item.id.toString()}>
+                          <SelectItem key={item.id} value={`${item?.id}`}>
                             {item.name}
                           </SelectItem>
                         ))}

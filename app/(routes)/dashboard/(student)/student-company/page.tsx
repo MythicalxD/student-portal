@@ -52,7 +52,7 @@ async function getApplication(token: string, session: string): Promise<Applicati
   }
 }
 
-export const findApplicationStatusById = (name: string, statuses: ApplicationStatus[] | undefined | null): ApplicationStatus | undefined => {
+const findApplicationStatusById = (name: string, statuses: ApplicationStatus[] | undefined | null): ApplicationStatus | undefined => {
 
   console.log(statuses);
 

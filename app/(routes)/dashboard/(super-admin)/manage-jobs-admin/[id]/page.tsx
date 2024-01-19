@@ -106,7 +106,7 @@ const Industry: React.FC<IndustryProps> = ({ params }) => {
               <div className="space-y-1">
                 <p className="text-sm font-medium leading-none">Skills</p>
                 <p className="text-sm text-muted-foreground">
-                  {data?.job_description.skills.map((skill) => (<Badge className="mr-1 mt-1" variant={"outline"} >{skill}</Badge>))}
+                  {data?.job_description.skills.map((skill) => (<Badge key={skill} className="mr-1 mt-1" variant={"outline"} >{skill}</Badge>))}
                 </p>
               </div>
             </div>
@@ -144,7 +144,7 @@ const Industry: React.FC<IndustryProps> = ({ params }) => {
               <div className="space-y-1">
                 <p className="text-sm font-medium leading-none">Courses</p>
                 <p className="text-sm text-muted-foreground">
-                  {data?.courses.map((skill) => (<Badge className="mr-1 mt-1" variant={"outline"} >{skill}</Badge>))}
+                  {data?.courses.map((skill) => (<Badge className="mr-1 mt-1" key={skill} variant={"outline"} >{skill}</Badge>))}
 
                 </p>
               </div>

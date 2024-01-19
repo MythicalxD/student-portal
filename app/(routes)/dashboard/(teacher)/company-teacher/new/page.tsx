@@ -33,7 +33,7 @@ import FormData from "form-data";
 import * as z from "zod";
 import toast from "react-hot-toast";
 import Link from "next/link";
-import { Industry } from "../../industry/components/columns";
+import { Industry } from "@/utils/types";
 
 const formSchema = z.object({
   name: z.string().min(2).max(50),
@@ -319,7 +319,7 @@ const ImagePicker: React.FC = () => {
                     <SelectContent>
                       {data.length != 0 &&
                         data.map((item) => (
-                          <SelectItem key={item.id} value={item.id.toString()}>
+                          <SelectItem key={item.name} value={item.name}>
                             {item.name}
                           </SelectItem>
                         ))}

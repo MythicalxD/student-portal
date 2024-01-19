@@ -32,7 +32,7 @@ async function getData(
     }
 }
 
-const Industry: React.FC<User> = () => {
+const Profile = () => {
 
     const [data, setData] = useState<User>();
 
@@ -142,6 +142,6 @@ const Industry: React.FC<User> = () => {
             </div>
         </main>
     );
-};
+}
 
-export default Industry;
+export default Profile;

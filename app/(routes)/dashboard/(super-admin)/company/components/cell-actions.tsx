@@ -94,7 +94,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
           <DropdownMenuItem
             className=" text-red-700"
             onClick={() => {
-              setId(data.id);
+              setId(data.id.toString());
               setOpen(true);
             }}
           >
