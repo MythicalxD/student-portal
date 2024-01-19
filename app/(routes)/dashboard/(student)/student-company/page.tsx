@@ -52,14 +52,16 @@ async function getApplication(token: string, session: string): Promise<Applicati
   }
 }
 
-export const findApplicationStatusById = (id: number, statuses: ApplicationStatus[] | undefined | null): ApplicationStatus | undefined => {
+export const findApplicationStatusById = (name: string, statuses: ApplicationStatus[] | undefined | null): ApplicationStatus | undefined => {
 
   console.log(statuses);
 
   if (!statuses || statuses.length === 0) {
     return undefined;
   } else {
-    return statuses.find(status => status.id === id);
+    var a = statuses.find(status => status.job_name == name);
+    console.log(a);
+    return a;
   }
 
 };
@@ -115,7 +117,7 @@ export default function DemoPage() {
               <CompanyCard
                 key={job.id}
                 item={job}
-                status={findApplicationStatusById(job.id, data1)?.status}
+                status={findApplicationStatusById(job.title, data1)?.status}
               />
             ))}
 
