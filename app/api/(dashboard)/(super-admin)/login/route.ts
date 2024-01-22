@@ -13,7 +13,9 @@ export async function POST(
         // Access the email and password from the request body
         const { email, pass } = await req.json();
 
-        const apiUrl = 'https://seal-app-krop4.ondigitalocean.app/api/v1/users/login';
+
+
+        const apiUrl = `${process.env.BASEURL}/api/v1/users/login`;
         const response = await axios.post(apiUrl, {
             email,
             password: pass, // Assuming your external API expects 'password' instead of 'pass'
