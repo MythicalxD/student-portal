@@ -110,6 +110,7 @@ export default function DemoPage() {
           <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
           <Input placeholder="Search" className="pl-8" />
           <Button type="submit" className="ml-2" >Search</Button>
+          <Button variant={"outline"} className="ml-2" >Filters</Button>
         </div>
         <ScrollArea>
           <div className="flex flex-col h-[80vh] space-y-4 pb-4">

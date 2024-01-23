@@ -64,7 +64,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
-          <DropdownMenuItem
+          {/* <DropdownMenuItem
             onClick={() => router.push(`/dashboard/student-application/${data.id}`)}
           >
             <Eye className="w-[15px] h-[15px] mr-2" />
@@ -75,7 +75,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
           >
             <Download className="w-[15px] h-[15px] mr-2" />
             Download Resume
-          </DropdownMenuItem>
+          </DropdownMenuItem> */}
           <DropdownMenuSeparator />
           <DropdownMenuItem className=" text-yellow-700" onClick={() => { handleUpload(data.id.toString()) }}>
             <ExternalLinkIcon className="w-[15px] h-[15px] mr-2" /> Withdraw
