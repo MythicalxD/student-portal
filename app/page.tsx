@@ -15,6 +15,7 @@ import { Course, JobListing } from "@/utils/types";
 import { CourseCard } from "./components/courses";
 import { JobCard } from "./components/jobs";
 import Footer from "@/components/footer";
+import { TestimonialCard } from "./components/testimonial";
 
 async function getCompany(): Promise<CompanyPublic[]> {
 
@@ -66,27 +67,29 @@ export default function Home() {
   const [jobs, setJobs] = useState<JobListing[]>([]);
   const [login, setLogin] = useState(false);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const fetchedData = await getCompany();
-      setData(fetchedData);
-      const fetchedData1 = await getCourses();
-      setCourses(fetchedData1);
-      const fetchedData2 = await getJobs();
-      setJobs(fetchedData2);
-    };
+  // uncomment when api is ready
 
-    fetchData(); // Call the fetchData function when the component mounts
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     const fetchedData = await getCompany();
+  //     setData(fetchedData);
+  //     const fetchedData1 = await getCourses();
+  //     setCourses(fetchedData1);
+  //     const fetchedData2 = await getJobs();
+  //     setJobs(fetchedData2);
+  //   };
 
-    const token = Cookies.get("session");
+  //   fetchData(); // Call the fetchData function when the component mounts
 
-    if (token) {
-      setLogin(true);
-      return;
-    }
+  //   const token = Cookies.get("session");
 
-    // Optionally, you can include a cleanup function here if needed
-  }, [router]); // The empty dependency array ensures that the effect runs only once
+  //   if (token) {
+  //     setLogin(true);
+  //     return;
+  //   }
+
+  //   // Optionally, you can include a cleanup function here if needed
+  // }, [router]); // The empty dependency array ensures that the effect runs only once
 
 
   return (
@@ -94,88 +97,61 @@ export default function Home() {
       <NavbarDash />
 
       {/* Banner 1 */}
-      <div className="flex relative">
-        <div className="absolute flex bg-black h-[500px] w-screen opacity-60"></div>
-        <Image src={img} alt="Students Image" className="w-full h-[500px] object-cover" />
-        <div className="flex flex-col justify-center items-center absolute top-0 w-full h-[500px]">
-          <div className="text-white text-[32px] font-semibold mt-[80px] md:text-[64px] text-center px-4">Placement And Career Cell</div>
-          <div className="max-w-[815px] text-center text-gray-300 md:text-2xl text-md font-normal">The Placement and Career Cell facilitates the process of placement of students, graduating from the Institute.</div>
-          <div className="flex items-center justify-center w-[200px] h-[60px] relative mt-[60px] cursor-pointer bg-amber-300 hover:bg-amber-400 rounded-sm" onClick={() => { router.push("./login") }} >
-            <div className="w-[200px] h-[60px] left-0 top-0 absolute" />
-            <div className="text-neutral-700 text-lg font-bold">{(login) ? "DASHBOARD" : "PORTAL LOGIN"}</div>
-          </div>
-        </div>
-      </div>
-
-      {/* Top Companies */}
-      <div className="flex flex-col m-4 mt-8">
-        <div className="text-neutral-700 md:text-4xl text-3xl font-semibold md:m-4 m-2">Top Recruiters</div>
-        <ScrollArea>
-          <div className="flex space-x-4 pb-4 m-4">
-            {data.map((company) => (
-              <CompanyCard
-                key={company.name}
-                company={company}
-              />
-            ))}
-          </div>
-          <ScrollBar orientation="horizontal" />
-        </ScrollArea>
-      </div>
-
-      {/* Banner 2 */}
-      <div className="flex relative">
-        <div className="absolute flex bg-black h-[400px] w-screen opacity-60"></div>
-        <Image src={img1} alt="Students Image" className="w-full h-[400px] object-cover" />
-        <div className="flex flex-col justify-center items-center absolute top-0 w-full h-[500px]">
-          <div className="text-white md:text-[32px] text-[20px] text-center px-2 font-semibold">Your career journey begins here, where potential meets placement</div>
-          <div className="max-w-[815px] text-center text-gray-300 text-xl font-normal mt-[10px] px-2">Embark on a transformative path as we navigate your potential towards tailored placements, sculpting your success story.</div>
-          <div className="flex items-center justify-center w-[200px] h-[60px] relative md:mt-[40px] mt-[20px] cursor-pointer bg-amber-300 hover:bg-amber-400 rounded-sm" onClick={() => { router.push("./login") }} >
-            <div className="w-[200px] h-[60px] left-0 top-0 absolute" />
-            <div className="text-neutral-700 text-lg font-bold">EXPLORE MORE</div>
-          </div>
-        </div>
-      </div>
-
-      {/* Top Jobs */}
-      <div className="flex flex-col m-4 mt-8">
-        <div className="text-neutral-700 md:text-4xl text-3xl font-semibold md:m-4 m-2">Top Courses</div>
-        <ScrollArea>
-          <div className="flex space-x-4 pb-4 m-4">
-            {courses.map((course) => (
-              <CourseCard
-                key={course.id}
-                course={course}
-              />
-            ))}
-          </div>
-          <ScrollBar orientation="horizontal" />
-        </ScrollArea>
-      </div>
-
-      {/* Banner 3 */}
-      <div className="flex relative">
-        <div className="absolute flex bg-black h-[400px] w-screen opacity-70"></div>
-        <Image src={img2} alt="Students Image" className="w-full h-[400px] object-cover" />
-        <div className="flex flex-col items-center absolute top-0 w-full h-[500px]">
-          <div className="text-white md:text-5xl text-3xl text-center px-4 font-semibold mt-[60px]">SAM GLOBAL UNIVERSITY</div>
-          <div className="flex flex-col w-screen gap-y-8 mt-[50px] md:px-2 px-4">
-            <div className="flex flex-1 w-full justify-center items-center">
-              <div className="w-full text-center text-gray-300 md:text-5xl text-2xl font-normal mt-[10px]">90+ Faculty</div>
-              <div className="w-full text-center text-gray-300 md:text-5xl text-2xl font-normal mt-[10px]">60+ Companies</div>
-            </div>
-            <div className="flex flex-1 w-full justify-center items-center">
-              <div className="w-full text-center text-gray-300 md:text-5xl text-2xl font-normal mt-[10px]">6000+ Students</div>
-              <div className="w-full text-center text-gray-300 md:text-5xl text-2xl font-normal mt-[10px]">30+ Researchers</div>
+      <div className="flex lg:h-screen h-[160vh] relative bg-[#E1E8F4] mb-[100px]">
+        <div className="flex md:flex-row flex-col h-[85vh] w-screen bg-[#E1E8F4]">
+          <div className="flex flex-col items-start md:w-[40%] md:h-[500px] md:m-8 m-4 md:px-8">
+            <div className="text-[#272A4B] text-[32px] font-semibold mt-[80px] md:text-[64px] text-start">Placement And Career Cell</div>
+            <div className="max-w-[815px] text-start text-[#000000] md:text-xl text-md font-normal">The Placement and Career Cell facilitates the process of placement of students, graduating from the Institute.</div>
+            <div className="flex items-center justify-center w-[200px] h-[60px] relative mt-[20px] cursor-pointer bg-[#272A4B] hover:bg-[#191c39] rounded-lg" onClick={() => { router.push("./login") }} >
+              <div className="w-[200px] h-[60px] left-0 top-0 absolute" />
+              <div className="text-white text-lg font-bold">{(login) ? "DASHBOARD" : "PORTAL LOGIN"}</div>
             </div>
           </div>
+          <div className="flex md:w-[60%] md:h-full h-[400px] m-3 rounded-md"></div>
+        </div>
 
+        {/* Sub Banner */}
+        <div className="flex absolute md:top-[90vh] top-[100vh] z-10 w-screen justify-center items-center md:h-[150px] h-[450px]">
+          <div className="flex bg-[#272A4B] rounded-2xl w-[80vw] md:h-[150px] h-[450px] justify-center items-center relative">
+            <div className="flex md:flex-row flex-col w-[80vw] justify-between items-center px-12">
+
+              <div className=" h-24  text-center"><span className="text-white text-5xl font-bold font-['Plus Jakarta Sans'] leading-[60px]">250+<br /></span><span className="text-white text-base font-semibold font-['Plus Jakarta Sans'] leading-9">Participating Companies</span></div>
+
+              <div className="w-[1px] h-24 bg-white md:block hidden"></div>
+
+              <div className=" h-24  text-center"><span className="text-white text-5xl font-bold font-['Plus Jakarta Sans'] leading-[60px]">35 LPA<br /></span><span className="text-white text-base font-semibold font-['Plus Jakarta Sans'] leading-9">Highest salary offered</span></div>
+
+              <div className="w-[1px] h-24 bg-white md:block hidden"></div>
+
+              <div className=" h-24  text-center"><span className="text-white text-5xl font-bold font-['Plus Jakarta Sans'] leading-[60px]">1.5 LPA<br /></span><span className="text-white text-base font-semibold font-['Plus Jakarta Sans'] leading-9">Highest internship offered</span></div>
+
+              <div className="w-[1px] h-24 bg-white md:block hidden"></div>
+
+              <div className=" h-24  text-center"><span className="text-white text-5xl font-bold font-['Plus Jakarta Sans'] leading-[60px]">383<br /></span><span className="text-white text-base font-semibold font-['Plus Jakarta Sans'] leading-9">Placement offers</span></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      {/* Companies Carousel */}
+      <div className="flex flex-col mt-[200px] md:h-[200px] h-[60vh] relative">
+        <div className="text-center text-zinc-900 text-2xl font-bold leading-9"> We collaborate with 250+ top recruiters and companies</div>
+        <div className="flex md:flex-row flex-wrap md:gap-0 gap-16 h-[70px] w-screen px-16 mt-[50px] justify-between">
+          <Image src={"/company/c1.svg"} alt={"company logo"} width={98} height={40} />
+          <Image src={"/company/c2.svg"} alt={"company logo"} width={98} height={40} />
+          <Image src={"/company/c3.svg"} alt={"company logo"} width={98} height={40} />
+          <Image src={"/company/c4.svg"} alt={"company logo"} width={98} height={40} />
+          <Image src={"/company/c5.svg"} alt={"company logo"} width={98} height={40} />
+          <Image src={"/company/c6.svg"} alt={"company logo"} width={98} height={40} />
+          <Image src={"/company/c7.svg"} alt={"company logo"} width={98} height={40} />
+          <Image src={"/company/c8.svg"} alt={"company logo"} width={98} height={40} />
         </div>
       </div>
 
-      {/* Top Jobs */}
-      <div className="flex flex-col m-4 mt-8">
-        <div className="text-neutral-700 md:text-4xl text-3xl font-semibold md:m-4 m-2">Job Opportunities</div>
+      {/* Job Opportunities */}
+      <div className="flex flex-col m-4 mt-[150px] relative">
+        <div className="text-neutral-700 md:text-4xl text-3xl font-semibold md:m-4 m-2 w-full text-center">Job Opportunities</div>
         <ScrollArea>
           <div className="flex space-x-4 pb-4 m-4">
             {jobs.map((job) => (
@@ -189,34 +165,171 @@ export default function Home() {
         </ScrollArea>
       </div>
 
-      {/* Banner 4 */}
-      <div className="flex relative">
-        <div className="absolute flex bg-black h-[350px] w-screen opacity-60"></div>
-        <Image src={img1} alt="Students Image" className="w-full h-[350px] object-cover" />
-        <div className="flex flex-col items-center absolute top-0 w-full h-[500px] mt-[70px]">
-          <div className="text-white md:text-[32px] text-[20px] text-center px-4 font-semibold">Most Placements in India - Watch Video</div>
-          <div className="max-w-[815px] text-center text-gray-300 text-xl font-normal mt-[10px]">Embark on a transformative path as we navigate your potential towards tailored placements, sculpting your success story.</div>
-          <div className="flex items-center justify-center w-[200px] h-[60px] relative md:mt-[40px] mt-[20px] cursor-pointer bg-amber-300 hover:bg-amber-400 rounded-sm" onClick={() => { router.push("./login") }} >
-            <div className="w-[200px] h-[60px] left-0 top-0 absolute" />
-            <div className="text-neutral-700 text-lg font-bold">EXPLORE MORE</div>
+      {/* Blogs and News */}
+      <div className="flex flex-col bg-[#E0E7F3] h-screen md:p-12 p-4 md:mt-0 mt-[160px] relative">
+        <div className="text-gray-800 text-[25.92px] font-semibold leading-loose">Blogs & Articles</div>
+        <div className="text-gray-500 text-base font-normal leading-normal">Discover articles and tutorials to help you build better</div>
+        <div className="flex mt-8 gap-4 overflow-x-auto py-4">
+          <div className="flex flex-col w-[383.54px] flex-shrink-0">
+            <img className="w-[383.54px] h-[240.10px] relative rounded-xl" src="https://via.placeholder.com/384x240" />
+            <div className="text-gray-800 text-[21.56px] font-medium leading-7 p-4">Top 20 UI Inspiration Sites<br />(2023)</div>
+            <div className="px-4 text-slate-500 text-sm font-normal font-['Plus Jakarta Sans'] leading-tight">We've collated the top 20 UI inspiration sites, all with<br />links in one handy spot! Find your inspiration for your<br />next project.</div>
+          </div>
+          <div className="flex flex-col w-[383.54px] flex-shrink-0">
+            <img className="w-[383.54px] h-[240.10px] relative rounded-xl" src="https://via.placeholder.com/384x240" />
+            <div className="text-gray-800 text-[21.56px] font-medium leading-7 p-4">Top 20 UI Inspiration Sites<br />(2023)</div>
+            <div className="px-4 text-slate-500 text-sm font-normal font-['Plus Jakarta Sans'] leading-tight">We've collated the top 20 UI inspiration sites, all with<br />links in one handy spot! Find your inspiration for your<br />next project.</div>
+          </div>
+          <div className="flex flex-col w-[383.54px] flex-shrink-0">
+            <img className="w-[383.54px] h-[240.10px] relative rounded-xl" src="https://via.placeholder.com/384x240" />
+            <div className="text-gray-800 text-[21.56px] font-medium leading-7 p-4">Top 20 UI Inspiration Sites<br />(2023)</div>
+            <div className="px-4 text-slate-500 text-sm font-normal font-['Plus Jakarta Sans'] leading-tight">We've collated the top 20 UI inspiration sites, all with<br />links in one handy spot! Find your inspiration for your<br />next project.</div>
+          </div>
+          <div className="flex flex-col w-[383.54px] flex-shrink-0">
+            <img className="w-[383.54px] h-[240.10px] relative rounded-xl" src="https://via.placeholder.com/384x240" />
+            <div className="text-gray-800 text-[21.56px] font-medium leading-7 p-4">Top 20 UI Inspiration Sites<br />(2023)</div>
+            <div className="px-4 text-slate-500 text-sm font-normal font-['Plus Jakarta Sans'] leading-tight">We've collated the top 20 UI inspiration sites, all with<br />links in one handy spot! Find your inspiration for your<br />next project.</div>
           </div>
         </div>
       </div>
 
-      {/* Top Companies */}
-      <div className="flex flex-col m-4 mt-8 p-4">
-        <div className="text-neutral-700 text-4xl font-semibold m-4">Blogs & News</div>
-        <div className="ml-4 mt-4 text-gray-600 text-xl font-normal">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam feugiat vel turpis et tincidunt. Cras porttitor semper felis sed commodo. Praesent ante nisi, dictum at suscipit vitae, porttitor at mauris.</div>
-        <div className="ml-4 mt-4 text-gray-600 text-xl font-normal">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam feugiat vel turpis et tincidunt. Cras porttitor semper felis sed commodo. Praesent ante nisi, dictum at suscipit vitae, porttitor at mauris.</div>
-        <div className="ml-4 mt-4 text-gray-600 text-xl font-normal">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam feugiat vel turpis et tincidunt. Cras porttitor semper felis sed commodo. Praesent ante nisi, dictum at suscipit vitae, porttitor at mauris.</div>
+      {/* Why choose us */}
+      <div className="flex mt-[100px] w-screen">
+        <div className="flex flex-col w-[40%] p-8 justify-center items-center">
+          <div className="flex flex-col justify-start items-start">
+            <div className="text-black text-5xl font-bold">Why choose us?</div>
+
+            <div className="flex justify-start items-baseline gap-4 mt-12">
+              <div className="w-[171px] h-[119px] relative">
+                <div className="w-[171px] h-[119px] left-0 top-0 absolute bg-slate-200 rounded-[25px]" />
+                <div className="w-[63.79px] h-[32.90px] left-[53.82px] top-[32.90px] absolute text-center text-blue-900 text-[32px] font-semibold font-['Plus Jakarta Sans'] leading-[34.53px]">90+</div>
+                <div className="w-[102.40px] h-[20.61px] left-[34.88px] top-[65.59px] absolute text-center text-neutral-950 text-xl font-normal font-['Plus Jakarta Sans'] leading-snug">Faculty</div>
+              </div>
+              <div className="w-[198px] h-[188px] relative">
+                <div className="w-[198px] h-[188px] left-0 top-0 absolute bg-slate-200 rounded-[30.07px]" />
+                <div className="w-[119.69px] h-[117.50px] left-[38.48px] top-[34.88px] absolute">
+                  <div className="w-[88.37px] h-[39.17px] left-[15.66px] top-0 absolute text-center text-blue-900 text-[38.49px] font-semibold font-['Plus Jakarta Sans'] leading-[41.54px]">6K+</div>
+                  <div className="w-[119.69px] h-[24.62px] left-[-0px] top-[39.17px] absolute text-center text-neutral-800 text-2xl font-normal font-['Plus Jakarta Sans'] leading-relaxed">Students</div>
+                  <div className="w-[89.49px] h-[42.52px] left-[14.54px] top-[74.98px] absolute">
+                    <img className="w-[42.51px] h-[42.52px] left-0 top-0 absolute rounded-full" src="/student/s1.svg" />
+                    <img className="w-[42.51px] h-[42.52px] left-[23.49px] top-0 absolute rounded-full" src="/student/s2.svg" />
+                    <img className="w-[42.51px] h-[42.52px] left-[46.98px] top-0 absolute rounded-full" src="/student/s3.svg" />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex gap-4 mt-4">
+              <div className="w-[171px] h-[119px] relative">
+                <div className="w-[171px] h-[119px] left-0 top-0 absolute bg-slate-200 rounded-[25px]" />
+                <div className="w-[66.78px] h-[32.67px] left-[51.56px] top-[32.62px] absolute text-center text-blue-900 text-[32px] font-semibold font-['Plus Jakarta Sans'] leading-[34.53px]">56+</div>
+                <div className="w-[102.40px] h-[20.61px] left-[34.80px] top-[65.59px] absolute text-center text-neutral-800 text-xl font-normal font-['Plus Jakarta Sans'] leading-snug">Startups</div>
+              </div>
+              <div className="w-[171px] h-[119px] relative">
+                <div className="w-[171px] h-[119px] left-0 top-0 absolute bg-slate-200 rounded-[25px]" />
+                <div className="w-[92.69px] h-[33.63px] left-[42.66px] top-[32.52px] absolute text-center text-blue-900 text-[32px] font-semibold font-['Plus Jakarta Sans'] leading-[34.53px]">150+</div>
+                <div className="w-[102.40px] h-[20.61px] left-[34.80px] top-[65.59px] absolute text-center text-black text-xl font-normal font-['Plus Jakarta Sans'] leading-snug">Professors</div>
+              </div>
+            </div>
+
+            <div className="w-[400px] text-neutral-800 text-md font-normal leading-relaxed mt-8">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean tristique, tor nec consequat vulputate, lorem ar congue. </div>
+
+            <div className="w-[200px] h-[60px] px-12 pt-[17px] pb-5 bg-indigo-950 rounded-lg justify-center items-center inline-flex mt-4 cursor-pointer hover:bg-[#161930]">
+              <div className="text-white text-lg font-bold font-['Plus Jakarta Sans']">Get Started</div>
+            </div>
+          </div>
+
+
+        </div>
+
+        {/* Image Combo */}
+        <div className="flex w-[60%] h-[110vh] relative">
+          <Image src={"/circle.png"} alt={"students image"} className="md:w-[385px] md:h-[385px] absolute top-[150px] right-[330px]" width={430} height={430} />
+          <Image src={"/class1.jpeg"} alt={"students image"} className="md:w-[452px] md:h-[556px] rounded-xl object-cover absolute top-[100px] right-[100px]" width={452} height={556} />
+          <Image src={"/class2.jpeg"} alt={"students image"} className="md:w-[430px] md:h-[430px] rounded-xl object-cover absolute bottom-[10px] right-[350px]" width={430} height={430} />
+        </div>
       </div>
 
-      {/* Top Companies */}
-      <div className="flex flex-col mt-8 p-4 m-4">
-        <div className="text-neutral-700 text-4xl font-semibold m-4">Common Questions</div>
-        <div className="ml-4 mt-4 text-gray-600 text-xl font-normal">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam feugiat vel turpis et tincidunt. Cras porttitor semper felis sed commodo.</div>
-        <div className="ml-4 mt-4 text-gray-600 text-xl font-normal">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam feugiat vel turpis et tincidunt. Cras porttitor semper felis sed commodo.</div>
-        <div className="ml-4 mt-4 text-gray-600 text-xl font-normal">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam feugiat vel turpis et tincidunt. Cras porttitor semper felis sed commodo.</div>
+      {/* Chart */}
+      <div className="flex flex-col p-4 mt-8 justify-center items-center">
+        <Image src={"/chart.png"} alt={"Chart Image"} className="md:w-[70vw] w-[90vw] object-contain md:m-[100px] m-16" width={1000} height={1000} />
+      </div>
+
+      {/* Student */}
+      <div className="flex flex-col p-4 justify-center items-center">
+        <Image src={"/student.png"} alt={"Student Image"} className="md:w-[70vw] w-[90vw] object-contain md:m-[100px] m-16" width={1000} height={1000} />
+      </div>
+
+      {/* Banner 4 */}
+      <div className="flex relative">
+        <div className="absolute flex bg-black h-[350px] w-screen opacity-70"></div>
+        <Image src={img1} alt="Students Image" className="w-full h-[350px] object-cover" />
+        <div className="flex flex-col items-center absolute top-0 w-full h-[500px] mt-[70px]">
+          <div className="text-white md:text-[32px] text-[20px] text-center px-4 font-semibold">Your career journey begins here, where potential meets placement</div>
+          <div className="max-w-[815px] text-center text-gray-300 text-xl font-normal mt-[10px]">Embark on a transformative path as we navigate your potential towards tailored
+            placements, sculpting your success story.</div>
+          <div className="w-[200px] h-[60px] pl-[46px] pr-[38px] pt-[17px] pb-5 bg-orange-400 hover:bg-orange-500 mt-10 rounded-lg justify-end items-center inline-flex cursor-pointer">
+            <div className="text-white text-lg font-bold font-['Plus Jakarta Sans']">Explore More</div>
+          </div>
+        </div>
+      </div>
+
+      {/* Testimonials */}
+
+      <div className="flex flex-col mt-[300px] m-8 relative">
+        <Image src={"/circle.png"} alt={"students image"} className="md:w-[385px] md:h-[385px] absolute top-[-220px] left-[-170px]" width={430} height={430} />
+        <div className="text-black text-[56px] font-bold font-['Plus Jakarta Sans'] leading-[67.20px] z-10">It speaks for itself</div>
+        <div className="text-indigo-950 text-[56px] font-bold font-['Plus Jakarta Sans'] leading-[67.20px] z-10">Bunch of feedback from<br />Prime users</div>
+
+        <div className="grid grid-cols-4 mt-8 gap-x-[180px] gap-4 overflow-x-auto py-4 relative">
+          <TestimonialCard testimonial={{
+            id: 0,
+            name: "Maria",
+            image: "/profile/p1.svg",
+            desc: "Probably the best system so far I was working with.Fully responsive, sleek and easy to customise.Elegant typography and attentiveness to every detail stole my heart."
+          }} />
+          <TestimonialCard testimonial={{
+            id: 0,
+            name: "Kyle G.",
+            image: "/profile/p1.svg",
+            desc: "The design system you've created looks unbelievable."
+          }} />
+          <TestimonialCard testimonial={{
+            id: 0,
+            name: "Kyle G.",
+            image: "/profile/p1.svg",
+            desc: "The design system you've created looks unbelievable."
+          }} />
+
+          <TestimonialCard testimonial={{
+            id: 1,
+            name: "Anna S.",
+            image: "/profile/p1.svg",
+            desc: "I'm amazed by the attention to detail in your work."
+          }} />
+
+          <TestimonialCard testimonial={{
+            id: 2,
+            name: "John D.",
+            image: "/profile/p1.svg",
+            desc: "Your professionalism and dedication are truly impressive."
+          }} />
+
+          <TestimonialCard testimonial={{
+            id: 3,
+            name: "Emily W.",
+            image: "/profile/p1.svg",
+            desc: "Working with your team has been a game-changer for us."
+          }} />
+
+          <TestimonialCard testimonial={{
+            id: 4,
+            name: "Michael R.",
+            image: "/profile/p1.svg",
+            desc: "I can't thank you enough for your outstanding support."
+          }} />
+
+        </div>
       </div>
 
       <Footer />

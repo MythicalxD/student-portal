@@ -160,3 +160,10 @@ export type Industry = {
     logo: string;
     name: string;
 };
+
+export type Testimonials = {
+    id: number;
+    name: string;
+    image: string;
+    desc: string;
+};
