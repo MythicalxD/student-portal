@@ -107,7 +107,11 @@ export default function Home() {
               <div className="text-white text-lg font-bold">{(login) ? "DASHBOARD" : "PORTAL LOGIN"}</div>
             </div>
           </div>
-          <div className="flex md:w-[60%] md:h-full h-[400px] m-3 rounded-md"></div>
+          <div className="flex md:w-[60%] md:h-full m-3 rounded-md relative">
+            <div className="flex flex-col p-4 mt-8 justify-center items-center">
+              <Image src={"/notice.png"} alt={"Notice board"} className="md:w-[70vw] w-[90vw] object-contain md:m-[100px] m-16" width={1000} height={1000} />
+            </div>
+          </div>
         </div>
 
         {/* Sub Banner */}
@@ -194,7 +198,7 @@ export default function Home() {
       </div>
 
       {/* Why choose us */}
-      <div className="flex mt-[100px] w-screen">
+      <div className="md:flex mt-[100px] w-screen hidden">
         <div className="flex flex-col w-[40%] p-8 justify-center items-center">
           <div className="flex flex-col justify-start items-start">
             <div className="text-black text-5xl font-bold">Why choose us?</div>
@@ -268,7 +272,7 @@ export default function Home() {
           <div className="text-white md:text-[32px] text-[20px] text-center px-4 font-semibold">Your career journey begins here, where potential meets placement</div>
           <div className="max-w-[815px] text-center text-gray-300 text-xl font-normal mt-[10px]">Embark on a transformative path as we navigate your potential towards tailored
             placements, sculpting your success story.</div>
-          <div className="w-[200px] h-[60px] pl-[46px] pr-[38px] pt-[17px] pb-5 bg-orange-400 hover:bg-orange-500 mt-10 rounded-lg justify-end items-center inline-flex cursor-pointer">
+          <div className="w-[200px] h-[60px] pl-[46px] pr-[38px] pt-[17px] pb-5 bg-orange-400 hover:bg-orange-500 md:mt-10 mt-4 rounded-lg justify-end items-center inline-flex cursor-pointer">
             <div className="text-white text-lg font-bold font-['Plus Jakarta Sans']">Explore More</div>
           </div>
         </div>
@@ -281,7 +285,7 @@ export default function Home() {
         <div className="text-black text-[56px] font-bold font-['Plus Jakarta Sans'] leading-[67.20px] z-10">It speaks for itself</div>
         <div className="text-indigo-950 text-[56px] font-bold font-['Plus Jakarta Sans'] leading-[67.20px] z-10">Bunch of feedback from<br />Prime users</div>
 
-        <div className="grid grid-cols-4 mt-8 gap-x-[180px] gap-4 overflow-x-auto py-4 relative">
+        <div className="grid md:grid-cols-4 grid-cols-1 mt-8 gap-x-[180px] gap-4 overflow-x-auto py-4 relative">
           <TestimonialCard testimonial={{
             id: 0,
             name: "Maria",

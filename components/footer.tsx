@@ -3,33 +3,51 @@ import Link from "next/link";
 
 const Footer: React.FC = () => {
     return (
-        <footer className="bg-[#e6e6e6] text-black">
+        <footer className="bg-[#29294D] text-black">
             <div className="container mx-auto md:py-12 py-4">
                 <div className="flex flex-col md:flex-row justify-between items-center">
                     <div className="">
                         <a href="/" className="ml-4 cursor-pointer block">
                             <img className="" alt="logo" src="/logo.png" />
                         </a>
-                        <p className="mt-0 ml-6">Best Private University in MP.</p>
+                        <p className="mt-0 ml-6 text-sm text-white md:w-[350px]">Lorem ipsum dolor sit amet, consectetur adipisci elit. Donec ultricies mi in ipsum vehicula lacinia. Iner porttitor ac libero .</p>
                     </div>
-                    <div className="md:w-2/3 flex flex-wrap justify-center md:justify-end md:ml-[200px]">
+                    <div className="md:w-2/3 flex flex-wrap justify-center md:justify-end md:ml-[200px] text-white">
                         <div className="w-full md:w-1/2 lg:w-1/4 p-4">
-                            <h3 className="text-xl font-semibold mb-2">Links</h3>
+                            <h3 className="text-xl font-semibold mb-2">Quick Links</h3>
                             <ul className="list-none">
                                 <Link href="/about">
-                                    <li className="mb-2">About Us</li>
+                                    <li className="mb-2">Home</li>
                                 </Link>
                                 <Link href="/blogs/all">
-                                    <li className="mb-2">Blogs</li>
+                                    <li className="mb-2">About Us</li>
                                 </Link>
                                 <Link href="/login">
-                                    <li className="mb-2">Find a job</li>
+                                    <li className="mb-2">Our Services</li>
                                 </Link>
                                 <Link href="/dashboard">
-                                    <li className="mb-2">Products</li>
+                                    <li className="mb-2">Contact Us</li>
                                 </Link>
                             </ul>
                         </div>
+                        <div className="w-full md:w-1/2 lg:w-1/4 p-4">
+                            <h3 className="text-xl font-semibold mb-2">Pages</h3>
+                            <ul className="list-none">
+                                <Link href="/about">
+                                    <li className="mb-2">Our Blog</li>
+                                </Link>
+                                <Link href="/blogs/all">
+                                    <li className="mb-2">Our Team</li>
+                                </Link>
+                                <Link href="/login">
+                                    <li className="mb-2">Testimonials</li>
+                                </Link>
+                                <Link href="/dashboard">
+                                    <li className="mb-2">CTA</li>
+                                </Link>
+                            </ul>
+                        </div>
+
                         <div className="w-full md:w-1/2 lg:w-1/2 p-4">
                             <h3 className="text-xl font-semibold mb-2">Contact</h3>
                             <ul className="list-none">
