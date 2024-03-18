@@ -86,12 +86,12 @@ export default function Home() {
 
   useEffect(() => {
     const fetchData = async () => {
-      // const fetchedData = await getCompany();
-      // setData(fetchedData);
-      // const fetchedData1 = await getCourses();
-      // setCourses(fetchedData1);
-      // const fetchedData2 = await getJobs();
-      // setJobs(fetchedData2);
+      const fetchedData = await getCompany();
+      setData(fetchedData);
+      const fetchedData1 = await getCourses();
+      setCourses(fetchedData1);
+      const fetchedData2 = await getJobs();
+      setJobs(fetchedData2);
       const fetchedData3 = await getBlogs();
       setBlogs(fetchedData3);
     };
