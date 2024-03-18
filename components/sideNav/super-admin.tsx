@@ -6,11 +6,14 @@ import {
   AreaChart,
   Book,
   BookMarked,
+  ChevronDown,
   Compass,
   Factory,
   GalleryHorizontal,
   GanttChart,
   GraduationCap,
+  Newspaper,
+  PinIcon,
   ScrollText,
   SlidersHorizontal,
   User,
@@ -30,7 +33,7 @@ export default function SuperAdmin() {
           <h2 className="text-2xl text-black font-semibold ml-2">Dashboard</h2>
         </Link>
 
-        <ul className="mt-4">
+        <ul className="flex flex-col h-[75vh] overflow-y-scroll mt-8">
           <Link href={"/dashboard/industry"}>
             <li
               className={`px-2 py-2 rounded-md text-black text-sm flex items-center mb-2 ${pathname == "/dashboard/industry"
@@ -130,6 +133,39 @@ export default function SuperAdmin() {
               All Applications
             </li>
           </Link>
+          <Link href={"/dashboard/training"}>
+            <li
+              className={`px-2 py-2 rounded-md text-black text-sm flex items-center mb-2 ${pathname == "/dashboard/training"
+                ? " bg-[#73a9ff] transition-all duration-300"
+                : "bg-gray-100 transition-all duration-300 hover:bg-gray-300"
+                }`}
+            >
+              <Book className="w-[15px] h-[15px] mr-2" />
+              Manage Training Module
+            </li>
+          </Link>
+          <Link href={"/dashboard/blogs"}>
+            <li
+              className={`px-2 py-2 rounded-md text-black text-sm flex items-center mb-2 ${pathname == "/dashboard/blogs"
+                ? " bg-[#73a9ff] transition-all duration-300"
+                : "bg-gray-100 transition-all duration-300 hover:bg-gray-300"
+                }`}
+            >
+              <Newspaper className="w-[15px] h-[15px] mr-2" />
+              Manage Blogs
+            </li>
+          </Link>
+          <Link href={"/dashboard/notice"}>
+            <li
+              className={`px-2 py-2 rounded-md text-black text-sm flex items-center mb-2 ${pathname == "/dashboard/notice"
+                ? " bg-[#73a9ff] transition-all duration-300"
+                : "bg-gray-100 transition-all duration-300 hover:bg-gray-300"
+                }`}
+            >
+              <PinIcon className="w-[15px] h-[15px] mr-2" />
+              Manage Notice
+            </li>
+          </Link>
           <Link href={"/dashboard/"}>
             <li
               className={`px-2 py-2 rounded-md text-black text-sm flex items-center mb-2 ${pathname == "/dashboard/"
@@ -152,18 +188,13 @@ export default function SuperAdmin() {
               Manage Internship
             </li>
           </Link>
-          <Link href={"/dashboard/"}>
-            <li
-              className={`px-2 py-2 rounded-md text-black text-sm flex items-center mb-2 ${pathname == "/dashboard/"
-                ? " bg-[#73a9ff] transition-all duration-300"
-                : "bg-gray-100 transition-all duration-300 hover:bg-gray-300"
-                }`}
-            >
-              <Book className="w-[15px] h-[15px] mr-2" />
-              Manage Training Module
-            </li>
-          </Link>
         </ul>
+
+        <div className="flex w-full justify-center items-center">
+          <ChevronDown className="w-[25px] h-[25px] text-black" />
+        </div>
+
+
       </div>
     </div>
   );
