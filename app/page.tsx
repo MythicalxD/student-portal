@@ -11,7 +11,7 @@ import { CompanyPublic } from "./(routes)/dashboard/(student)/student-company/co
 import axios from "axios";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { CompanyCard } from "./components/company";
-import { Course, JobListing } from "@/utils/types";
+import { BlogPostPublic, Course, JobListing } from "@/utils/types";
 import { CourseCard } from "./components/courses";
 import { JobCard } from "./components/jobs";
 import Footer from "@/components/footer";
@@ -59,37 +59,54 @@ async function getJobs(): Promise<JobListing[]> {
   }
 }
 
+async function getBlogs(): Promise<BlogPostPublic[]> {
+
+  const apiUrl = "/api/blogs/public";
+
+  try {
+    const response = await axios.post(apiUrl);
+    console.log(response);
+    return response.data;
+  } catch (error: any) {
+    console.error();
+    return error;
+  }
+}
+
 export default function Home() {
   const router = useRouter();
 
   const [data, setData] = useState<CompanyPublic[]>([]);
   const [courses, setCourses] = useState<Course[]>([]);
   const [jobs, setJobs] = useState<JobListing[]>([]);
+  const [blogs, setBlogs] = useState<BlogPostPublic[]>([]);
   const [login, setLogin] = useState(false);
 
   // uncomment when api is ready
 
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     const fetchedData = await getCompany();
-  //     setData(fetchedData);
-  //     const fetchedData1 = await getCourses();
-  //     setCourses(fetchedData1);
-  //     const fetchedData2 = await getJobs();
-  //     setJobs(fetchedData2);
-  //   };
+  useEffect(() => {
+    const fetchData = async () => {
+      // const fetchedData = await getCompany();
+      // setData(fetchedData);
+      // const fetchedData1 = await getCourses();
+      // setCourses(fetchedData1);
+      // const fetchedData2 = await getJobs();
+      // setJobs(fetchedData2);
+      const fetchedData3 = await getBlogs();
+      setBlogs(fetchedData3);
+    };
 
-  //   fetchData(); // Call the fetchData function when the component mounts
+    fetchData(); // Call the fetchData function when the component mounts
 
-  //   const token = Cookies.get("session");
+    const token = Cookies.get("session");
 
-  //   if (token) {
-  //     setLogin(true);
-  //     return;
-  //   }
+    if (token) {
+      setLogin(true);
+      return;
+    }
 
-  //   // Optionally, you can include a cleanup function here if needed
-  // }, [router]); // The empty dependency array ensures that the effect runs only once
+    // Optionally, you can include a cleanup function here if needed
+  }, [router]); // The empty dependency array ensures that the effect runs only once
 
 
   return (
@@ -174,26 +191,15 @@ export default function Home() {
         <div className="text-gray-800 text-[25.92px] font-semibold leading-loose">Blogs & Articles</div>
         <div className="text-gray-500 text-base font-normal leading-normal">Discover articles and tutorials to help you build better</div>
         <div className="flex mt-8 gap-4 overflow-x-auto py-4">
-          <div className="flex flex-col w-[383.54px] flex-shrink-0">
-            <img className="w-[383.54px] h-[240.10px] relative rounded-xl" src="https://via.placeholder.com/384x240" />
-            <div className="text-gray-800 text-[21.56px] font-medium leading-7 p-4">Top 20 UI Inspiration Sites<br />(2023)</div>
-            <div className="px-4 text-slate-500 text-sm font-normal font-['Plus Jakarta Sans'] leading-tight">We've collated the top 20 UI inspiration sites, all with<br />links in one handy spot! Find your inspiration for your<br />next project.</div>
-          </div>
-          <div className="flex flex-col w-[383.54px] flex-shrink-0">
-            <img className="w-[383.54px] h-[240.10px] relative rounded-xl" src="https://via.placeholder.com/384x240" />
-            <div className="text-gray-800 text-[21.56px] font-medium leading-7 p-4">Top 20 UI Inspiration Sites<br />(2023)</div>
-            <div className="px-4 text-slate-500 text-sm font-normal font-['Plus Jakarta Sans'] leading-tight">We've collated the top 20 UI inspiration sites, all with<br />links in one handy spot! Find your inspiration for your<br />next project.</div>
-          </div>
-          <div className="flex flex-col w-[383.54px] flex-shrink-0">
-            <img className="w-[383.54px] h-[240.10px] relative rounded-xl" src="https://via.placeholder.com/384x240" />
-            <div className="text-gray-800 text-[21.56px] font-medium leading-7 p-4">Top 20 UI Inspiration Sites<br />(2023)</div>
-            <div className="px-4 text-slate-500 text-sm font-normal font-['Plus Jakarta Sans'] leading-tight">We've collated the top 20 UI inspiration sites, all with<br />links in one handy spot! Find your inspiration for your<br />next project.</div>
-          </div>
-          <div className="flex flex-col w-[383.54px] flex-shrink-0">
-            <img className="w-[383.54px] h-[240.10px] relative rounded-xl" src="https://via.placeholder.com/384x240" />
-            <div className="text-gray-800 text-[21.56px] font-medium leading-7 p-4">Top 20 UI Inspiration Sites<br />(2023)</div>
-            <div className="px-4 text-slate-500 text-sm font-normal font-['Plus Jakarta Sans'] leading-tight">We've collated the top 20 UI inspiration sites, all with<br />links in one handy spot! Find your inspiration for your<br />next project.</div>
-          </div>
+
+          {blogs.map((blog) => (
+            <div className="flex flex-col w-[383.54px] flex-shrink-0">
+              <img className="w-[383.54px] h-[240.10px] relative rounded-xl" src={blog.image_url} />
+              <div className="text-gray-800 text-[21.56px] font-medium leading-7 p-4">{blog.title}</div>
+              <div className="px-4 text-slate-500 text-sm font-normal font-['Plus Jakarta Sans'] leading-tight">{blog.content}</div>
+            </div>
+          ))}
+
         </div>
       </div>
 

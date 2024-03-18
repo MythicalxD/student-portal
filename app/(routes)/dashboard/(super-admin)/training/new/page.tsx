@@ -335,7 +335,7 @@ const ImagePicker: React.FC = () => {
                     </FormControl>
                     <SelectContent>
                       <SelectItem value="LIVE">Live</SelectItem>
-                      <SelectItem value="RECORDED">Recorded</SelectItem>
+                      <SelectItem value="VIDEO">Video</SelectItem>
                     </SelectContent>
                   </Select>
                   <FormMessage />

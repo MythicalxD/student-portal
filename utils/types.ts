@@ -192,3 +192,17 @@ export type BlogPost = {
     title: string;
     updated_by: string;
 };
+
+export type BlogPostPublic = {
+    author: string;
+    content: string;
+    created_at: string;
+    created_by: string;
+    id: number;
+    image_url: string;
+    publication_date: string;
+    status: "DRAFT" | "PUBLISHED" | "ARCHIVED"; // Assuming status can only be one of these values
+    tags: string[] | null;
+    title: string;
+    updated_by: string;
+};
