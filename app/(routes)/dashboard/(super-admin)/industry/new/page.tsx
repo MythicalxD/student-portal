@@ -69,14 +69,14 @@ const ImagePicker: React.FC = () => {
       formData.append("session", session);
       formData.append("token", authToken);
 
-      const apiUrl = "/api/manage-jobs/upload";
+      const apiUrl = "/api/industry/upload";
       const response = await axios.post(apiUrl, formData);
 
       console.log(response.data);
       const { token } = response.data;
       if (token === "done") {
         toast.success("Industry Created");
-        router.push("/dashboard/manage-jobs");
+        router.push("/dashboard/industry");
       }
       setIsLoading(false);
     } catch (error) {
