@@ -14,22 +14,27 @@ export async function POST(
 
     try {
 
-        const { name, desc, id, session, token } = body;
+        const { name, desc, id, file, session, token } = body;
 
         let headersList = {
             "Accept": "*/*",
             "Authorization": `Bearer ${token}`,
-            "Cookie": `session=${session}`,
-            "Content-Type": "application/json"
+            "Cookie": `session=${session}`
         }
 
-        let bodyContent = JSON.stringify({ "name": name, "description": desc });
+        const formdata = new FormData();
+        formdata.append("name", name);
+        formdata.append("description", desc);
+
+        if (file != "null") {
+            formdata.append("file", file);
+        }
 
         let reqOptions = {
-            url: `${process.env.BASEURL}/api/v1/notices/${id}`,
+            url: `${process.env.BASEURL}/api/v1/companyIndustry/industry/${id}`,
             method: "PUT",
             headers: headersList,
-            data: bodyContent,
+            data: formdata,
         }
 
         let response = await axios.request(reqOptions);

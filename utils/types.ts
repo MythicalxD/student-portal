@@ -178,3 +178,17 @@ export type Notice = {
     title: string;
     updated_by: string;
 };
+
+export type BlogPost = {
+    author: string;
+    content: string;
+    created_at: string;
+    created_by: string;
+    id: number;
+    image_url: string;
+    publication_date: string;
+    status: string;
+    tags: string[] | null; // Assuming tags can be an array of strings or null
+    title: string;
+    updated_by: string;
+};

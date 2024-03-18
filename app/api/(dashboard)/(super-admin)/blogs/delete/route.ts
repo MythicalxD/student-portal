@@ -14,17 +14,18 @@ export async function POST(req: NextRequest, res: NextResponse) {
 
 
         let reqOptions = {
-            url: `${process.env.BASEURL}/api/v1/notice/${id}`,
-            method: "GET",
-            headers: headersList,
+            url: `${process.env.BASEURL}/api/v1/companyIndustry/industry/${id}`,
+            method: "DELETE",
+            headers: headersList,   
         }
 
         let response = await axios.request(reqOptions);
 
+
         return NextResponse.json(response.data, { status: 200 })
         // Handle success as needed
-    }
-    catch (error: any) {
-        return NextResponse.json(error, { status: error.response.status })
+    } catch (error) {
+        return NextResponse.json({ res: `Server Error` }, { status: 500 })
+        // Handle the error
     }
 }

@@ -1,38 +1,38 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import { ColumnDef } from "@tanstack/react-table";
-import { ArrowUpDown } from "lucide-react";
 import { CellAction } from "./cell-actions";
-import { Badge } from "@/components/ui/badge";
-import { Notice } from "@/utils/types";
+import { ArrowUpDown, MoreHorizontal } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { BlogPost } from "@/utils/types";
 
-export const columns: ColumnDef<Notice>[] = [
+export const columns: ColumnDef<BlogPost>[] = [
   {
-    accessorKey: "id",
-    header: ({ column }) => {
-      return <div className="text-start ml-2">ID</div>;
-    },
+    accessorKey: "logo",
+    header: () => <div className="">Logo</div>,
     cell: ({ row }) => {
-      return <Badge variant="secondary">{row.original.id}</Badge>;
+      return (
+        <img
+          className=" bg-black rounded-full w-[30px] h-[30px] object-cover"
+          src={row.original.image_url.replace(
+            "https://s3.amazonaws.com/sambucketcoduty/",
+            "https://sambucketcoduty.s3.ap-south-1.amazonaws.com/"
+          )}
+        />
+      );
     },
   },
   {
-    accessorKey: "title",
+    accessorKey: "author",
     header: ({ column }) => {
       return (
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Title
+          Author
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
-      );
-    },
-    cell: ({ row }) => {
-      return (
-        <div className="text-start font-medium ml-4">{row.original.title}</div>
       );
     },
   },
@@ -41,12 +41,8 @@ export const columns: ColumnDef<Notice>[] = [
     header: "Content",
   },
   {
-    accessorKey: "expiry_date",
-    header: "Expiry Date",
-  },
-  {
-    accessorKey: "author",
-    header: "Author",
+    accessorKey: "publication_date",
+    header: "Publication Date",
   },
   {
     accessorKey: "created_at",
@@ -61,6 +57,10 @@ export const columns: ColumnDef<Notice>[] = [
         </Button>
       );
     },
+  },
+  {
+    accessorKey: "status",
+    header: "Status",
   },
   {
     header: "Actions",
