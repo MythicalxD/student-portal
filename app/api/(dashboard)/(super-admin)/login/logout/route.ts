@@ -13,7 +13,7 @@ export async function POST(
 
         const { email } = await req.json();
 
-        const apiUrl = 'https://seal-app-krop4.ondigitalocean.app/logout';
+        const apiUrl = `${process.env.BASEURL}/logout`;
         const response = await axios.post(apiUrl, {
             email
         });
