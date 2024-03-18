@@ -167,3 +167,14 @@ export type Testimonials = {
     image: string;
     desc: string;
 };
+
+export type Notice = {
+    author: string;
+    content: string;
+    created_at: string;
+    created_by: string;
+    expiry_date: string;
+    id: number;
+    title: string;
+    updated_by: string;
+};
