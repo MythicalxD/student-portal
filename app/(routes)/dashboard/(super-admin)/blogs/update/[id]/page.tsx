@@ -29,6 +29,7 @@ import { Textarea } from "@/components/ui/textarea";
 import toast from "react-hot-toast";
 import Link from "next/link";
 import { BlogPost } from "@/utils/types";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 interface IndustryProps {
   params: {
@@ -39,6 +40,7 @@ interface IndustryProps {
 const formSchema = z.object({
   name: z.string().min(2).max(50),
   description: z.string().min(2).max(5000),
+  status: z.string().min(2)
 });
 
 async function getData(
@@ -52,7 +54,7 @@ async function getData(
     id: id,
   };
 
-  const apiUrl = "/api/industry/get";
+  const apiUrl = "/api/blogs/get";
 
   try {
     const response = await axios.post(apiUrl, dataToSend);
@@ -99,6 +101,7 @@ const UpdateIndustry: React.FC<IndustryProps> = ({ params }) => {
       // Populate the form fields with the fetched data
       form.setValue("name", fetchedData.title);
       form.setValue("description", fetchedData.content);
+      form.setValue("status", fetchedData.status);
     };
 
     fetchData(); // Call the fetchData function when the component mounts
@@ -112,12 +115,14 @@ const UpdateIndustry: React.FC<IndustryProps> = ({ params }) => {
     defaultValues: {
       name: "",
       description: "",
+      status: ""
     },
   });
 
   const handleUpload = async (
     name: string,
     description: string,
+    status: string,
     id: string
   ) => {
     try {
@@ -135,6 +140,7 @@ const UpdateIndustry: React.FC<IndustryProps> = ({ params }) => {
       const formData = new FormData();
       formData.append("name", name);
       formData.append("desc", description);
+      formData.append("status", status);
       formData.append("id", id);
 
       // add the logo if it is not empty/null
@@ -147,19 +153,19 @@ const UpdateIndustry: React.FC<IndustryProps> = ({ params }) => {
       formData.append("session", session);
       formData.append("token", authToken);
 
-      const apiUrl = "/api/industry/update";
+      const apiUrl = "/api/blogs/update";
       const response = await axios.post(apiUrl, formData);
 
       console.log(response.data);
       const { token } = response.data;
       if (token === "done") {
-        toast.success("Industry Updated");
-        router.push("/dashboard/industry");
+        toast.success("Blog Updated");
+        router.push("/dashboard/blogs");
       }
       setIsLoading(false);
     } catch (error) {
       setIsLoading(false);
-      toast.error("Error Updating Industry");
+      toast.error("Error Updating Blog");
       console.error("Error uploading file:", error);
       // Handle the error
     }
@@ -168,7 +174,7 @@ const UpdateIndustry: React.FC<IndustryProps> = ({ params }) => {
   // 2. Define a submit handler.
   function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
-    handleUpload(values.name, values.description, params.id);
+    handleUpload(values.name, values.description, values.status, params.id);
     console.log(values);
   }
 
@@ -185,9 +191,9 @@ const UpdateIndustry: React.FC<IndustryProps> = ({ params }) => {
             className="w-[55px] h-[55px] rounded-md object-cover mr-4"
           />
           <div className="flex flex-col">
-            <p className="text-3xl text-black font-bold">Update Industry</p>
+            <p className="text-3xl text-black font-bold">Update Blog</p>
             <p className="text-sm text-gray-600 mb-2">
-              Please provide updated information for industry profile.
+              Please provide updated information for blog.
             </p>
           </div>
         </div>
@@ -215,14 +221,10 @@ const UpdateIndustry: React.FC<IndustryProps> = ({ params }) => {
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Industry Name</FormLabel>
+                  <FormLabel>Blog Name</FormLabel>
                   <FormControl>
                     <Input placeholder="Minimum 2 characters" {...field} />
                   </FormControl>
-                  <FormDescription>
-                    This is public display name.
-                  </FormDescription>
-                  <FormMessage />
                 </FormItem>
               )}
             />
@@ -231,20 +233,40 @@ const UpdateIndustry: React.FC<IndustryProps> = ({ params }) => {
               name="description"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Industry Description</FormLabel>
+                  <FormLabel>Blog Description</FormLabel>
                   <FormControl>
                     <Textarea
                       placeholder="Enter industry description in detail."
                       {...field}
                     />
                   </FormControl>
-                  <FormDescription>
-                    You can <span>@mention</span> other users and industries.
-                  </FormDescription>
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="status"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Training Status</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value} value={field.value}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select a status" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="ACTIVE">Active</SelectItem>
+                      <SelectItem value="INACTIVE">Inactive</SelectItem>
+                      <SelectItem value="DRAFT">Draft</SelectItem>
+                    </SelectContent>
+                  </Select>
                   <FormMessage />
                 </FormItem>
               )}
             />
+
             <div className="flex flex-col space-y-4">
               <div className="flex items-center space-x-3">
                 <div
@@ -267,7 +289,7 @@ const UpdateIndustry: React.FC<IndustryProps> = ({ params }) => {
                     {selectedFile ? (
                       <span>Uploaded</span>
                     ) : (
-                      <span>Update Logo</span>
+                      <span>Update Image</span>
                     )}
                   </label>
                 </div>
@@ -275,7 +297,7 @@ const UpdateIndustry: React.FC<IndustryProps> = ({ params }) => {
               </div>
 
               <FormDescription>
-                Leave the logo blank if there is no update.
+                Leave the Image blank if there is no update.
               </FormDescription>
 
               <Button type="submit" disabled={isLoading}>
@@ -290,7 +312,7 @@ const UpdateIndustry: React.FC<IndustryProps> = ({ params }) => {
         <Separator orientation="vertical" className="h-auto mx-8" />
 
         <div className="flex flex-col">
-          <p className="text-xl font-bold">Industry Details</p>
+          <p className="text-xl font-bold">Blog Details</p>
           <div className="grid grid-cols-2 gap-4">
             <div className="flex items-center space-x-4 rounded-md min-h-[70px] bg-gray-100 p-2 px-4 mt-2">
               <Factory className="mt-px h-5 w-5" />

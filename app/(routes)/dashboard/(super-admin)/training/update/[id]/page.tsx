@@ -243,7 +243,7 @@ const UpdateIndustry: React.FC<IndustryProps> = ({ params }) => {
       setIsLoading(false);
     } catch (error) {
       setIsLoading(false);
-      toast.error("Error Updating Industry");
+      toast.error("Error Updating Training");
       console.error("Error uploading file:", error);
       // Handle the error
     }
@@ -308,7 +308,7 @@ const UpdateIndustry: React.FC<IndustryProps> = ({ params }) => {
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Industry Name</FormLabel>
+                  <FormLabel>Training Name</FormLabel>
                   <FormControl>
                     <Input placeholder="Minimum 2 characters" {...field} />
                   </FormControl>
@@ -532,7 +532,7 @@ const UpdateIndustry: React.FC<IndustryProps> = ({ params }) => {
         <Separator orientation="vertical" className="h-auto mx-8" />
 
         <div className="flex flex-col">
-          <p className="text-xl font-bold">Industry Details</p>
+          <p className="text-xl font-bold">Training Details</p>
           <div className="grid grid-cols-2 gap-4">
             <div className="flex items-center space-x-4 rounded-md min-h-[70px] bg-gray-100 p-2 px-4 mt-2">
               <Factory className="mt-px h-5 w-5" />

@@ -85,21 +85,21 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
             <Eye className="w-[15px] h-[15px] mr-2" />
             View
           </DropdownMenuItem>
-          {/* <DropdownMenuSeparator />
+          <DropdownMenuSeparator />
           <DropdownMenuItem
-            onClick={() => router.push(`/dashboard/industry/update/${data.id}`)}
+            onClick={() => router.push(`/dashboard/blogs/update/${data.id}`)}
           >
-            <Edit className="w-[15px] h-[15px] mr-2" /> Update Industry
+            <Edit className="w-[15px] h-[15px] mr-2" /> Update Blog
           </DropdownMenuItem>
           <DropdownMenuItem
             className=" text-red-700"
             onClick={() => {
-              setId(data.id);
+              setId(data.id.toString());
               setOpen(true);
             }}
           >
-            <Trash className="w-[15px] h-[15px] mr-2" /> Delete Industry
-          </DropdownMenuItem> */}
+            <Trash className="w-[15px] h-[15px] mr-2" /> Delete Blog
+          </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
     </>
