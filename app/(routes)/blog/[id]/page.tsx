@@ -68,6 +68,15 @@ const Company: React.FC<IndustryProps> = ({ params }) => {
 
     return (
         <main className="flex min-h-screen flex-col p-4">
+            <Link
+                href="/"
+                className={cn(
+                    buttonVariants({ variant: "outline" }),
+                    "bg-indigo-950 hover:bg-[#151730] text-white hover:text-white absolute right-[2rem] top-[5rem] z-0"
+                )}
+            >
+                Home
+            </Link>
             <h1 className="text-5xl font-bold mb-4">{data?.title}</h1>
             <p className="text-gray-400 mt-1 mb-1 text-lg">
                 Published: {data?.publication_date}
@@ -76,11 +85,6 @@ const Company: React.FC<IndustryProps> = ({ params }) => {
             <div className="blogContent mt-4">
                 {data?.content}
             </div>
-            <Link href={"/"}>
-                <div className="w-[129px] h-10 mt-8 bg-indigo-950 hover:bg-[#151730] rounded-lg justify-center items-center inline-flex cursor-pointer">
-                    <div className="text-white text-md font-bold">Home</div>
-                </div>
-            </Link>
         </main>
     );
 };

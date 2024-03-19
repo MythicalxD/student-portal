@@ -195,7 +195,7 @@ export default function Home() {
         </div>
 
         {/* Sub Banner */}
-        <div className="flex absolute md:top-[90vh] top-[100vh] z-10 w-screen justify-center items-center md:h-[150px] h-[450px]">
+        <div className="flex absolute md:top-[90vh] top-[100vh] z-[1] w-screen justify-center items-center md:h-[150px] h-[450px]">
           <div className="flex bg-[#272A4B] rounded-2xl w-[80vw] md:h-[150px] h-[450px] justify-center items-center relative">
             <div className="flex md:flex-row flex-col w-[80vw] justify-between items-center px-12">
 
