@@ -45,12 +45,12 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
       id: id,
     };
 
-    const apiUrl = "/api/skill/delete";
+    const apiUrl = "/api/notice/delete";
     const response = await axios.post(apiUrl, dataToSend);
 
     if (response.status === 200) {
-      toast.success("Skill Deleted");
-      window.location.href = "/dashboard/skills";
+      toast.success("Notice Deleted");
+      window.location.href = "/dashboard/notice";
     }
 
     console.log(response.data);
@@ -85,21 +85,21 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
             <Eye className="w-[15px] h-[15px] mr-2" />
             View
           </DropdownMenuItem>
-          {/* <DropdownMenuSeparator />
+          <DropdownMenuSeparator />
           <DropdownMenuItem
-            onClick={() => router.push(`/dashboard/skills/update/${data.id}`)}
+            onClick={() => router.push(`/dashboard/notice/update/${data.id}`)}
           >
-            <Edit className="w-[15px] h-[15px] mr-2" /> Update Skill
+            <Edit className="w-[15px] h-[15px] mr-2" /> Update Notice
           </DropdownMenuItem>
           <DropdownMenuItem
             className=" text-red-700"
             onClick={() => {
-              setId(data.id);
+              setId(data.id.toString());
               setOpen(true);
             }}
           >
-            <Trash className="w-[15px] h-[15px] mr-2" /> Delete Skill
-          </DropdownMenuItem> */}
+            <Trash className="w-[15px] h-[15px] mr-2" /> Delete Notice
+          </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
     </>
