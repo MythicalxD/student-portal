@@ -326,15 +326,15 @@ export default function Home() {
 
       <div className="flex flex-col mt-[300px] m-8 relative">
         <Image src={"/circle.png"} alt={"students image"} className="md:w-[385px] md:h-[385px] absolute top-[-220px] left-[-170px]" width={430} height={430} />
-        <div className="text-black text-[56px] font-bold font-['Plus Jakarta Sans'] leading-[67.20px] z-10">It speaks for itself</div>
-        <div className="text-indigo-950 text-[56px] font-bold font-['Plus Jakarta Sans'] leading-[67.20px] z-10">Bunch of feedback from<br />Prime users</div>
+        <div className="text-black text-[56px] font-bold font-['Plus Jakarta Sans'] leading-[67.20px] z-[1]">It speaks for itself</div>
+        <div className="text-indigo-950 text-[56px] font-bold font-['Plus Jakarta Sans'] leading-[67.20px] z-[1]">Bunch of feedback from<br />Prime users</div>
 
         <div className="grid md:grid-cols-4 grid-cols-1 mt-8 gap-x-[180px] gap-4 overflow-x-auto py-4 relative">
           <TestimonialCard testimonial={{
             id: 0,
             name: "Maria",
             image: "/profile/p1.svg",
-            desc: "Probably the best system so far I was working with.Fully responsive, sleek and easy to customise.Elegant typography and attentiveness to every detail stole my heart."
+            desc: "Probably the best system so far I was working with.Fully responsive, sleek and easy to customize. Elegant typography and attentiveness to every detail stole my heart."
           }} />
           <TestimonialCard testimonial={{
             id: 0,
