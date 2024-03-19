@@ -350,6 +350,22 @@ export default function Home() {
         </div>
       </div>
 
+      {/* Courses */}
+      <div className="flex flex-col m-4 mt-[50px] relative">
+        <div className="text-neutral-700 md:text-4xl text-3xl font-semibold md:m-4 m-2 w-full text-center">Our best courses for you</div>
+        <ScrollArea>
+          <div className="flex flex-wrap space-x-4 gap-y-4 pb-4 m-4">
+            {courses.map((course) => (
+              <CourseCard
+                key={course.id}
+                course={course}
+              />
+            ))}
+          </div>
+          <ScrollBar orientation="horizontal" />
+        </ScrollArea>
+      </div>
+
       {/* Testimonials */}
 
       <div className="flex flex-col mt-[300px] m-8 relative">
