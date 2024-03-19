@@ -2,6 +2,7 @@
 import { Badge } from "@/components/ui/badge";
 import { JobListing } from "@/utils/types";
 import { CircleDollarSign, MapPin } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 interface CompanyCardProps extends React.HTMLAttributes<HTMLDivElement> {
     course: JobListing;
@@ -10,8 +11,14 @@ interface CompanyCardProps extends React.HTMLAttributes<HTMLDivElement> {
 export function JobCard({
     course
 }: CompanyCardProps) {
+    const router = useRouter();
+
+    const handelOnClick = () => {
+        router.push("/login");
+    }
+
     return (
-        <div className="relative w-[310px] min-h-[336px] space-y-3 cursor-pointer bg-white hover:bg-gray-50 rounded-[16px] shadow-md transition-all duration-100">
+        <div className="relative w-[310px] min-h-[336px] space-y-3 cursor-pointer bg-white hover:bg-gray-50 rounded-[16px] shadow-md transition-all duration-100" onClick={handelOnClick} >
             <div className="flex">
                 <div className="flex flex-col m-4">
                     <img className="w-[70px] h-[70px] rounded-[15px] shadow-md" src={course.company_logo} />
@@ -32,12 +39,13 @@ export function JobCard({
                 </div>
             </div>
             {/* <div className="text-neutral-500 text-[15px] font-medium mt-2 ml-5">{course.job_description}</div> */}
-            <div className="flex w-full justify-center items-center gap-x-2 gap-y-2 absolute bottom-4">
-                <div className="flex w-[270px] text-md justify-center items-center ml-4 font-medium text-green-800 rounded-full"> <CircleDollarSign className="w-4 h-4 mr-1" /> ₹{course.salary} / month</div>
-                <div className="flex flex-grow"></div>
-                <div className="flex text-blue-800 text-sm font-bold justify-center items-center w-full"><p className="" >APPLY NOW</p></div>
-
+            <div className="flex w-full gap-x-2 gap-y-2 absolute bottom-4">
+                <div className="flex text-md justify-center items-center ml-4 font-medium text-green-800 rounded-full"> <CircleDollarSign className="w-4 h-4 mr-1" /> ₹{course.salary} / month</div>
             </div>
+            <div className="flex w-full gap-x-2 gap-y-2 absolute bottom-4 right-6">
+                <div className="flex text-blue-800 text-sm font-bold justify-end items-end w-full"><p className="" >APPLY NOW</p></div>
+            </div>
+
         </div>
     );
 }
