@@ -25,7 +25,7 @@ export default function AuthenticationPage() {
 
   return (
     <>
-      <div className="md:hidden">
+      {/* <div className="md:hidden">
         <Image
           src="/examples/authentication-light.png"
           width={1280}
@@ -40,17 +40,18 @@ export default function AuthenticationPage() {
           alt="Authentication"
           className="hidden dark:block"
         />
-      </div>
-      <div className="container relative hidden h-screen flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0">
-        <Link
-          href="/"
-          className={cn(
-            buttonVariants({ variant: "outline" }),
-            "absolute right-4 top-4 md:right-8 md:top-8"
-          )}
-        >
-          Home
-        </Link>
+      </div> */}
+      <Link
+        href="/"
+        className={cn(
+          buttonVariants({ variant: "outline" }),
+          "absolute right-4 top-4 md:right-8 md:top-8"
+        )}
+      >
+        Home
+      </Link>
+      <div className="container relative md:mt-0 mt-[100px] h-screen flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0">
+
         <div className="relative hidden h-full flex-col bg-muted p-10 text-white dark:border-r lg:flex">
           {/* IMAGE ON THE SIDE */}
           <div className="">
