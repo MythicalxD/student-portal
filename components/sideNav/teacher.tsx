@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Factory, GraduationCap, ScrollText } from "lucide-react";
+import { Book, Factory, GraduationCap, Newspaper, PinIcon, ScrollText } from "lucide-react";
 
 export default function Teacher() {
   const pathname = usePathname();
@@ -47,6 +47,39 @@ export default function Teacher() {
             >
               <ScrollText className="w-[15px] h-[15px] mr-2" />
               All Applications
+            </li>
+          </Link>
+          <Link href={"/dashboard/training"}>
+            <li
+              className={`px-2 py-2 rounded-md text-black text-sm flex items-center mb-2 ${pathname == "/dashboard/training"
+                ? " bg-[#73a9ff] transition-all duration-300"
+                : "bg-gray-100 transition-all duration-300 hover:bg-gray-300"
+                }`}
+            >
+              <Book className="w-[15px] h-[15px] mr-2" />
+              Manage Training Module
+            </li>
+          </Link>
+          <Link href={"/dashboard/blogs"}>
+            <li
+              className={`px-2 py-2 rounded-md text-black text-sm flex items-center mb-2 ${pathname == "/dashboard/blogs"
+                ? " bg-[#73a9ff] transition-all duration-300"
+                : "bg-gray-100 transition-all duration-300 hover:bg-gray-300"
+                }`}
+            >
+              <Newspaper className="w-[15px] h-[15px] mr-2" />
+              Manage Blogs
+            </li>
+          </Link>
+          <Link href={"/dashboard/notice"}>
+            <li
+              className={`px-2 py-2 rounded-md text-black text-sm flex items-center mb-2 ${pathname == "/dashboard/notice"
+                ? " bg-[#73a9ff] transition-all duration-300"
+                : "bg-gray-100 transition-all duration-300 hover:bg-gray-300"
+                }`}
+            >
+              <PinIcon className="w-[15px] h-[15px] mr-2" />
+              Manage Notice
             </li>
           </Link>
         </ul>

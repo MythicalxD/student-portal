@@ -81,7 +81,7 @@ const Footer: React.FC = () => {
                     </div>
                 </div>
             </div>
-            <div className="bg-[#bababa] py-4 md:text-lg text-md">
+            <div className="bg-[#1d1d3b] py-4 md:text-lg text-md text-white">
                 <div className="container mx-auto text-center">
                     <p>
                         © SAM Global University 2020. All rights reserved.

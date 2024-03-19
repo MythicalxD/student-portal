@@ -11,11 +11,12 @@ import { CompanyPublic } from "./(routes)/dashboard/(student)/student-company/co
 import axios from "axios";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { CompanyCard } from "./components/company";
-import { BlogPostPublic, Course, JobListing } from "@/utils/types";
+import { BlogPostPublic, Course, JobListing, Notice } from "@/utils/types";
 import { CourseCard } from "./components/courses";
 import { JobCard } from "./components/jobs";
 import Footer from "@/components/footer";
 import { TestimonialCard } from "./components/testimonial";
+import { Calendar, User2 } from "lucide-react";
 
 async function getCompany(): Promise<CompanyPublic[]> {
 
@@ -73,6 +74,20 @@ async function getBlogs(): Promise<BlogPostPublic[]> {
   }
 }
 
+async function getNotice(): Promise<Notice[]> {
+
+  const apiUrl = "/api/notice/public";
+
+  try {
+    const response = await axios.post(apiUrl);
+    console.log(response);
+    return response.data;
+  } catch (error: any) {
+    console.error();
+    return error;
+  }
+}
+
 export default function Home() {
   const router = useRouter();
 
@@ -80,6 +95,7 @@ export default function Home() {
   const [courses, setCourses] = useState<Course[]>([]);
   const [jobs, setJobs] = useState<JobListing[]>([]);
   const [blogs, setBlogs] = useState<BlogPostPublic[]>([]);
+  const [notice, setNotice] = useState<Notice[]>([]);
   const [login, setLogin] = useState(false);
 
   // uncomment when api is ready
@@ -94,6 +110,8 @@ export default function Home() {
       setJobs(fetchedData2);
       const fetchedData3 = await getBlogs();
       setBlogs(fetchedData3);
+      const fetchedData4 = await getNotice();
+      setNotice(fetchedData4);
     };
 
     fetchData(); // Call the fetchData function when the component mounts
@@ -125,8 +143,28 @@ export default function Home() {
             </div>
           </div>
           <div className="flex md:w-[60%] md:h-full m-3 rounded-md relative">
-            <div className="flex flex-col p-4 mt-8 justify-center items-center">
-              <Image src={"/notice.png"} alt={"Notice board"} className="md:w-[70vw] w-[90vw] object-contain md:m-[100px] m-16" width={1000} height={1000} />
+            <div className="flex flex-col p-4 mt-8 justify-center items-center relative">
+              <Image src={"/notice.png"} alt={"Notice board"} className="md:w-[70vw] w-[90vw] object-contain md:m-[100px] m-16 md:block hidden" width={1000} height={1000} />
+              <div className="flex flex-col w-[330px] h-[330px] absolute top-[140px] left-12 p-2 bg-[#F4FAFD] rounded-lg justify-center items-center gap-y-2 overflow-y-auto">
+                {/* Notice card */}
+                {notice.slice(0, 2).map((notice) => (
+                  <div className="flex flex-col w-[300px] bg-white rounded-lg h-[150px] p-3 relative cursor-pointer hover:bg-zinc-50" key={notice.id}>
+                    <div className="text-gray-800 text-lg font-medium">{notice.title}</div>
+                    <div className="text-slate-500 text-sm font-normal overflow-hidden" style={{ textOverflow: 'ellipsis' }}>{notice.content}</div>
+                    <div className="flex">
+                      {/* <div className="flex text-gray-600 text-md justify-center items-center">
+                        <User2 className="w-[15px] h-[15px] mr-2" />
+                        {notice.author} name
+                      </div> */}
+                      <div className="flex text-gray-600 text-sm justify-center items-center absolute bottom-3 left-3">
+                        <Calendar className="w-[15px] h-[15px] mr-2" />
+                        {notice.expiry_date}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+                {notice.length == 0 && (<div>No Notices</div>)}
+              </div>
             </div>
           </div>
         </div>
@@ -187,7 +225,7 @@ export default function Home() {
       </div>
 
       {/* Blogs and News */}
-      <div className="flex flex-col bg-[#E0E7F3] h-screen md:p-12 p-4 md:mt-0 mt-[160px] relative">
+      <div className="flex flex-col bg-[#E0E7F3] md:p-12 p-4 md:mt-0 mt-[160px] relative">
         <div className="text-gray-800 text-[25.92px] font-semibold leading-loose">Blogs & Articles</div>
         <div className="text-gray-500 text-base font-normal leading-normal">Discover articles and tutorials to help you build better</div>
         <div className="flex mt-8 gap-4 overflow-x-auto py-4">
