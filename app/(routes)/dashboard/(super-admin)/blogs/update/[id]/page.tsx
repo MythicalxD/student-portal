@@ -27,8 +27,8 @@ import { Factory, Image } from "lucide-react";
 import { Icons } from "@/components/icons";
 import { Textarea } from "@/components/ui/textarea";
 import toast from "react-hot-toast";
-import { IndustryFull } from "../../components/columns";
 import Link from "next/link";
+import { BlogPost } from "@/utils/types";
 
 interface IndustryProps {
   params: {
@@ -45,7 +45,7 @@ async function getData(
   token: string,
   session: string,
   id: string
-): Promise<IndustryFull> {
+): Promise<BlogPost> {
   const dataToSend = {
     token: token,
     session: session,
@@ -70,7 +70,7 @@ async function getData(
 
 const UpdateIndustry: React.FC<IndustryProps> = ({ params }) => {
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
-  const [data, setData] = useState<IndustryFull>();
+  const [data, setData] = useState<BlogPost>();
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
   const router = useRouter();
@@ -97,8 +97,8 @@ const UpdateIndustry: React.FC<IndustryProps> = ({ params }) => {
       setData(fetchedData);
 
       // Populate the form fields with the fetched data
-      form.setValue("name", fetchedData.name);
-      form.setValue("description", fetchedData.description);
+      form.setValue("name", fetchedData.title);
+      form.setValue("description", fetchedData.content);
     };
 
     fetchData(); // Call the fetchData function when the component mounts
@@ -177,7 +177,7 @@ const UpdateIndustry: React.FC<IndustryProps> = ({ params }) => {
       <div className="flex flex-col w-[80vw]">
         <div className="flex">
           <img
-            src={data?.logo.replace(
+            src={data?.image_url.replace(
               "https://s3.amazonaws.com/sambucketcoduty/",
               "https://sambucketcoduty.s3.ap-south-1.amazonaws.com/"
             )}
@@ -307,16 +307,6 @@ const UpdateIndustry: React.FC<IndustryProps> = ({ params }) => {
                 <p className="text-sm font-medium leading-none">Created By</p>
                 <p className="text-sm text-muted-foreground">
                   {data?.created_by}
-                </p>
-              </div>
-            </div>
-
-            <div className="flex items-center space-x-4 rounded-md min-h-[70px] bg-gray-100 p-2 px-4 mt-2">
-              <Factory className="mt-px h-5 w-5" />
-              <div className="space-y-1">
-                <p className="text-sm font-medium leading-none">Updated On</p>
-                <p className="text-sm text-muted-foreground">
-                  {data?.updated_at}
                 </p>
               </div>
             </div>
