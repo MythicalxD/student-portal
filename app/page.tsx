@@ -102,19 +102,36 @@ export default function Home() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const fetchedData = await getCompany();
-      setData(fetchedData);
-      const fetchedData1 = await getCourses();
-      setCourses(fetchedData1);
-      const fetchedData2 = await getJobs();
-      setJobs(fetchedData2);
-      const fetchedData3 = await getBlogs();
-      setBlogs(fetchedData3);
-      const fetchedData4 = await getNotice();
-      setNotice(fetchedData4);
+      try {
+        // Initiate all data fetching requests simultaneously
+        const promise1 = getCompany();
+        const promise2 = getCourses();
+        const promise3 = getJobs();
+        const promise4 = getBlogs();
+        const promise5 = getNotice();
+
+        // Wait for all promises to resolve
+        const [companyData, coursesData, jobsData, blogsData, noticeData] = await Promise.all([
+          promise1,
+          promise2,
+          promise3,
+          promise4,
+          promise5
+        ]);
+
+        // Set state for all data once all promises resolve
+        setData(companyData);
+        setCourses(coursesData);
+        setJobs(jobsData);
+        setBlogs(blogsData);
+        setNotice(noticeData);
+      } catch (error) {
+        // Handle errors
+        console.error('Error fetching data:', error);
+      }
     };
 
-    fetchData(); // Call the fetchData function when the component mounts
+    fetchData();
 
     const token = Cookies.get("session");
 
