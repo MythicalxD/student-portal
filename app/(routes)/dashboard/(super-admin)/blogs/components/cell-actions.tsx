@@ -91,15 +91,16 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
           >
             <Edit className="w-[15px] h-[15px] mr-2" /> Update Blog
           </DropdownMenuItem>
-          <DropdownMenuItem
-            className=" text-red-700"
-            onClick={() => {
-              setId(data.id.toString());
-              setOpen(true);
-            }}
-          >
-            <Trash className="w-[15px] h-[15px] mr-2" /> Delete Blog
-          </DropdownMenuItem>
+          {localStorage.getItem("accountType") === "SuperAdmin" && (
+            <DropdownMenuItem
+              className=" text-red-700"
+              onClick={() => {
+                setId(data.id.toString());
+                setOpen(true);
+              }}
+            >
+              <Trash className="w-[15px] h-[15px] mr-2" /> Delete Blog
+            </DropdownMenuItem>)}
         </DropdownMenuContent>
       </DropdownMenu>
     </>

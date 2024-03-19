@@ -91,7 +91,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
           >
             <Edit className="w-[15px] h-[15px] mr-2" /> Update Training
           </DropdownMenuItem>
-          <DropdownMenuItem
+          {localStorage.getItem("accountType") === "SuperAdmin" && (<DropdownMenuItem
             className=" text-red-700"
             onClick={() => {
               setId(data.id.toString());
@@ -99,7 +99,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
             }}
           >
             <Trash className="w-[15px] h-[15px] mr-2" /> Delete Training
-          </DropdownMenuItem>
+          </DropdownMenuItem>)}
         </DropdownMenuContent>
       </DropdownMenu>
     </>
