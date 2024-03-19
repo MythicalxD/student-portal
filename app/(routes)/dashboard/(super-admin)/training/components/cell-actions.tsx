@@ -89,7 +89,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
           <DropdownMenuItem
             onClick={() => router.push(`/dashboard/training/update/${data.id}`)}
           >
-            <Edit className="w-[15px] h-[15px] mr-2" /> Update Company
+            <Edit className="w-[15px] h-[15px] mr-2" /> Update Training
           </DropdownMenuItem>
           <DropdownMenuItem
             className=" text-red-700"
@@ -98,7 +98,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
               setOpen(true);
             }}
           >
-            <Trash className="w-[15px] h-[15px] mr-2" /> Delete Company
+            <Trash className="w-[15px] h-[15px] mr-2" /> Delete Training
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

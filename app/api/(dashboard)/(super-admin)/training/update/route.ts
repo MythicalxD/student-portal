@@ -14,7 +14,7 @@ export async function POST(
 
     try {
 
-        const { name, email, address, contact, status, id, file, session, token } = body;
+        const { name, desc, video_link, type, status, zoom_link, skills, id, file, session, token } = body;
 
         let headersList = {
             "Accept": "*/*",
@@ -24,10 +24,12 @@ export async function POST(
 
         const formdata = new FormData();
         formdata.append("name", name);
-        formdata.append("email", email);
-        formdata.append("address", address);
-        formdata.append("contact", contact);
+        formdata.append("description", desc);
+        formdata.append("video_link", video_link);
+        formdata.append("type", type);
         formdata.append("status", status);
+        formdata.append("zoom_link", zoom_link);
+        formdata.append("skills", skills);
 
         if (file != "null") {
             formdata.append("file", file);
