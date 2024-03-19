@@ -231,10 +231,10 @@ export default function Home() {
         <div className="flex mt-8 gap-4 overflow-x-auto py-4">
 
           {blogs.map((blog) => (
-            <div className="flex flex-col w-[383.54px] flex-shrink-0" key={blog.id}>
+            <div className="flex flex-col w-[383.54px] flex-shrink-0 hover:bg-[#ccdaf3] p-2 rounded-lg cursor-pointer" key={blog.id}>
               <img className="w-[383.54px] h-[240.10px] relative rounded-xl" src={blog.image_url} />
               <div className="text-gray-800 text-[21.56px] font-medium leading-7 p-4">{blog.title}</div>
-              <div className="px-4 text-slate-500 text-sm font-normal font-['Plus Jakarta Sans'] leading-tight">{blog.content}</div>
+              <div className="px-4 text-slate-500 text-sm font-normal font-['Plus Jakarta Sans'] leading-tight overflow-hidden" style={{ textOverflow: 'ellipsis' }}>{blog.content}</div>
             </div>
           ))}
 
