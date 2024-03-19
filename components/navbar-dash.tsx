@@ -19,9 +19,11 @@ const NavbarDash = () => {
         </a>
       </div>
       <div className="flex items-center gap-x-12">
-        <div className="text-center text-black text-base font-semibold">About Us</div>
-        <div className="text-center text-black text-base font-semibold">Find a Job</div>
-        <div className="text-center text-black text-base font-semibold">Blogs</div>
+        <div className="md:flex gap-x-12 hidden">
+          <div className="text-center text-black text-base font-semibold">About Us</div>
+          <div className="text-center text-black text-base font-semibold">Find a Job</div>
+          <div className="text-center text-black text-base font-semibold">Blogs</div>
+        </div>
         <Link href={"/login"}>
           <div className="w-[129px] h-10 bg-indigo-950 hover:bg-[#151730] rounded-lg justify-center items-center inline-flex cursor-pointer">
             <div className="text-white text-md font-bold">Login Now</div>

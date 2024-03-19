@@ -159,28 +159,35 @@ export default function Home() {
               <div className="text-white text-lg font-bold">{(login) ? "DASHBOARD" : "PORTAL LOGIN"}</div>
             </div>
           </div>
-          <div className="flex md:w-[60%] md:h-full m-3 rounded-md relative">
-            <div className="flex flex-col p-4 mt-8 justify-center items-center relative">
-              <Image src={"/notice.png"} alt={"Notice board"} className="md:w-[70vw] w-[90vw] object-contain md:m-[100px] m-16 md:block hidden" width={1000} height={1000} />
-              <div className="flex flex-col w-[330px] h-[330px] absolute top-[140px] left-12 p-2 bg-[#F4FAFD] rounded-lg justify-center items-center gap-y-2 overflow-y-auto">
-                {/* Notice card */}
-                {notice.slice(0, 2).map((notice) => (
-                  <div className="flex flex-col w-[300px] bg-white rounded-lg h-[150px] p-3 relative cursor-pointer hover:bg-zinc-50" key={notice.id}>
-                    <div className="text-gray-800 text-lg font-medium">{notice.title}</div>
-                    <div className="text-slate-500 text-sm font-normal overflow-hidden" style={{ textOverflow: 'ellipsis' }}>{notice.content}</div>
-                    <div className="flex">
-                      {/* <div className="flex text-gray-600 text-md justify-center items-center">
+          <div className="flex md:w-[60%] md:h-full m-3 rounded-md mr-6 relative justify-center items-center">
+            <div className="flex flex-col p-2 h-[420px] justify-start items-start relative bg-[#F4F3F9] rounded-xl w-full">
+              <div className="flex w-full justify-center items-center mb-2 mt-1 text-slate-600 text-lg">Notice</div>
+              <div className="flex w-full h-[2px] justify-center items-center p-[1px] bg-white text-md"></div>
+              <div className="flex gap-x-4 w-full">
+                <div className="flex flex-col flex-1 mt-[15px] w-full h-[330px] p-2 ml-2 bg-[#F4FAFD] rounded-lg justify-center items-center gap-y-2 overflow-y-auto">
+                  {/* Notice card */}
+                  {notice.slice(0, 2).map((notice) => (
+                    <div className="flex flex-col w-full bg-white rounded-lg h-[150px] p-3 relative cursor-pointer hover:bg-zinc-50" key={notice.id}>
+                      <div className="text-gray-800 text-lg font-medium">{notice.title}</div>
+                      <div className="text-slate-500 text-sm font-normal overflow-hidden" style={{ textOverflow: 'ellipsis' }}>{notice.content}</div>
+                      <div className="flex">
+                        {/* <div className="flex text-gray-600 text-md justify-center items-center">
                         <User2 className="w-[15px] h-[15px] mr-2" />
                         {notice.author} name
                       </div> */}
-                      <div className="flex text-gray-600 text-sm justify-center items-center absolute bottom-3 left-3">
-                        <Calendar className="w-[15px] h-[15px] mr-2" />
-                        {notice.expiry_date}
+                        <div className="flex text-gray-600 text-sm justify-center items-center absolute bottom-3 left-3">
+                          <Calendar className="w-[15px] h-[15px] mr-2" />
+                          {notice.expiry_date}
+                        </div>
                       </div>
                     </div>
-                  </div>
-                ))}
-                {notice.length == 0 && (<div>No Notices</div>)}
+                  ))}
+                  {notice.length == 0 && (<div>No Notices</div>)}
+                </div>
+                <div className="h-[330px] w-[2px] mt-[10px] bg-white md:block hidden" ></div>
+                <div className="md:flex flex-col flex-1 w-full h-[330px] p-2 rounded-lg justify-center items-center gap-y-2 overflow-y-auto hidden">
+                  <Image src={"/pin.png"} alt={"Pin Image"} width={500} height={500} />
+                </div>
               </div>
             </div>
           </div>
@@ -213,7 +220,7 @@ export default function Home() {
       {/* Companies Carousel */}
       <div className="flex flex-col mt-[200px] md:h-[200px] h-[60vh] relative">
         <div className="text-center text-zinc-900 text-2xl font-bold leading-9"> We collaborate with 250+ top recruiters and companies</div>
-        <div className="flex md:flex-row flex-wrap md:gap-0 gap-16 h-[70px] w-screen px-16 mt-[50px] justify-between">
+        <div className="flex md:flex-row flex-wrap md:gap-0 gap-8 h-[70px] w-screen px-16 mt-[50px] justify-between">
           <Image src={"/company/c1.svg"} alt={"company logo"} width={98} height={40} />
           <Image src={"/company/c2.svg"} alt={"company logo"} width={98} height={40} />
           <Image src={"/company/c3.svg"} alt={"company logo"} width={98} height={40} />
@@ -344,7 +351,7 @@ export default function Home() {
       <div className="flex flex-col mt-[300px] m-8 relative">
         <Image src={"/circle.png"} alt={"students image"} className="md:w-[385px] md:h-[385px] absolute top-[-220px] left-[-170px]" width={430} height={430} />
         <div className="text-black text-[56px] font-bold font-['Plus Jakarta Sans'] leading-[67.20px] z-[1]">It speaks for itself</div>
-        <div className="text-indigo-950 text-[56px] font-bold font-['Plus Jakarta Sans'] leading-[67.20px] z-[1]">Bunch of feedback from<br />Prime users</div>
+        <div className="text-indigo-950 text-[56px] font-bold font-['Plus Jakarta Sans'] leading-[67.20px] z-[1]">Bunch of feedback from<br />Our Students</div>
 
         <div className="grid md:grid-cols-4 grid-cols-1 mt-8 gap-x-[180px] gap-4 overflow-x-auto py-4 relative">
           <TestimonialCard testimonial={{
