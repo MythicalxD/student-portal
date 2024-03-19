@@ -6,12 +6,19 @@ export async function POST(req: NextRequest, res: NextResponse) {
 
         const { token, session, id } = await req.json();
 
-        let headersList = {
-            "Accept": "*/*",
-            "Authorization": `Bearer ${token}`,
-            "Cookie": `session=${session}`
-        }
+        let headersList;
 
+        if (token === "") {
+            headersList = {
+                "Accept": "*/*"
+            }
+        } else {
+            headersList = {
+                "Accept": "*/*",
+                "Authorization": `Bearer ${token}`,
+                "Cookie": `session=${session}`
+            }
+        }
 
         let reqOptions = {
             url: `${process.env.BASEURL}/api/v1/blog/${id}`,
